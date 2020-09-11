@@ -1,13 +1,13 @@
 import React from 'react';
 
+import CenteredContainer from '../CenteredContainer/CenteredContainer';
+
 import LoadingIndicator from './LoadingIndicator';
 
-import './FullScreenIndicator.css';
-
 const FullScreenIndicator: React.FC = () => (
-  <div className="FullScreenIndicator">
+  <CenteredContainer fullScreen>
     <LoadingIndicator />
-  </div>
+  </CenteredContainer>
 );
 
 export default FullScreenIndicator;

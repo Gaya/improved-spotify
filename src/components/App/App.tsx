@@ -7,6 +7,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import pink from '@material-ui/core/colors/pink';
 import green from '@material-ui/core/colors/green';
 
+import './App.css';
+
 import Routes from '../../Routes';
 
 const App: React.FC = () => {

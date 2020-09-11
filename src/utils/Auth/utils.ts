@@ -28,6 +28,11 @@ export function getStoredState(): string | null {
   return localStorage.getItem(STORAGE_AUTH_STATE);
 }
 
+export function wipeAuthStorage(): void {
+  localStorage.removeItem(STORAGE_AUTH_CODE_VERIFIER);
+  localStorage.removeItem(STORAGE_AUTH_STATE);
+}
+
 interface AuthStrings {
   codeChallenge: string;
   codeVerifier: string;
