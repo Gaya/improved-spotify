@@ -7,14 +7,16 @@ export function urlWithQueryString(url: string, data?: QueryStringData): string 
     return url;
   }
 
-  const queryString = Object.keys(data).sort().map((key: string) => [
-    key,
-    encodeURIComponent(data[key]),
-  ].join('=')).join('&');
-
   return [
     url,
     '?',
-    queryString,
+    dataToQueryString(data),
   ].join('');
+}
+
+export function dataToQueryString(data: QueryStringData): string {
+  return Object.keys(data).sort().map((key: string) => [
+    key,
+    encodeURI(data[key]),
+  ].join('=')).join('&');
 }
