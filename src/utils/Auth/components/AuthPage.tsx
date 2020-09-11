@@ -1,4 +1,5 @@
 import React from 'react';
+import FullScreenIndicator from '../../../components/LoadingIndicator/FullScreenIndicator';
 
 const AuthPage: React.FC = () => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -6,7 +7,7 @@ const AuthPage: React.FC = () => {
   console.log(searchParams.get('state'));
 
   return (
-    <div>Auth</div>
+    <FullScreenIndicator />
   );
 };
 

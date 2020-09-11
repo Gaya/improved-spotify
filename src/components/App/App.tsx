@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
+
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import pink from '@material-ui/core/colors/pink';
+import green from '@material-ui/core/colors/green';
 
 import Routes from '../../Routes';
 
@@ -13,6 +16,8 @@ const App: React.FC = () => {
     () => createMuiTheme({
       palette: {
         type: prefersDarkMode ? 'dark' : 'light',
+        primary: green,
+        secondary: pink,
       },
       typography: {
         fontFamily: [
@@ -36,7 +41,6 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
-        <h1>Improved Spotify</h1>
         <Routes />
       </div>
     </ThemeProvider>
