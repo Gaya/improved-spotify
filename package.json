@@ -16,7 +16,6 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "classnames": "^2.2.6",
-    "crypto-js": "^4.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
@@ -24,6 +23,7 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "clear-eslint-cache": "rm -r node_modules/.cache/eslint-loader",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -43,6 +43,7 @@
           "**/*.ts?(x)"
         ],
         "rules": {
+          "react/prop-types": 0,
           "react/jsx-filename-extension": [
             1,
             {

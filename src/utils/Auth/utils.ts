@@ -1,4 +1,3 @@
-import SHA256 from 'crypto-js/sha256';
 import { STORAGE_AUTH_CODE_VERIFIER, STORAGE_AUTH_STATE } from '../../consts';
 
 export function generateRandomString(length: number): string {
@@ -16,8 +15,21 @@ export function createCodeVerifier(): string {
   return generateRandomString(128);
 }
 
-export function createCodeChallenge(codeVerifier: string): string {
-  return btoa(SHA256(codeVerifier).toString());
+function sha256(plain: string): Promise<ArrayBuffer> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plain);
+
+  return new Promise((resolve) => window.crypto.subtle.digest('SHA-256', data).then(resolve));
+}
+
+function base64urlencode(arrayBuffer: ArrayBuffer): string {
+  return btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer))))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+export function createCodeChallenge(codeVerifier: string): Promise<string> {
+  return sha256(codeVerifier)
+    .then((hashed) => base64urlencode(hashed));
 }
 
 export function getStoredCodeVerifier(): string | null {
@@ -39,7 +51,7 @@ interface AuthStrings {
   state: string;
 }
 
-export function createAuthStrings(): AuthStrings {
+export function createAuthStrings(): Promise<AuthStrings> {
   const hasInStorage = getStoredCodeVerifier() !== null
     && getStoredState() !== null;
 
@@ -51,9 +63,10 @@ export function createAuthStrings(): AuthStrings {
     localStorage.setItem(STORAGE_AUTH_STATE, state);
   }
 
-  return {
-    codeChallenge: createCodeChallenge(codeVerifier),
-    codeVerifier,
-    state,
-  };
+  return createCodeChallenge(codeVerifier)
+    .then((codeChallenge) => ({
+      codeChallenge,
+      codeVerifier,
+      state,
+    }));
 }
