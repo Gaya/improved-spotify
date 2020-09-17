@@ -1,4 +1,10 @@
-import { STORAGE_AUTH_CODE_VERIFIER, STORAGE_AUTH_STATE } from '../../consts';
+import {
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_REDIRECT_URI, SPOTIFY_TOKEN_URI,
+  STORAGE_AUTH_CODE_VERIFIER,
+  STORAGE_AUTH_STATE,
+  STORAGE_TOKEN,
+} from '../../consts';
 
 export function generateRandomString(length: number): string {
   let text = '';
@@ -47,7 +53,6 @@ export function wipeAuthStorage(): void {
 
 interface AuthStrings {
   codeChallenge: string;
-  codeVerifier: string;
   state: string;
 }
 
@@ -66,7 +71,54 @@ export function createAuthStrings(): Promise<AuthStrings> {
   return createCodeChallenge(codeVerifier)
     .then((codeChallenge) => ({
       codeChallenge,
-      codeVerifier,
       state,
     }));
+}
+
+interface AuthToken {
+  access_token: string;
+  token_type: 'Bearer';
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
+}
+
+interface StoredToken extends AuthToken {
+  received: number;
+}
+
+export function storeToken(token: AuthToken): void {
+  const toBeStored: StoredToken = { ...token, received: +new Date() };
+
+  localStorage.setItem(STORAGE_TOKEN, JSON.stringify(toBeStored));
+}
+
+export function authWithAuthorizationCode(code: string): Promise<void> {
+  const codeVerifier = getStoredCodeVerifier() || '';
+
+  const body = new URLSearchParams();
+  body.set('client_id', SPOTIFY_CLIENT_ID);
+  body.set('grant_type', 'authorization_code');
+  body.set('code', code);
+  body.set('redirect_uri', SPOTIFY_REDIRECT_URI);
+  body.set('code_verifier', codeVerifier);
+
+  return fetch(
+    SPOTIFY_TOKEN_URI,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      return response.json();
+    })
+    .then((response) => storeToken(response));
 }

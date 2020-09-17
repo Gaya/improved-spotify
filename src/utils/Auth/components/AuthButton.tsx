@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from '@material-ui/core';
 
-import { createAuthStrings } from '../utils';
+import useAuthStrings from '../hooks/useAuthStrings';
 
 import { urlWithQueryString } from '../../request';
 
@@ -17,54 +17,6 @@ const scopes = [
   'streaming',
 ];
 const scope = scopes.join(' ');
-
-interface LoadableAuthString {
-  codeChallenge: string;
-  state: string;
-  isLoading: boolean;
-  isFetching: boolean;
-}
-
-const useAuthStrings = (): Omit<LoadableAuthString, 'isFetching'> => {
-  const [authStringState, setState] = useState<LoadableAuthString>({
-    codeChallenge: '',
-    state: '',
-    isLoading: true,
-    isFetching: false,
-  });
-
-  const {
-    codeChallenge,
-    state,
-    isLoading,
-    isFetching,
-  } = authStringState;
-
-  useEffect(() => {
-    if (isLoading && !isFetching) {
-      setState({
-        ...authStringState,
-        isFetching: true,
-      });
-
-      createAuthStrings()
-        .then((result) => {
-          setState({
-            codeChallenge: result.codeChallenge,
-            state: result.state,
-            isLoading: false,
-            isFetching: false,
-          });
-        });
-    }
-  }, [isFetching, isLoading, authStringState]);
-
-  return {
-    codeChallenge,
-    state,
-    isLoading,
-  };
-};
 
 const AuthButton: React.FC = () => {
   const { codeChallenge, state, isLoading } = useAuthStrings();
