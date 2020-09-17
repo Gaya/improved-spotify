@@ -25,10 +25,13 @@ const AuthPage: React.FC = () => {
 
   useEffect(() => {
     authWithAuthorizationCode(code || '')
+      .then(() => {
+        history.push('/');
+      })
       .catch((err) => {
         history.push(`/auth?error=${err.error}`);
       });
-  }, [code]);
+  }, [history, code]);
 
   if (storedState !== state || error) {
     wipeAuthStorage();

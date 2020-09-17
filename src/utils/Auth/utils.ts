@@ -49,6 +49,7 @@ export function getStoredState(): string | null {
 export function wipeAuthStorage(): void {
   localStorage.removeItem(STORAGE_AUTH_CODE_VERIFIER);
   localStorage.removeItem(STORAGE_AUTH_STATE);
+  localStorage.removeItem(STORAGE_TOKEN);
 }
 
 interface AuthStrings {
@@ -87,10 +88,20 @@ interface StoredToken extends AuthToken {
   received: number;
 }
 
-export function storeToken(token: AuthToken): void {
+function storeToken(token: AuthToken): void {
   const toBeStored: StoredToken = { ...token, received: +new Date() };
 
   localStorage.setItem(STORAGE_TOKEN, JSON.stringify(toBeStored));
+}
+
+export function getStoredToken(): StoredToken {
+  const token = localStorage.getItem(STORAGE_TOKEN);
+
+  if (!token) {
+    throw new Error('No stored token');
+  }
+
+  return JSON.parse(token);
 }
 
 export function authWithAuthorizationCode(code: string): Promise<void> {
