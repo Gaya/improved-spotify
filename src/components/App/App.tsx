@@ -9,6 +9,8 @@ import green from '@material-ui/core/colors/green';
 
 import './App.css';
 
+import { AuthProvider } from '../../utils/Auth/context';
+
 import Routes from '../../Routes';
 
 const App: React.FC = () => {
@@ -42,9 +44,11 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className="App">
-        <Routes />
-      </div>
+      <AuthProvider>
+        <div className="App">
+          <Routes />
+        </div>
+      </AuthProvider>
     </ThemeProvider>
   );
 };

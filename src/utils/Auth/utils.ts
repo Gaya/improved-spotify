@@ -1,10 +1,12 @@
 import {
+  SPOTIFY_AUTH_URI,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_REDIRECT_URI, SPOTIFY_TOKEN_URI,
   STORAGE_AUTH_CODE_VERIFIER,
   STORAGE_AUTH_STATE,
   STORAGE_TOKEN,
 } from '../../consts';
+import { urlWithQueryString } from '../request';
 
 export function generateRandomString(length: number): string {
   let text = '';
@@ -76,6 +78,36 @@ export function createAuthStrings(): Promise<AuthStrings> {
     }));
 }
 
+function getAuthScopes(): string {
+  const scopes = [
+    'playlist-read-private',
+    'playlist-read-collaborative',
+    'user-read-playback-state',
+    'user-modify-playback-state',
+    'user-read-currently-playing',
+    'streaming',
+  ];
+
+  return scopes.join(' ');
+}
+
+export function createAuthUrl(codeChallenge: string, state: string): string {
+  return urlWithQueryString(
+    SPOTIFY_AUTH_URI,
+    {
+      /* eslint-disable @typescript-eslint/camelcase */
+      client_id: SPOTIFY_CLIENT_ID,
+      response_type: 'code',
+      redirect_uri: SPOTIFY_REDIRECT_URI,
+      code_challenge_method: 'S256',
+      code_challenge: codeChallenge,
+      state,
+      scope: getAuthScopes(),
+      /* eslint-enable @typescript-eslint/camelcase */
+    },
+  );
+}
+
 interface AuthToken {
   access_token: string;
   token_type: 'Bearer';
@@ -132,4 +164,8 @@ export function authWithAuthorizationCode(code: string): Promise<void> {
       return response.json();
     })
     .then((response) => storeToken(response));
+}
+
+export function hasToken(): boolean {
+  return localStorage.getItem(STORAGE_TOKEN) !== null;
 }

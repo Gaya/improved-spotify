@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -9,12 +9,14 @@ import red from '@material-ui/core/colors/red';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import ReplayIcon from '@material-ui/icons/Replay';
 
-import { authWithAuthorizationCode, getStoredState, wipeAuthStorage } from '../utils';
+import { authWithAuthorizationCode, getStoredState } from '../utils';
+import AuthContext from '../context';
 
 import FullScreenIndicator from '../../../components/LoadingIndicator/FullScreenIndicator';
 import CenteredContainer from '../../../components/CenteredContainer/CenteredContainer';
 
 const AuthPage: React.FC = () => {
+  const { setLoggedIn, logOut } = useContext(AuthContext);
   const history = useHistory();
   const searchParams = new URLSearchParams(window.location.search);
   const storedState = getStoredState();
@@ -26,6 +28,7 @@ const AuthPage: React.FC = () => {
   useEffect(() => {
     authWithAuthorizationCode(code || '')
       .then(() => {
+        setLoggedIn(true);
         history.push('/');
       })
       .catch((err) => {
@@ -34,7 +37,7 @@ const AuthPage: React.FC = () => {
   }, [history, code]);
 
   if (storedState !== state || error) {
-    wipeAuthStorage();
+    logOut();
 
     return (
       <CenteredContainer fullScreen>
