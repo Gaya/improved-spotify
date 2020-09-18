@@ -1,11 +1,7 @@
-import { ContentType } from '../types';
-
-interface QueryStringData {
-  [key: string]: string;
-}
+import { ContentType, PostData, QueryStringData } from '../types';
 
 export function urlWithQueryString(url: string, data?: QueryStringData): string {
-  if (!data) {
+  if (!data || Object.keys(data).length === 0) {
     return url;
   }
 
@@ -23,10 +19,6 @@ export function dataToQueryString(data: QueryStringData): string {
   ].join('=')).join('&');
 }
 
-interface PostData {
-  [key: string]: string | number | boolean;
-}
-
 function bodyForContentType(data: PostData, contentType: ContentType): string | URLSearchParams {
   switch (contentType) {
     case ContentType.formUrlEncoded: {
@@ -39,19 +31,49 @@ function bodyForContentType(data: PostData, contentType: ContentType): string | 
   }
 }
 
+interface Headers {
+  [key: string]: string;
+}
+
+function headersWithAccessToken(headers: Headers, accessToken?: string): Headers {
+  return accessToken ? { ...headers, Authorization: `Bearer ${accessToken}` } : headers;
+}
+
 export function post(
   uri: string,
   data: PostData = {},
   contentType: ContentType = ContentType.json,
+  accessToken?: string,
 ): Promise<Response> {
   return fetch(
     uri,
     {
       method: 'POST',
-      headers: {
+      headers: headersWithAccessToken({
+        Accept: 'application/json',
         'Content-Type': contentType,
-      },
+      }, accessToken),
       body: bodyForContentType(data, contentType),
+    },
+  );
+}
+
+export function get(
+  uri: string,
+  params: QueryStringData = {},
+  accessToken?: string,
+): Promise<Response> {
+  const headers: { [key: string]: string } = {};
+
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return fetch(
+    urlWithQueryString(uri, params),
+    {
+      method: 'GET',
+      headers: headersWithAccessToken({}, accessToken),
     },
   );
 }

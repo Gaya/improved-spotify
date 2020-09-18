@@ -1,4 +1,5 @@
 import { post, urlWithQueryString } from '../request';
+
 import {
   SPOTIFY_AUTH_URI,
   SPOTIFY_CLIENT_ID,
@@ -7,7 +8,12 @@ import {
   STORAGE_AUTH_STATE,
   STORAGE_TOKEN,
 } from '../../consts';
-import { ContentType } from '../../types';
+import {
+  AuthToken,
+  ContentType,
+  PostData,
+  StoredAuthToken,
+} from '../../types';
 
 export function generateRandomString(length: number): string {
   let text = '';
@@ -109,25 +115,7 @@ export function createAuthUrl(codeChallenge: string, state: string): string {
   );
 }
 
-interface AuthToken {
-  access_token: string;
-  token_type: 'Bearer';
-  scope: string;
-  expires_in: number;
-  refresh_token: string;
-}
-
-interface StoredToken extends AuthToken {
-  received: number;
-}
-
-function storeToken(token: AuthToken): void {
-  const toBeStored: StoredToken = { ...token, received: +new Date() };
-
-  localStorage.setItem(STORAGE_TOKEN, JSON.stringify(toBeStored));
-}
-
-export function getStoredToken(): StoredToken {
+export function getStoredToken(): StoredAuthToken {
   const token = localStorage.getItem(STORAGE_TOKEN);
 
   if (!token) {
@@ -137,22 +125,28 @@ export function getStoredToken(): StoredToken {
   return JSON.parse(token);
 }
 
-export function authWithAuthorizationCode(code: string): Promise<void> {
-  const codeVerifier = getStoredCodeVerifier() || '';
+export function hasToken(): boolean {
+  return localStorage.getItem(STORAGE_TOKEN) !== null;
+}
 
-  return post(
-    SPOTIFY_TOKEN_URI,
-    {
-      /* eslint-disable @typescript-eslint/camelcase */
-      client_id: SPOTIFY_CLIENT_ID,
-      grant_type: 'authorization_code',
-      redirect_uri: SPOTIFY_REDIRECT_URI,
-      code,
-      code_verifier: codeVerifier,
-      /* eslint-enable @typescript-eslint/camelcase */
-    },
-    ContentType.formUrlEncoded,
-  )
+export function getValidToken(): Promise<AuthToken> {
+  const token = getStoredToken();
+
+  if (token.received + (token.expires_in * 1000) < +new Date()) {
+    return refreshToken(token);
+  }
+
+  return Promise.resolve(token);
+}
+
+function storeToken(token: AuthToken): void {
+  const toBeStored: StoredAuthToken = { ...token, received: +new Date() };
+
+  localStorage.setItem(STORAGE_TOKEN, JSON.stringify(toBeStored));
+}
+
+function performAuthentication(data: PostData): Promise<AuthToken> {
+  return post(SPOTIFY_TOKEN_URI, data, ContentType.formUrlEncoded)
     .then((response) => {
       if (response.status !== 200) {
         throw new Error(response.statusText);
@@ -160,9 +154,41 @@ export function authWithAuthorizationCode(code: string): Promise<void> {
 
       return response.json();
     })
-    .then((response) => storeToken(response));
+    .then((response: AuthToken) => {
+      storeToken(response);
+      return response;
+    });
 }
 
-export function hasToken(): boolean {
-  return localStorage.getItem(STORAGE_TOKEN) !== null;
+let currentTokenRefresh: Promise<AuthToken> | undefined;
+
+function refreshToken(authToken: StoredAuthToken): Promise<AuthToken> {
+  if (!currentTokenRefresh) {
+    currentTokenRefresh = performAuthentication({
+      /* eslint-disable @typescript-eslint/camelcase */
+      grant_type: 'refresh_token',
+      refresh_token: authToken.refresh_token,
+      client_id: SPOTIFY_CLIENT_ID,
+      /* eslint-enable @typescript-eslint/camelcase */
+    }).then((token) => {
+      currentTokenRefresh = undefined;
+      return token;
+    });
+  }
+
+  return currentTokenRefresh;
+}
+
+export function authenticateWithAuthorizationCode(code: string): Promise<AuthToken> {
+  const codeVerifier = getStoredCodeVerifier() || '';
+
+  return performAuthentication({
+    /* eslint-disable @typescript-eslint/camelcase */
+    client_id: SPOTIFY_CLIENT_ID,
+    grant_type: 'authorization_code',
+    redirect_uri: SPOTIFY_REDIRECT_URI,
+    code,
+    code_verifier: codeVerifier,
+    /* eslint-enable @typescript-eslint/camelcase */
+  });
 }

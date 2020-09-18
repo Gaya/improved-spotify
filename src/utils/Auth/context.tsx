@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState } from 'react';
 
-import { hasToken, wipeAuthStorage } from './utils';
+import { wipeAuthStorage, hasToken } from './utils';
 
 interface AuthContextValues {
   isLoggedIn: boolean;

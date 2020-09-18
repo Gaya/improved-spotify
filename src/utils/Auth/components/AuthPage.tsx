@@ -10,7 +10,7 @@ import red from '@material-ui/core/colors/red';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import ReplayIcon from '@material-ui/icons/Replay';
 
-import { authWithAuthorizationCode, getStoredState } from '../utils';
+import { authenticateWithAuthorizationCode, getStoredState } from '../utils';
 import AuthContext from '../context';
 
 import FullScreenIndicator from '../../../components/LoadingIndicator/FullScreenIndicator';
@@ -27,7 +27,7 @@ const AuthPage: React.FC = () => {
   const code = searchParams.get('code');
 
   useEffect(() => {
-    authWithAuthorizationCode(code || '')
+    authenticateWithAuthorizationCode(code || '')
       .then(() => {
         setLoggedIn(true);
         history.push('/');

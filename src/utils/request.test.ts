@@ -7,6 +7,10 @@ describe('urlWithQueryString', () => {
     expect(urlWithQueryString(baseUrl)).toEqual(baseUrl);
   });
 
+  it('should only return url with empty data supplied', () => {
+    expect(urlWithQueryString(baseUrl, {})).toEqual(baseUrl);
+  });
+
   it('should turn objects into query string', () => {
     const data = {
       key: 'this value',
