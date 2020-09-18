@@ -1,11 +1,12 @@
 import { useEffect, useReducer } from 'react';
+
 import { createAuthStrings } from '../utils';
 
-interface LoadableAuthString {
+import { Loadable } from '../../../types';
+
+interface LoadableAuthString extends Loadable {
   codeChallenge: string;
   state: string;
-  isLoading: boolean;
-  isResolving: boolean;
 }
 
 const useAuthStrings = (): Omit<LoadableAuthString, 'isResolving'> => {

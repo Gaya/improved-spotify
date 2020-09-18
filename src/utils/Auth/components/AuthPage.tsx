@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -34,7 +35,7 @@ const AuthPage: React.FC = () => {
       .catch((err) => {
         history.push(`/auth?error=${err.error}`);
       });
-  }, [history, code]);
+  }, [history, code, setLoggedIn]);
 
   if (storedState !== state || error) {
     logOut();

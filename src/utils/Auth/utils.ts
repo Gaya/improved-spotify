@@ -1,3 +1,4 @@
+import { post, urlWithQueryString } from '../request';
 import {
   SPOTIFY_AUTH_URI,
   SPOTIFY_CLIENT_ID,
@@ -6,7 +7,7 @@ import {
   STORAGE_AUTH_STATE,
   STORAGE_TOKEN,
 } from '../../consts';
-import { urlWithQueryString } from '../request';
+import { ContentType } from '../../types';
 
 export function generateRandomString(length: number): string {
   let text = '';
@@ -139,22 +140,18 @@ export function getStoredToken(): StoredToken {
 export function authWithAuthorizationCode(code: string): Promise<void> {
   const codeVerifier = getStoredCodeVerifier() || '';
 
-  const body = new URLSearchParams();
-  body.set('client_id', SPOTIFY_CLIENT_ID);
-  body.set('grant_type', 'authorization_code');
-  body.set('code', code);
-  body.set('redirect_uri', SPOTIFY_REDIRECT_URI);
-  body.set('code_verifier', codeVerifier);
-
-  return fetch(
+  return post(
     SPOTIFY_TOKEN_URI,
     {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
+      /* eslint-disable @typescript-eslint/camelcase */
+      client_id: SPOTIFY_CLIENT_ID,
+      grant_type: 'authorization_code',
+      redirect_uri: SPOTIFY_REDIRECT_URI,
+      code,
+      code_verifier: codeVerifier,
+      /* eslint-enable @typescript-eslint/camelcase */
     },
+    ContentType.formUrlEncoded,
   )
     .then((response) => {
       if (response.status !== 200) {
