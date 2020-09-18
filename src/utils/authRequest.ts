@@ -1,17 +1,17 @@
 import { getValidToken } from './Auth/utils';
-import { get, post } from './request';
+import { get as GET, post as POST } from './request';
 
 import { ContentType, PostData, QueryStringData } from '../types';
 
-export const authGet = (
+export const get = (
   uri: string,
   params: QueryStringData = {},
 ): Promise<Response> => getValidToken()
-  .then((token) => get(uri, params, token.access_token));
+  .then((token) => GET(uri, params, token.access_token));
 
-export const authPost = (
+export const post = (
   uri: string,
   data: PostData = {},
   contentType: ContentType = ContentType.json,
 ): Promise<Response> => getValidToken()
-  .then((token) => post(uri, data, contentType, token.access_token));
+  .then((token) => POST(uri, data, contentType, token.access_token));

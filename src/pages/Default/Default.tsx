@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 import AuthButton from '../../utils/Auth/components/AuthButton';
 import AuthContext from '../../utils/Auth/context';
 import { SPOTIFY_PLAYLISTS_URI } from '../../consts';
-import { authGet } from '../../utils/authRequest';
+import { get } from '../../utils/authRequest';
 
 const Default: React.FC = () => {
   const { isLoggedIn, logOut } = useContext(AuthContext);
@@ -26,7 +26,7 @@ const Default: React.FC = () => {
       <div>
         <Button
           onClick={(): void => {
-            authGet(SPOTIFY_PLAYLISTS_URI).then(console.log).catch(console.error);
+            get(SPOTIFY_PLAYLISTS_URI).then(console.log).catch(console.error);
           }}
         >
           Get Playlists
