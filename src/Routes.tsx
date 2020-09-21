@@ -1,13 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import AuthPage from './utils/Auth/components/AuthPage';
+import AuthRoutes from './utils/Auth/components/Routes';
 
 import Default from './pages/Default/Default';
 
 const Routes: React.FC = () => (
   <Switch>
-    <Route exact path="/auth" component={AuthPage} />
+    <Route path="/auth" component={AuthRoutes} />
     <Route component={Default} />
   </Switch>
 );
