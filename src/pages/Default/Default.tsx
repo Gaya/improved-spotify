@@ -6,6 +6,8 @@ import AuthContext from '../../utils/Auth/context';
 import { SPOTIFY_PLAYLISTS_URI } from '../../consts';
 import { get } from '../../utils/authRequest';
 
+import Layout from '../../components/App/Layout';
+
 const Default: React.FC = () => {
   const { isLoggedIn, logOut } = useContext(AuthContext);
 
@@ -18,7 +20,7 @@ const Default: React.FC = () => {
   }
 
   return (
-    <div>
+    <Layout>
       <h1>Welcome!</h1>
       <div>
         <Button color="secondary" variant="contained" onClick={logOut}>Logout</Button>
@@ -32,7 +34,7 @@ const Default: React.FC = () => {
           Get Playlists
         </Button>
       </div>
-    </div>
+    </Layout>
   );
 };
 
