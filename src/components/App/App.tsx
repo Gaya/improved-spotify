@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { RecoilRoot } from 'recoil';
 
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -45,9 +46,11 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <div className="App">
-          <Routes />
-        </div>
+        <RecoilRoot>
+          <div className="App">
+            <Routes />
+          </div>
+        </RecoilRoot>
       </AuthProvider>
     </ThemeProvider>
   );

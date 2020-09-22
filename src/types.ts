@@ -28,3 +28,15 @@ export interface AuthToken {
 export interface StoredAuthToken extends AuthToken {
   received: number;
 }
+
+export interface SpotifyImage {
+  height: number | null;
+  width: number | null;
+  uri: string;
+}
+
+export interface SpotifyUser {
+  display_name: string;
+  id: string;
+  images: SpotifyImage[];
+}
