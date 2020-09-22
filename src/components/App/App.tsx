@@ -23,6 +23,10 @@ const App: React.FC = () => {
         type: prefersDarkMode ? 'dark' : 'light',
         primary: green,
         secondary: pink,
+        background: {
+          default: '#1d1e20',
+          paper: '#2b2c2f',
+        },
       },
       typography: {
         fontFamily: [

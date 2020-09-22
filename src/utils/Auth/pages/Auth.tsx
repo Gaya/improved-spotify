@@ -16,6 +16,8 @@ import AuthContext from '../context';
 import FullScreenIndicator from '../../../components/LoadingIndicator/FullScreenIndicator';
 import CenteredContainer from '../../../components/CenteredContainer/CenteredContainer';
 
+import './Auth.css';
+
 const Auth: React.FC = () => {
   const { setLoggedIn, logOut } = useContext(AuthContext);
   const history = useHistory();
