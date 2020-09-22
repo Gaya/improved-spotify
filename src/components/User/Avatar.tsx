@@ -1,10 +1,9 @@
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MUIAvatar from '@material-ui/core/Avatar';
 
-import { userInformationQuery } from '../../state/atoms';
+import { SpotifyUser } from '../../types';
 
 const useStyles = makeStyles({
   avatar: {
@@ -13,18 +12,17 @@ const useStyles = makeStyles({
   },
 });
 
-const Avatar: React.FC = () => {
-  const styles = useStyles();
-  const user = useRecoilValueLoadable(userInformationQuery);
+interface AvatarProps {
+  user?: SpotifyUser;
+}
 
-  if (user.state === 'hasError') {
-    throw user.contents;
-  }
+const Avatar: React.FC<AvatarProps> = ({ user }) => {
+  const styles = useStyles();
 
   return (
     <MUIAvatar
       className={styles.avatar}
-      src={user.state === 'hasValue' ? user.contents.images[0].url : undefined}
+      src={user ? user.images[0].url : undefined}
     />
   );
 };

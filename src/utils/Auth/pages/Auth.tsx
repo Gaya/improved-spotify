@@ -16,7 +16,7 @@ import AuthContext from '../context';
 import FullScreenIndicator from '../../../components/LoadingIndicator/FullScreenIndicator';
 import CenteredContainer from '../../../components/CenteredContainer/CenteredContainer';
 
-const AuthPage: React.FC = () => {
+const Auth: React.FC = () => {
   const { setLoggedIn, logOut } = useContext(AuthContext);
   const history = useHistory();
   const searchParams = new URLSearchParams(window.location.search);
@@ -70,4 +70,4 @@ const AuthPage: React.FC = () => {
   );
 };
 
-export default AuthPage;
+export default Auth;

@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import Avatar from '../User/Avatar';
+import UserMenu from '../User/UserMenu';
 
 const useStyles = makeStyles({
   title: {
@@ -20,10 +20,10 @@ const Layout: React.FC = ({ children }) => {
     <section>
       <AppBar position="static" color="transparent">
         <Toolbar variant="dense">
-          <Typography variant="h6" className={styles.title}>
-            Improved Spotify
+          <Typography className={styles.title}>
+            Room for play controls
           </Typography>
-          <Avatar />
+          <UserMenu />
         </Toolbar>
       </AppBar>
       {children}

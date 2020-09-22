@@ -8,11 +8,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import pink from '@material-ui/core/colors/pink';
 import green from '@material-ui/core/colors/green';
 
-import './App.css';
+import Routes from './Routes';
 
 import { AuthProvider } from '../../utils/Auth/context';
 
-import Routes from '../../Routes';
+import './App.css';
 
 const App: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
