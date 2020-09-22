@@ -3,7 +3,16 @@ import { Route, RouteProps, Redirect } from 'react-router-dom';
 
 import AuthContext from '../../utils/Auth/context';
 
-const ProtectedRoute: React.FC<RouteProps> = (props) => {
+const ProtectedRoute: React.FC<RouteProps> = ({
+  location,
+  component,
+  render,
+  children,
+  path,
+  exact,
+  sensitive,
+  strict,
+}) => {
   const { isLoggedIn } = useContext(AuthContext);
 
   if (!isLoggedIn) {
@@ -13,8 +22,17 @@ const ProtectedRoute: React.FC<RouteProps> = (props) => {
   }
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <Route {...props} />
+    <Route
+      location={location}
+      component={component}
+      render={render}
+      path={path}
+      exact={exact}
+      sensitive={sensitive}
+      strict={strict}
+    >
+      {children}
+    </Route>
   );
 };
 
