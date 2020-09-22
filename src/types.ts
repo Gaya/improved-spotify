@@ -32,7 +32,7 @@ export interface StoredAuthToken extends AuthToken {
 export interface SpotifyImage {
   height: number | null;
   width: number | null;
-  uri: string;
+  url: string;
 }
 
 export interface SpotifyUser {

@@ -15,11 +15,18 @@ const useStyles = makeStyles({
 
 const Avatar: React.FC = () => {
   const styles = useStyles();
-  const userInformation = useRecoilValueLoadable(userInformationQuery);
+  const user = useRecoilValueLoadable(userInformationQuery);
 
-  console.log(userInformation);
+  if (user.state === 'hasError') {
+    throw user.contents;
+  }
 
-  return <MUIAvatar className={styles.avatar} />;
+  return (
+    <MUIAvatar
+      className={styles.avatar}
+      src={user.state === 'hasValue' ? user.contents.images[0].url : undefined}
+    />
+  );
 };
 
 export default Avatar;
