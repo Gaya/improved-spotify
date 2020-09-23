@@ -1,23 +1,17 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
 
-import { SPOTIFY_PLAYLISTS_URI } from '../../consts';
-import { get } from '../../utils/authRequest';
+import Container from '@material-ui/core/Container';
 
 import Layout from '../../components/App/Layout';
+import PageTitle from '../../components/PageTitle/PageTitle';
 
 const Default: React.FC = () => (
   <Layout>
-    <h1>Welcome!</h1>
-    <div>
-      <Button
-        onClick={(): void => {
-          get(SPOTIFY_PLAYLISTS_URI).then(console.log).catch(console.error);
-        }}
-      >
-        Get Playlists
-      </Button>
-    </div>
+    <Container>
+      <PageTitle>
+        Browse Your Playlists
+      </PageTitle>
+    </Container>
   </Layout>
 );
 
