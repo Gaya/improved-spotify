@@ -15,6 +15,6 @@ export const userInformationQuery = selector({
 export const playlistsQuery = selector({
   key: 'Playlists',
   get(): Promise<SpotifyPlaylist[]> {
-    return getPaged<SpotifyPlaylist>(SPOTIFY_PLAYLISTS_URI, { limit: 5 });
+    return getPaged<SpotifyPlaylist>(SPOTIFY_PLAYLISTS_URI);
   },
 });

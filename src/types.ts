@@ -49,8 +49,26 @@ export interface SpotifyUser {
   display_name: string;
   id: string;
   images: SpotifyImage[];
+  uri: string;
 }
 
 export interface SpotifyPlaylist {
+  collaborative: boolean;
+  description: string;
+  external_urls: {
+    [name: string]: string;
+  };
+  href: string;
   id: string;
+  images: SpotifyImage[];
+  name: string;
+  owner: SpotifyUser;
+  primary_color: string | null;
+  public: boolean;
+  tracks: {
+    href: string;
+    total: number;
+  };
+  type: string;
+  uri: string;
 }
