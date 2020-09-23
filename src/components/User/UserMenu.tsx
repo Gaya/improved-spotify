@@ -5,16 +5,16 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { useRecoilValueLoadable } from 'recoil';
+import { useHistory } from 'react-router-dom';
 
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItem from '@material-ui/core/ListItem';
 
-import { useHistory } from 'react-router-dom';
 import Avatar from './Avatar';
 
-import { userInformationQuery } from '../../state/atoms';
+import { userInformationQuery } from '../../state/selectors';
 import AuthContext from '../../utils/Auth/context';
 
 const IconButtonNoPadding = styled(IconButton)`
@@ -24,9 +24,9 @@ const IconButtonNoPadding = styled(IconButton)`
 const UserMenu: React.FC = () => {
   const { logOut } = useContext(AuthContext);
   const history = useHistory();
+  const user = useRecoilValueLoadable(userInformationQuery);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const user = useRecoilValueLoadable(userInformationQuery);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget);

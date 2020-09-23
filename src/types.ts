@@ -10,7 +10,7 @@ export enum ContentType {
 }
 
 export interface QueryStringData {
-  [key: string]: string;
+  [key: string]: string | number | boolean;
 }
 
 export interface PostData {
@@ -29,6 +29,16 @@ export interface StoredAuthToken extends AuthToken {
   received: number;
 }
 
+export interface PagedResponse<S> {
+  href: string;
+  items: S[];
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+}
+
 export interface SpotifyImage {
   height: number | null;
   width: number | null;
@@ -39,4 +49,8 @@ export interface SpotifyUser {
   display_name: string;
   id: string;
   images: SpotifyImage[];
+}
+
+export interface SpotifyPlaylist {
+  id: string;
 }

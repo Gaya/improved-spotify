@@ -18,12 +18,27 @@ describe('urlWithQueryString', () => {
       another: 'value',
     };
 
-    const expectedQueryString = 'another=value&key=this%20value&test=hello';
+    const expectedQueryString = 'another=value&key=this+value&test=hello';
 
     expect(
       urlWithQueryString(baseUrl, data),
     ).toEqual(
-      [baseUrl, expectedQueryString].join('?'),
+      [`${baseUrl}/`, expectedQueryString].join('?'),
+    );
+  });
+
+  it('should merge with already supplied query strings', () => {
+    const data = {
+      limit: 5,
+      test: 'hello',
+    };
+
+    const expectedQueryString = 'limit=5&offset=5&test=hello';
+
+    expect(
+      urlWithQueryString(`${baseUrl}/path?limit=5&offset=5`, data),
+    ).toEqual(
+      [`${baseUrl}/path`, expectedQueryString].join('?'),
     );
   });
 });

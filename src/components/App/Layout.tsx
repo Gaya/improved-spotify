@@ -6,6 +6,7 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import UserMenu from '../User/UserMenu';
+import CompactPlaylists from '../Playlists/CompactPlaylists';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,7 +42,7 @@ const Layout: React.FC = ({ children }) => {
   return (
     <section className={styles.container}>
       <section className={styles.sidebar}>
-        Sidebar
+        <CompactPlaylists />
       </section>
       <section className={styles.content}>
         <section className={styles.toolbar}>

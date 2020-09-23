@@ -1,22 +1,33 @@
-import { ContentType, PostData, QueryStringData } from '../types';
+import {
+  ContentType,
+  PagedResponse,
+  PostData,
+  QueryStringData,
+} from '../types';
 
 export function urlWithQueryString(url: string, data?: QueryStringData): string {
   if (!data || Object.keys(data).length === 0) {
     return url;
   }
 
+  const parsed = new URL(url);
+
   return [
-    url,
+    parsed.origin,
+    parsed.pathname,
     '?',
-    dataToQueryString(data),
+    dataToQueryString(data, parsed.search),
   ].join('');
 }
 
-export function dataToQueryString(data: QueryStringData): string {
-  return Object.keys(data).sort().map((key: string) => [
-    key,
-    encodeURI(data[key]),
-  ].join('=')).join('&');
+export function dataToQueryString(data: QueryStringData, baseUrl = ''): string {
+  const searchParams = new URLSearchParams(baseUrl);
+
+  Object.keys(data).sort().forEach((key: string) => {
+    searchParams.set(key, data[key].toString());
+  });
+
+  return searchParams.toString();
 }
 
 function bodyForContentType(data: PostData, contentType: ContentType): string | URLSearchParams {
@@ -76,4 +87,26 @@ export function get(
       headers: headersWithAccessToken({}, accessToken),
     },
   );
+}
+
+export function getPaged<T>(
+  uri: string,
+  params: QueryStringData = {},
+  accessToken?: string,
+  currentItems: T[] = [],
+): Promise<T[]> {
+  return get(uri, params, accessToken)
+    .then((response) => response.json())
+    .then((response: PagedResponse<T>) => {
+      if (response.next) {
+        return getPaged<T>(
+          response.next,
+          params,
+          accessToken,
+          [...currentItems, ...response.items],
+        );
+      }
+
+      return [...currentItems, ...response.items];
+    });
 }
