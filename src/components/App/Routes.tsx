@@ -1,15 +1,17 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import AuthRoutes from '../Auth/components/Routes';
-import Default from '../../pages/Default/Default';
+import AuthRoutes from '../Auth/Routes';
+import PlaylistRoutes from '../Playlists/Routes';
+import Browse from '../Playlists/pages/Browse';
 
 import ProtectedRoute from './ProtectedRoute';
 
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/auth" component={AuthRoutes} />
-    <ProtectedRoute component={Default} />
+    <ProtectedRoute path="/playlist" component={PlaylistRoutes} />
+    <ProtectedRoute component={Browse} />
   </Switch>
 );
 

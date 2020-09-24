@@ -6,7 +6,7 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import UserMenu from '../User/UserMenu';
-import CompactPlaylists from '../Playlists/CompactPlaylists';
+import CompactPlaylists from '../Playlists/components/CompactPlaylists';
 
 const useStyles = makeStyles((theme) => ({
   container: {

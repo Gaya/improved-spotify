@@ -2,10 +2,10 @@ import React from 'react';
 
 import Container from '@material-ui/core/Container';
 
-import Layout from '../../components/App/Layout';
-import PageTitle from '../../components/PageTitle/PageTitle';
+import Layout from '../../App/Layout';
+import PageTitle from '../../PageTitle/PageTitle';
 
-const Default: React.FC = () => (
+const Browse: React.FC = () => (
   <Layout>
     <Container>
       <PageTitle>
@@ -15,4 +15,4 @@ const Default: React.FC = () => (
   </Layout>
 );
 
-export default Default;
+export default Browse;
