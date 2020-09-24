@@ -4,7 +4,7 @@ import { Link } from '@material-ui/core';
 import { createAuthUrl } from '../utils';
 import useAuthStrings from '../hooks/useAuthStrings';
 
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
+import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
 const AuthButton: React.FC = () => {
   const { codeChallenge, state, isLoading } = useAuthStrings();

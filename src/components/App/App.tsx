@@ -10,7 +10,7 @@ import green from '@material-ui/core/colors/green';
 
 import Routes from './Routes';
 
-import { AuthProvider } from '../../utils/Auth/context';
+import { AuthProvider } from '../Auth/context';
 
 import './App.css';
 

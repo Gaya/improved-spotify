@@ -1,4 +1,4 @@
-import { post, urlWithQueryString } from '../request';
+import { post, urlWithQueryString } from '../../utils/request';
 
 import {
   SPOTIFY_AUTH_URI,

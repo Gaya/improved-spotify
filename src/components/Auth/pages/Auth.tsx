@@ -13,8 +13,8 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import { authenticateWithAuthorizationCode, getStoredState } from '../utils';
 import AuthContext from '../context';
 
-import FullScreenIndicator from '../../../components/LoadingIndicator/FullScreenIndicator';
-import CenteredContainer from '../../../components/CenteredContainer/CenteredContainer';
+import FullScreenIndicator from '../../LoadingIndicator/FullScreenIndicator';
+import CenteredContainer from '../../CenteredContainer/CenteredContainer';
 
 import './Auth.css';
 

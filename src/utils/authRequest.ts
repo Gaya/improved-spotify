@@ -1,4 +1,4 @@
-import { getValidToken } from './Auth/utils';
+import { getValidToken } from '../components/Auth/utils';
 import { get as getPlain, post as postPlain, getPaged as getPagedPlain } from './request';
 
 import { ContentType, PostData, QueryStringData } from '../types';

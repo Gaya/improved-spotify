@@ -15,7 +15,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Avatar from './Avatar';
 
 import { userInformationQuery } from '../../state/selectors';
-import AuthContext from '../../utils/Auth/context';
+import AuthContext from '../Auth/context';
 
 const IconButtonNoPadding = styled(IconButton)`
   padding: 0;

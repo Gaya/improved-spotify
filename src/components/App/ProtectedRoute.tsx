@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 
-import AuthContext from '../../utils/Auth/context';
+import AuthContext from '../Auth/context';
 
 const ProtectedRoute: React.FC<RouteProps> = ({
   location,
