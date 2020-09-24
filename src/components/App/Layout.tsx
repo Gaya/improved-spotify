@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     borderRightStyle: 'solid',
     borderRightWidth: 2,
     borderRightColor: '#010102',
+    overflow: 'auto',
   },
   toolbar: {
     borderBottomStyle: 'solid',
