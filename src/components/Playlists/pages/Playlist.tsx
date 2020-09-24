@@ -13,6 +13,7 @@ import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
 import Image from '../components/Image';
 import PlaylistInfo from '../components/PlaylistInfo';
+import TrackList from '../components/TrackList';
 
 const useStyles = makeStyles((theme) => ({
   topBar: {
@@ -38,12 +39,15 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
       <PageContainer>
         {playlist.state !== 'hasValue' && <LoadingIndicator />}
         {playlist.state === 'hasValue' && playlist.contents && (
-          <section className={styles.topBar}>
-            <div className={styles.topBarImage}>
-              <Image key={id} id={id} />
-            </div>
-            <PlaylistInfo playlist={playlist.contents} />
-          </section>
+          <>
+            <section className={styles.topBar}>
+              <div className={styles.topBarImage}>
+                <Image key={`Image_${id}`} id={id} />
+              </div>
+              <PlaylistInfo playlist={playlist.contents} />
+            </section>
+            <TrackList key={`TrackList_${id}`} id={id} />
+          </>
         )}
       </PageContainer>
     </Layout>

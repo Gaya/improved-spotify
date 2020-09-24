@@ -26,7 +26,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PlaylistInfo: React.FC<{ playlist: SpotifyPlaylist }> = ({ playlist }) => {
+interface PlaylistInfoProps {
+  playlist: SpotifyPlaylist;
+}
+
+const PlaylistInfo: React.FC<PlaylistInfoProps> = ({ playlist }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 
