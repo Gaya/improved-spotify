@@ -1,4 +1,4 @@
-import { selector } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 
 import { SPOTIFY_ME_URI, SPOTIFY_PLAYLISTS_URI } from '../consts';
 
@@ -17,4 +17,10 @@ export const playlistsQuery = selector({
   get(): Promise<SpotifyPlaylist[]> {
     return getPaged<SpotifyPlaylist>(SPOTIFY_PLAYLISTS_URI);
   },
+});
+
+export const playlistQuery = selectorFamily({
+  key: 'Playlist',
+  get: (id: string) => ({ get: g }): SpotifyPlaylist | undefined => g(playlistsQuery)
+    .find((playlist) => playlist.id === id),
 });
