@@ -65,6 +65,7 @@ export interface SpotifyPlaylist {
   owner: SpotifyUser;
   primary_color: string | null;
   public: boolean;
+  snapshot_id: string;
   tracks: {
     href: string;
     total: number;

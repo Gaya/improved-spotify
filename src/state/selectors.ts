@@ -34,7 +34,7 @@ export const playlistQuery = selectorFamily({
 
 export const playlistTracksQuery = selectorFamily({
   key: 'PlaylistTracks',
-  get: (id: string) => ({ get: getRecoil }): any => {
+  get: (id: string) => ({ get: getRecoil }): Promise<SpotifyTrack[]> => {
     const playlist = getRecoil(playlistsQuery)
       .find((p) => p.id === id);
 
