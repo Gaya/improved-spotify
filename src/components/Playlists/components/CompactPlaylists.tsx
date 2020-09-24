@@ -12,6 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
 import { playlistsQuery } from '../../../state/selectors';
+import htmlDecode from '../../../utils/htmlDecode';
 
 const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 26px;
@@ -40,7 +41,7 @@ const CompactPlaylists: React.FC = () => {
             component={Link}
             selected={playlist.id === id}
           >
-            {playlist.name}
+            {htmlDecode(playlist.name)}
           </ListItem>
         ),
       )}

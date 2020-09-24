@@ -10,20 +10,22 @@ import Layout from '../../App/Layout';
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
 import { playlistQuery } from '../../../state/selectors';
+import htmlDecode from '../../../utils/htmlDecode';
 
 type PlaylistProps = RouteComponentProps<{ id: string }>;
 
 const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const playlist = useRecoilValueLoadable(playlistQuery(match.params.id));
 
-  console.log(playlist);
-
   return (
     <Layout>
       <Container>
         {playlist.state !== 'hasValue' && <Box marginTop={3}><LoadingIndicator /></Box>}
         {playlist.state === 'hasValue' && playlist.contents && (
-          <PageTitle title={playlist.contents.name} subtitle={playlist.contents.description} />
+          <PageTitle
+            title={htmlDecode(playlist.contents.name)}
+            subtitle={htmlDecode(playlist.contents.description)}
+          />
         )}
       </Container>
     </Layout>
