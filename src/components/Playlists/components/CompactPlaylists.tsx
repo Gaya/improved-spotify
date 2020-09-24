@@ -19,7 +19,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
 `;
 
 const CompactPlaylists: React.FC = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
   const playlists = useRecoilValueLoadable(playlistsQuery);
 
   return (

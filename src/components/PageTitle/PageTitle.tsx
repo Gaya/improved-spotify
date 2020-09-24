@@ -3,7 +3,6 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
-import { Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -11,8 +10,6 @@ const useStyles = makeStyles((theme) => ({
     borderBottomWidth: 1,
     borderBottomColor: theme.palette.divider,
     paddingBottom: theme.spacing(1),
-    paddingTop: theme.spacing(3),
-    marginBottom: theme.spacing(2),
   },
   subtitle: {
     paddingBottom: theme.spacing(1),

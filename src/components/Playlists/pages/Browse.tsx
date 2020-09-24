@@ -1,17 +1,16 @@
 import React from 'react';
 
-import Container from '@material-ui/core/Container';
-
 import Layout from '../../App/Layout';
 import PageTitle from '../../PageTitle/PageTitle';
+import PageContainer from '../../App/PageContainer';
 
 const Browse: React.FC = () => (
   <Layout>
-    <Container>
+    <PageContainer>
       <PageTitle>
         Browse Your Playlists
       </PageTitle>
-    </Container>
+    </PageContainer>
   </Layout>
 );
 
