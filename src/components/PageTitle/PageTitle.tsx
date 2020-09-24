@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomWidth: 1,
     borderBottomColor: theme.palette.divider,
     paddingBottom: theme.spacing(1),
+    flexGrow: 1,
   },
   subtitle: {
     paddingBottom: theme.spacing(1),
@@ -28,11 +29,11 @@ const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle, children }) => {
 
   return (
     <div className={styles.title}>
-      <Typography variant="h5">
+      <Typography variant="h4">
         {title || children}
       </Typography>
       {subtitle && (
-        <Typography className={styles.subtitle} variant="body2">
+        <Typography className={styles.subtitle} variant="body1">
           {subtitle}
         </Typography>
       )}
