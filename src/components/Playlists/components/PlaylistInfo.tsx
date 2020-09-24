@@ -18,9 +18,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
+  title: {
+    paddingBottom: theme.spacing(2),
+  },
   subtitle: {
     paddingBottom: theme.spacing(1),
-    paddingTop: theme.spacing(1),
   },
 }));
 
@@ -30,15 +32,15 @@ const PlaylistInfo: React.FC<{ playlist: SpotifyPlaylist }> = ({ playlist }) => 
 
   return (
     <div className={styles.infoContainer}>
-      <Typography variant="h4">
+      <Typography className={styles.title} variant="h4">
         {htmlDecode(playlist.name)}
       </Typography>
       {playlist.description && (
-        <Typography className={styles.subtitle} variant="body1">
+        <Typography className={styles.title} variant="body1" color="textSecondary">
           {htmlDecode(playlist.description)}
         </Typography>
       )}
-      <Typography className={styles.subtitle} variant="body2">
+      <Typography className={styles.subtitle} variant="body2" color="textSecondary">
         {`Created by ${playlist.owner.display_name}, ${playlist.tracks.total} songs`}
       </Typography>
     </div>

@@ -40,7 +40,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
         {playlist.state === 'hasValue' && playlist.contents && (
           <section className={styles.topBar}>
             <div className={styles.topBarImage}>
-              <Image id={id} />
+              <Image key={id} id={id} />
             </div>
             <PlaylistInfo playlist={playlist.contents} />
           </section>
