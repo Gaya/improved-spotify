@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { PagedResponse, SpotifyTrack } from '../../../types';
+import { SpotifyTrack } from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
-import { get } from '../../../utils/authRequest';
+import { getPlaylistTracks } from '../../../utils/data';
 
 function useTrackList(id: string): {
   totalTracks: number;
@@ -18,7 +18,7 @@ function useTrackList(id: string): {
     if (!isFetching) {
       setIsFetching(true);
 
-      get<PagedResponse<SpotifyTrack>>(nextRef.current).then((response) => {
+      getPlaylistTracks(nextRef.current, tracks).then((response) => {
         setTracks([...tracks, ...response.items]);
         setTotalTracks(response.total);
 

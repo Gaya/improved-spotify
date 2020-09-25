@@ -39,6 +39,14 @@ export interface PagedResponse<S> {
   total: number;
 }
 
+export interface PlaylistSnapshots {
+  [playlistId: string]: string;
+}
+
+export interface PlaylistTracks {
+  [playlistId: string]: string[];
+}
+
 export interface SpotifyImage {
   height: number | null;
   width: number | null;
