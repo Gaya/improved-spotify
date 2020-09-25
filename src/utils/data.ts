@@ -154,33 +154,58 @@ export function extractTrackData(tracks: SpotifyTrack[]): SpotifyDataExport {
   };
 }
 
+function extractAndStoreTrackData(tracksToStore: SpotifyTrack[], playlistId: string): void {
+  const {
+    tracks,
+    trackInfo,
+    artists,
+    albums,
+  } = extractTrackData(tracksToStore);
+
+  // save data to local storage
+  const currentPlaylistTracks = getStoredPlaylistTracks();
+  storePlaylistTracks({ ...currentPlaylistTracks, [playlistId]: tracks });
+
+  const currentTrackInfo = getStoredTrackInfo();
+  storeTrackInfo({ ...currentTrackInfo, ...trackInfo });
+
+  const currentArtists = getStoredArtists();
+  storeArtists({ ...currentArtists, ...artists });
+
+  const currentAlbums = getStoredAlbums();
+  storeAlbums({ ...currentAlbums, ...albums });
+}
+
+function hasTracksInStore(playlistId: string): boolean {
+  const currentPlaylistTracks = getStoredPlaylistTracks();
+
+  return currentPlaylistTracks[playlistId].length > 0;
+}
+
 export function getPlaylistTracks(
   uri: string,
   prevTracks: SpotifyTrack[],
   playlistId: string,
 ): Promise<PagedResponse<SpotifyTrack>> {
+  if (hasTracksInStore(playlistId)) {
+    // @todo get and parse tracks
+
+    return Promise.resolve({
+      items: [],
+      total: 0,
+      href: '',
+      limit: 0,
+      offset: 0,
+      next: null,
+      previous: null,
+    });
+  }
+
   return get<PagedResponse<SpotifyTrack>>(uri)
     .then((response) => {
       if (!response.next) {
-        const {
-          tracks,
-          trackInfo,
-          artists,
-          albums,
-        } = extractTrackData([...prevTracks, ...response.items]);
-
-        // save data to local storage
-        const currentPlaylistTracks = getStoredPlaylistTracks();
-        storePlaylistTracks({ ...currentPlaylistTracks, [playlistId]: tracks });
-
-        const currentTrackInfo = getStoredTrackInfo();
-        storeTrackInfo({ ...currentTrackInfo, ...trackInfo });
-
-        const currentArtists = getStoredArtists();
-        storeArtists({ ...currentArtists, ...artists });
-
-        const currentAlbums = getStoredAlbums();
-        storeAlbums({ ...currentAlbums, ...albums });
+        // done with paging, store information
+        extractAndStoreTrackData([...prevTracks, ...response.items], playlistId);
       }
 
       return response;
