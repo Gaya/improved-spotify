@@ -18,7 +18,7 @@ function useTrackList(id: string): {
     if (!isFetching) {
       setIsFetching(true);
 
-      getPlaylistTracks(nextRef.current, tracks).then((response) => {
+      getPlaylistTracks(nextRef.current, tracks, id).then((response) => {
         setTracks([...tracks, ...response.items]);
         setTotalTracks(response.total);
 

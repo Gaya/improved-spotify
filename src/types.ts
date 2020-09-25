@@ -55,6 +55,7 @@ export interface SpotifyImage {
 
 export interface SpotifyUser {
   display_name: string;
+  href: string;
   id: string;
   images: SpotifyImage[];
   uri: string;
@@ -111,34 +112,79 @@ interface SpotifyAlbum {
   uri: string;
 }
 
+export interface SpotifyTrackInfo {
+  album: SpotifyAlbum;
+  artists: SpotifyArtist[];
+  available_markets: string[];
+  disc_number: number;
+  duration_ms: number;
+  episode: boolean;
+  explicit: boolean;
+  external_ids: {
+    [name: string]: string;
+  };
+  external_urls: {
+    [name: string]: string;
+  };
+  href: string;
+  id: string;
+  is_local: boolean;
+  name: string;
+  popularity: number;
+  preview_url: string | null;
+  track: boolean;
+  track_number: number;
+  type: string;
+  uri: string;
+}
+
 export interface SpotifyTrack {
   added_at: string;
-  added_by: Omit<SpotifyUser, 'images'>;
-  is_local: boolean;
-  primary_color: string | null;
-  track: {
-    album: SpotifyAlbum;
-    artists: SpotifyArtist[];
-    available_markets: string[];
-    disc_number: number;
-    duration_ms: number;
-    episode: boolean;
-    explicit: boolean;
-    external_ids: {
-      [name: string]: string;
-    };
+  added_by: {
     external_urls: {
       [name: string]: string;
     };
     href: string;
     id: string;
-    is_local: boolean;
-    name: string;
-    popularity: number;
-    preview_url: string;
-    track: boolean;
-    track_number: number;
     type: string;
     uri: string;
   };
+  is_local: boolean;
+  primary_color: string | null;
+  track: SpotifyTrackInfo;
+  video_thumbnail: {
+    url: string | null;
+  };
+}
+
+export interface StoredSpotifyTrack extends Omit<SpotifyTrack, 'track'> {
+  track: string;
+}
+
+export interface StoredSpotifyTrackInfo {
+  [trackId: string]: {
+    album: string;
+    artists: string[];
+  } & Omit<SpotifyTrackInfo, 'album' | 'artists'>;
+}
+
+export interface StoredSpotifyAlbums {
+  [albumId: string]: {
+    artists: string[];
+  } & Omit<SpotifyAlbum, 'artists'>;
+}
+
+export interface StoredSpotifyArtists {
+  [artistId: string]: SpotifyArtist;
+}
+
+export interface StoredPlaylistTracks {
+  [playlistId: string]: StoredSpotifyTrack[];
+}
+
+export interface SpotifyDataExport {
+  tracks: StoredSpotifyTrack[];
+  trackInfo: StoredSpotifyTrackInfo;
+  artists: StoredSpotifyArtists;
+  albums: StoredSpotifyAlbums;
 }
