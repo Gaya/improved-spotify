@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 
@@ -11,8 +10,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
-import { playlistsQuery } from '../../../state/selectors';
 import htmlDecode from '../../../utils/htmlDecode';
+import usePlaylists from '../hooks/usePlaylists';
 
 const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 26px;
@@ -20,7 +19,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
 
 const CompactPlaylists: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
-  const playlists = useRecoilValueLoadable(playlistsQuery);
+  const playlists = usePlaylists();
 
   return (
     <List subheader={<ListSubheader disableSticky>Playlists</ListSubheader>}>

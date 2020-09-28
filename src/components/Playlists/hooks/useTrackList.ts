@@ -19,12 +19,15 @@ function useTrackList(id: string): {
       setIsFetching(true);
 
       getPlaylistTracks(nextRef.current, tracks, id).then((response) => {
-        setTracks([...tracks, ...response.items]);
+        const allTracks = [...tracks, ...response.items];
+        setTracks(allTracks);
         setTotalTracks(response.total);
 
         if (response.next) {
           nextRef.current = response.next;
           setIsFetching(false);
+        } else {
+          console.log(allTracks);
         }
       });
     }

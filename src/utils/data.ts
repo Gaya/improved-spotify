@@ -23,7 +23,7 @@ export function getUserInformation(): Promise<SpotifyUser> {
   return get(SPOTIFY_ME_URI);
 }
 
-function getStoredPlaylistSnapshots(): PlaylistSnapshots {
+export function getStoredPlaylistSnapshots(): PlaylistSnapshots {
   const currentData = localStorage.getItem(STORAGE_PLAYLIST_SNAPSHOTS);
 
   if (!currentData) {
@@ -33,11 +33,11 @@ function getStoredPlaylistSnapshots(): PlaylistSnapshots {
   return JSON.parse(currentData);
 }
 
-function storePlaylistSnapshots(snapshots: PlaylistSnapshots): void {
+export function storePlaylistSnapshots(snapshots: PlaylistSnapshots): void {
   localStorage.setItem(STORAGE_PLAYLIST_SNAPSHOTS, JSON.stringify(snapshots));
 }
 
-function getStoredPlaylistTracks(): StoredPlaylistTracks {
+export function getStoredPlaylistTracks(): StoredPlaylistTracks {
   const currentData = localStorage.getItem(STORAGE_CACHE_DATA_PLAYLIST_TRACKS);
 
   if (!currentData) {
@@ -47,18 +47,11 @@ function getStoredPlaylistTracks(): StoredPlaylistTracks {
   return JSON.parse(currentData);
 }
 
-function storePlaylistTracks(tracks: StoredPlaylistTracks): void {
+export function storePlaylistTracks(tracks: StoredPlaylistTracks): void {
   localStorage.setItem(STORAGE_CACHE_DATA_PLAYLIST_TRACKS, JSON.stringify(tracks));
 }
 
-function removeStoredTracksOfPlaylist(id: string): void {
-  const currentPlaylistTracks = getStoredPlaylistTracks();
-  delete currentPlaylistTracks[id];
-
-  storePlaylistTracks(currentPlaylistTracks);
-}
-
-function getStoredTrackInfo(): StoredSpotifyTrackInfo {
+export function getStoredTrackInfo(): StoredSpotifyTrackInfo {
   const currentData = localStorage.getItem(STORAGE_CACHE_DATA_TRACK_INFO);
 
   if (!currentData) {
@@ -68,11 +61,11 @@ function getStoredTrackInfo(): StoredSpotifyTrackInfo {
   return JSON.parse(currentData);
 }
 
-function storeTrackInfo(tracks: StoredSpotifyTrackInfo): void {
+export function storeTrackInfo(tracks: StoredSpotifyTrackInfo): void {
   localStorage.setItem(STORAGE_CACHE_DATA_TRACK_INFO, JSON.stringify(tracks));
 }
 
-function getStoredAlbums(): StoredSpotifyAlbums {
+export function getStoredAlbums(): StoredSpotifyAlbums {
   const currentData = localStorage.getItem(STORAGE_CACHE_DATA_ALBUMS);
 
   if (!currentData) {
@@ -82,11 +75,11 @@ function getStoredAlbums(): StoredSpotifyAlbums {
   return JSON.parse(currentData);
 }
 
-function storeAlbums(albums: StoredSpotifyAlbums): void {
+export function storeAlbums(albums: StoredSpotifyAlbums): void {
   localStorage.setItem(STORAGE_CACHE_DATA_ALBUMS, JSON.stringify(albums));
 }
 
-function getStoredArtists(): StoredSpotifyArtists {
+export function getStoredArtists(): StoredSpotifyArtists {
   const currentData = localStorage.getItem(STORAGE_CACHE_DATA_ARTISTS);
 
   if (!currentData) {
@@ -96,33 +89,12 @@ function getStoredArtists(): StoredSpotifyArtists {
   return JSON.parse(currentData);
 }
 
-function storeArtists(artists: StoredSpotifyArtists): void {
+export function storeArtists(artists: StoredSpotifyArtists): void {
   localStorage.setItem(STORAGE_CACHE_DATA_ARTISTS, JSON.stringify(artists));
 }
 
 export function getSpotifyPlaylists(): Promise<SpotifyPlaylist[]> {
-  const currentSnapshots = getStoredPlaylistSnapshots();
-
-  return getPaged<SpotifyPlaylist>(SPOTIFY_PLAYLISTS_URI)
-    .then((playlists) => {
-      const newSnapshots = playlists.reduce((acc: PlaylistSnapshots, playlist) => {
-        if (
-          currentSnapshots[playlist.id]
-          && currentSnapshots[playlist.id] !== playlist.snapshot_id
-        ) {
-          removeStoredTracksOfPlaylist(playlist.id);
-        }
-
-        return {
-          ...acc,
-          [playlist.id]: playlist.snapshot_id,
-        };
-      }, {});
-
-      storePlaylistSnapshots(newSnapshots);
-
-      return playlists;
-    });
+  return getPaged<SpotifyPlaylist>(SPOTIFY_PLAYLISTS_URI);
 }
 
 export function extractTrackData(tracks: SpotifyTrack[]): SpotifyDataExport {
@@ -178,8 +150,7 @@ function extractAndStoreTrackData(tracksToStore: SpotifyTrack[], playlistId: str
 
 function hasTracksInStore(playlistId: string): boolean {
   const currentPlaylistTracks = getStoredPlaylistTracks();
-
-  return currentPlaylistTracks[playlistId].length > 0;
+  return !!currentPlaylistTracks[playlistId];
 }
 
 export function getPlaylistTracks(
