@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { extractTrackData } from './data';
-
-import tracksData from './data.test.mocks';
+import tracksData from './storage.test.mocks';
+import { extractTrackData } from './storage';
 
 describe('extractTrackData', () => {
   it('should change tracks to reference ids', () => {

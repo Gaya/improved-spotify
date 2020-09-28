@@ -8,7 +8,7 @@ import {
 import { playlistsQuery } from '../../../state/selectors';
 import { PlaylistSnapshots, SpotifyPlaylist, StoredPlaylistTracks } from '../../../types';
 import { playlistSnapshots, playlistTracks } from '../../../state/atoms';
-import { storePlaylistSnapshots, storePlaylistTracks } from '../../../utils/data';
+import { storePlaylistSnapshots, storePlaylistTracks } from '../../../utils/storage';
 
 function usePlaylists(): Loadable<SpotifyPlaylist[]> {
   const playlists = useRecoilValueLoadable(playlistsQuery);
