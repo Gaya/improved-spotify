@@ -114,28 +114,6 @@ export function extractTrackData(tracks: SpotifyTrack[]): SpotifyDataExport {
   };
 }
 
-export function extractAndStoreTrackData(tracksToStore: SpotifyTrack[], playlistId: string): void {
-  const {
-    tracks,
-    trackInfo,
-    artists,
-    albums,
-  } = extractTrackData(tracksToStore);
-
-  // save data to local storage
-  const currentPlaylistTracks = getStoredPlaylistTracks();
-  storePlaylistTracks({ ...currentPlaylistTracks, [playlistId]: tracks });
-
-  const currentTrackInfo = getStoredTrackInfo();
-  storeTrackInfo({ ...currentTrackInfo, ...trackInfo });
-
-  const currentArtists = getStoredArtists();
-  storeArtists({ ...currentArtists, ...artists });
-
-  const currentAlbums = getStoredAlbums();
-  storeAlbums({ ...currentAlbums, ...albums });
-}
-
 export function hasTracksInStore(playlistId: string): boolean {
   const currentPlaylistTracks = getStoredPlaylistTracks();
   return !!currentPlaylistTracks[playlistId];
