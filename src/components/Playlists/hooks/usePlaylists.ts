@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Loadable,
   useRecoilState,
@@ -6,15 +6,25 @@ import {
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import { PlaylistSnapshots, SpotifyPlaylist } from '../../../types';
+import { PlaylistSnapshots, SpotifyPlaylist, StoredPlaylistTracks } from '../../../types';
 import { playlistSnapshots, playlistTracks } from '../../../state/atoms';
-import { removeStoredTracksOfPlaylist, storePlaylistSnapshots, storePlaylistTracks } from '../../../utils/data';
+import { storePlaylistSnapshots, storePlaylistTracks } from '../../../utils/data';
 
 function usePlaylists(): Loadable<SpotifyPlaylist[]> {
   const playlists = useRecoilValueLoadable(playlistsQuery);
   const [snapshots, setSnapshots] = useRecoilState(playlistSnapshots);
   const [tracks, setTracks] = useRecoilState(playlistTracks);
   const [isUpdated, setIsUpdated] = useState(false);
+
+  const updateSnapshots = useCallback((newSnapshots: PlaylistSnapshots): void => {
+    setSnapshots(newSnapshots);
+    storePlaylistSnapshots(newSnapshots);
+  }, [setSnapshots]);
+
+  const updateTracks = useCallback((newPlaylistTracks: StoredPlaylistTracks): void => {
+    setTracks(newPlaylistTracks);
+    storePlaylistTracks(newPlaylistTracks);
+  }, [setTracks]);
 
   useEffect(() => {
     if (playlists.state === 'hasValue' && !isUpdated) {
@@ -28,8 +38,7 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
           const newTrackList = { ...tracks };
           delete newTrackList[playlist.id];
 
-          setTracks(newTrackList);
-          storePlaylistTracks(newTrackList);
+          updateTracks(newTrackList);
         }
 
         return {
@@ -38,10 +47,18 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
         };
       }, {});
 
-      setSnapshots(newSnapshots);
-      storePlaylistSnapshots(newSnapshots);
+      updateSnapshots(newSnapshots);
     }
-  }, [isUpdated, playlists.contents, playlists.state, setSnapshots, snapshots]);
+  }, [
+    isUpdated,
+    playlists.contents,
+    playlists.state,
+    setSnapshots,
+    snapshots,
+    tracks,
+    updateSnapshots,
+    updateTracks,
+  ]);
 
   return playlists;
 }
