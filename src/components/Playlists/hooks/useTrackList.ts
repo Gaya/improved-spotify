@@ -6,7 +6,7 @@ import {
 } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { SpotifyDataExport, SpotifyTrack } from '../../../types';
+import { SpotifyDataExport, SpotifyTrack, StoredSpotifyTrack } from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
 import { getPlaylistTracks } from '../../../utils/data';
 import {
@@ -26,18 +26,18 @@ import {
 function useTrackList(id: string): {
   totalTracks: number;
   progress: number;
-  tracks: SpotifyTrack[];
+  tracks: StoredSpotifyTrack[];
 } {
   const [currentPlaylistTracks, setPlaylistTracks] = useRecoilState(playlistTracks);
   const [currentTrackInfo, setTrackInfo] = useRecoilState(trackInfo);
   const [currentArtists, setArtists] = useRecoilState(artists);
   const [currentAlbums, setAlbums] = useRecoilState(albums);
 
-  // @todo convert currentPlaylistTracks to SpotifyTracks and prevent fetching
+  const hasTracks = !!currentPlaylistTracks[id];
 
   const [isFetching, setIsFetching] = useState(false);
-  const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [totalTracks, setTotalTracks] = useState(0);
+  const tracksRef = useRef<SpotifyTrack[]>([]);
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
 
   const updateTrackData = useCallback((data: SpotifyDataExport): void => {
@@ -70,12 +70,12 @@ function useTrackList(id: string): {
   ]);
 
   useEffect(() => {
-    if (!isFetching) {
+    if (!isFetching && !hasTracks) {
       setIsFetching(true);
 
       getPlaylistTracks(nextRef.current).then((response) => {
-        const allTracks = [...tracks, ...response.items];
-        setTracks(allTracks);
+        const allTracks = [...tracksRef.current, ...response.items];
+        tracksRef.current = allTracks;
         setTotalTracks(response.total);
 
         if (response.next) {
@@ -84,25 +84,19 @@ function useTrackList(id: string): {
         } else {
           const extracted = extractTrackData(allTracks);
           updateTrackData(extracted);
-
-          console.log(allTracks, extracted);
         }
       });
     }
   }, [
-    currentAlbums,
-    currentArtists,
-    currentPlaylistTracks,
-    currentTrackInfo,
+    hasTracks,
     id,
     isFetching,
-    tracks,
     updateTrackData,
   ]);
 
   return {
-    tracks,
-    progress: (tracks.length / totalTracks) * 100,
+    tracks: currentPlaylistTracks[id],
+    progress: hasTracks ? 100 : (tracksRef.current.length / totalTracks) * 100,
     totalTracks,
   };
 }
