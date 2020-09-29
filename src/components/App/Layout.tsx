@@ -27,9 +27,13 @@ const useStyles = makeStyles((theme) => ({
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: theme.palette.divider,
+    flexGrow: 0,
+    flexShrink: 0,
   },
   content: {
     flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
   title: {
     flexGrow: 1,

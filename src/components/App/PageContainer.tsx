@@ -7,6 +7,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(3),
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
 }));
 
