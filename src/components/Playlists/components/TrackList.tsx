@@ -13,7 +13,12 @@ interface TrackListProps {
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    display: 'flex',
+    flexGrow: 1,
     paddingTop: theme.spacing(3),
+  },
+  listContainer: {
+    display: 'flex',
     flexGrow: 1,
   },
 }));
@@ -28,8 +33,7 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
     function handleWindowResize(): void {
       if (containerRef.current) {
         const boundingBox = containerRef.current.getBoundingClientRect();
-        const containerHeight = boundingBox.height - theme.spacing(3);
-        setHeight(containerHeight);
+        setHeight(boundingBox.height);
       }
     }
 
@@ -42,14 +46,16 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
   const { progress, tracks } = useTrackList(id);
 
   return (
-    <div className={styles.container} ref={containerRef}>
+    <div className={styles.container}>
       {progress < 100 && <LinearProgress variant="determinate" value={progress} />}
       {progress === 100 && (
-        <List height={height} itemCount={tracks.length} itemSize={30} width="100%">
-          {({ index, style }): React.ReactElement => (
-            <div style={style}>{tracks[index].track}</div>
-          )}
-        </List>
+        <div className={styles.listContainer} ref={containerRef}>
+          <List height={height} itemCount={tracks.length} itemSize={30} width="100%">
+            {({ index, style }): React.ReactElement => (
+              <div style={style}>{tracks[index].track}</div>
+            )}
+          </List>
+        </div>
       )}
     </div>
   );

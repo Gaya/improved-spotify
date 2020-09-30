@@ -18,6 +18,8 @@ import TrackList from '../components/TrackList';
 const useStyles = makeStyles((theme) => ({
   topBar: {
     display: 'flex',
+    flexShrink: 0,
+    flexGrow: 0,
   },
   topBarImage: {
     flexShrink: 0,

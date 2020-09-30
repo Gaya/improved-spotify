@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
   },
   content: {
-    flexGrow: 1,
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
