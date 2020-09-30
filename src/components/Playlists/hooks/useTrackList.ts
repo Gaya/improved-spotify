@@ -40,6 +40,11 @@ function useTrackList(id: string): {
   const tracksRef = useRef<SpotifyTrack[]>([]);
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
 
+  useEffect(() => {
+    tracksRef.current = [];
+    nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
+  }, [id]);
+
   const updateTrackData = useCallback((data: SpotifyDataExport): void => {
     const updatedPlaylistTracks = { ...currentPlaylistTracks, [id]: data.tracks };
     const updatedTrackInfo = { ...currentTrackInfo, ...data.trackInfo };
