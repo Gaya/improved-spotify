@@ -23,8 +23,11 @@ import {
   trackInfo,
 } from '../../../state/atoms';
 
+function log(...args: string[]): void {
+  console.info(...args);
+}
+
 function useTrackList(id: string): {
-  totalTracks: number;
   progress: number;
   tracks: StoredSpotifyTrack[];
 } {
@@ -37,22 +40,16 @@ function useTrackList(id: string): {
 
   const [isFetching, setIsFetching] = useState(false);
   const [totalTracks, setTotalTracks] = useState(0);
-  const tracksRef = useRef<SpotifyTrack[]>([]);
+  const [fetchedTracks, setFetchedTracks] = useState<SpotifyTrack[]>([]);
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
 
-  useEffect(() => {
-    tracksRef.current = [];
-    nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
-  }, [id]);
-
   const updateTrackData = useCallback((data: SpotifyDataExport): void => {
+    log('Update cached data');
+
     const updatedPlaylistTracks = { ...currentPlaylistTracks, [id]: data.tracks };
     const updatedTrackInfo = { ...currentTrackInfo, ...data.trackInfo };
     const updatedArtists = { ...currentArtists, ...data.artists };
     const updatedAlbums = { ...currentAlbums, ...data.albums };
-
-    setPlaylistTracks(updatedPlaylistTracks);
-    storePlaylistTracks(updatedPlaylistTracks);
 
     setTrackInfo(updatedTrackInfo);
     storeTrackInfo(updatedTrackInfo);
@@ -62,6 +59,9 @@ function useTrackList(id: string): {
 
     setAlbums(updatedAlbums);
     storeAlbums(updatedAlbums);
+
+    setPlaylistTracks(updatedPlaylistTracks);
+    storePlaylistTracks(updatedPlaylistTracks);
   }, [
     currentAlbums,
     currentArtists,
@@ -78,10 +78,16 @@ function useTrackList(id: string): {
     if (!isFetching && !hasTracks) {
       setIsFetching(true);
 
+      log(`Fetching ${nextRef.current}`);
+
       getPlaylistTracks(nextRef.current).then((response) => {
-        const allTracks = [...tracksRef.current, ...response.items];
-        tracksRef.current = allTracks;
-        setTotalTracks(response.total);
+        const allTracks = [...fetchedTracks, ...response.items];
+
+        if (totalTracks !== response.total) {
+          setTotalTracks(response.total);
+        }
+
+        setFetchedTracks(allTracks);
 
         if (response.next) {
           nextRef.current = response.next;
@@ -92,17 +98,11 @@ function useTrackList(id: string): {
         }
       });
     }
-  }, [
-    hasTracks,
-    id,
-    isFetching,
-    updateTrackData,
-  ]);
+  }, [fetchedTracks, hasTracks, id, isFetching, totalTracks, updateTrackData]);
 
   return {
     tracks: currentPlaylistTracks[id],
-    progress: hasTracks ? 100 : (tracksRef.current.length / totalTracks) * 100,
-    totalTracks,
+    progress: hasTracks ? 100 : ((fetchedTracks.length / totalTracks) || 0) * 100,
   };
 }
 

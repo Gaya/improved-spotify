@@ -48,7 +48,7 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
   return (
     <div className={styles.container}>
       {progress < 100 && <LinearProgress variant="determinate" value={progress} />}
-      {progress === 100 && (
+      {progress === 100 && tracks && (
         <div className={styles.listContainer} ref={containerRef}>
           <List height={height} itemCount={tracks.length} itemSize={30} width="100%">
             {({ index, style }): React.ReactElement => (
