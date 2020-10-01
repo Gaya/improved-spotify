@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import tracksData from './storage.test.mocks';
-import { extractTrackData } from './storage';
+import tracksData from './extractTrackData.test.mocks';
+import extractTrackData from './extractTrackData';
 
 describe('extractTrackData', () => {
   it('should change tracks to reference ids', () => {
-    const { tracks } = extractTrackData('1234', tracksData);
+    const { playlistTracks } = extractTrackData('1234', tracksData);
 
     const expectedTracks = [
       {
@@ -67,11 +67,11 @@ describe('extractTrackData', () => {
       },
     ];
 
-    expect(tracks).toEqual(expectedTracks);
+    expect(playlistTracks).toEqual(expectedTracks);
   });
 
   it('should extract track info into structured object', () => {
-    const { trackInfo } = extractTrackData('1234', tracksData);
+    const { tracks } = extractTrackData('1234', tracksData);
 
     const expectedTrackInfo = {
       '1VyO9SeIAsiYAqQfcsx9qt': {
@@ -151,7 +151,7 @@ describe('extractTrackData', () => {
       },
     };
 
-    expect(trackInfo).toEqual(expectedTrackInfo);
+    expect(tracks).toEqual(expectedTrackInfo);
   });
 
   it('should extract artist info into structured object', () => {

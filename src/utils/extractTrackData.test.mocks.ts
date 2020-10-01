@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { SpotifyTrack } from '../types';
+import { SpotifyPlaylistTrack } from '../types';
 
-const tracksData: SpotifyTrack[] = [
+const tracksData: SpotifyPlaylistTrack[] = [
   {
     added_at: '2016-07-22T22:49:09Z',
     added_by: {

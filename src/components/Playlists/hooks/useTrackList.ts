@@ -6,16 +6,10 @@ import {
 } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { SpotifyDataExport, SpotifyTrack, StoredSpotifyTrack } from '../../../types';
+import { SpotifyDataExport, SpotifyPlaylistTrack, StoredSpotifyPlaylistTrack } from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
 import { getPlaylistTracks } from '../../../utils/externalData';
-import {
-  extractTrackData,
-  storeAlbums,
-  storeArtists,
-  storePlaylistTracks,
-  storeTrackInfo,
-} from '../../../utils/storage';
+import extractTrackData from '../../../utils/extractTrackData';
 import {
   albums,
   artists,
@@ -29,7 +23,7 @@ function log(...args: string[]): void {
 
 function useTrackList(id: string): {
   progress: number;
-  tracks: StoredSpotifyTrack[];
+  tracks: StoredSpotifyPlaylistTrack[];
 } {
   const [currentPlaylistTracks, setPlaylistTracks] = useRecoilState(playlistTracks);
   const [currentTrackInfo, setTrackInfo] = useRecoilState(trackInfo);
@@ -40,14 +34,14 @@ function useTrackList(id: string): {
 
   const [isFetching, setIsFetching] = useState(false);
   const [totalTracks, setTotalTracks] = useState(0);
-  const [fetchedTracks, setFetchedTracks] = useState<SpotifyTrack[]>([]);
+  const [fetchedTracks, setFetchedTracks] = useState<SpotifyPlaylistTrack[]>([]);
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
 
   const updateTrackData = useCallback((data: SpotifyDataExport): void => {
     log('Update cached data');
 
-    const updatedPlaylistTracks = { ...currentPlaylistTracks, [id]: data.tracks };
-    const updatedTrackInfo = { ...currentTrackInfo, ...data.trackInfo };
+    const updatedPlaylistTracks = { ...currentPlaylistTracks, [id]: data.playlistTracks };
+    const updatedTrackInfo = { ...currentTrackInfo, ...data.tracks };
     const updatedArtists = { ...currentArtists, ...data.artists };
     const updatedAlbums = { ...currentAlbums, ...data.albums };
 

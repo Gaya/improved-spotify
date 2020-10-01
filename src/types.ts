@@ -83,7 +83,7 @@ export interface SpotifyPlaylist {
   uri: string;
 }
 
-interface SpotifyArtist {
+export interface SpotifyArtist {
   external_urls: {
     [name: string]: string;
   };
@@ -138,7 +138,7 @@ export interface SpotifyTrackInfo {
   uri: string;
 }
 
-export interface SpotifyTrack {
+export interface SpotifyPlaylistTrack {
   added_at: string;
   added_by: {
     external_urls: {
@@ -157,22 +157,26 @@ export interface SpotifyTrack {
   };
 }
 
-export interface StoredSpotifyTrack extends Omit<SpotifyTrack, 'track'> {
+export interface StoredSpotifyPlaylistTrack extends Omit<SpotifyPlaylistTrack, 'track'> {
   playlistId: string;
   track: string;
 }
 
+export interface StoredSpotifyTrack extends Omit<SpotifyTrackInfo, 'album' | 'artists'> {
+  album: string;
+  artists: string[];
+}
+
 export interface StoredSpotifyTrackInfo {
-  [trackId: string]: {
-    album: string;
-    artists: string[];
-  } & Omit<SpotifyTrackInfo, 'album' | 'artists'>;
+  [trackId: string]: StoredSpotifyTrack;
+}
+
+export interface StoredSpotifyAlbum extends Omit<SpotifyAlbum, 'artists'> {
+  artists: string[];
 }
 
 export interface StoredSpotifyAlbums {
-  [albumId: string]: {
-    artists: string[];
-  } & Omit<SpotifyAlbum, 'artists'>;
+  [albumId: string]: StoredSpotifyAlbum;
 }
 
 export interface StoredSpotifyArtists {
@@ -180,12 +184,12 @@ export interface StoredSpotifyArtists {
 }
 
 export interface StoredPlaylistTracks {
-  [playlistId: string]: StoredSpotifyTrack[];
+  [playlistId: string]: StoredSpotifyPlaylistTrack[];
 }
 
 export interface SpotifyDataExport {
-  tracks: StoredSpotifyTrack[];
-  trackInfo: StoredSpotifyTrackInfo;
+  playlistTracks: StoredSpotifyPlaylistTrack[];
+  tracks: StoredSpotifyTrackInfo;
   artists: StoredSpotifyArtists;
   albums: StoredSpotifyAlbums;
 }
