@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import {
   Loadable,
   useRecoilState,
@@ -6,11 +8,14 @@ import {
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import { PlaylistSnapshots, SpotifyPlaylist, StoredPlaylistTracks } from '../../../types';
+import { PlaylistSnapshots, SpotifyPlaylist } from '../../../types';
 import { playlistSnapshots, playlistTracks } from '../../../state/atoms';
-import { storePlaylistSnapshots, storePlaylistTracks } from '../../../utils/storage';
+
+import { saveSnapshots } from '../../../database/queries';
+import DatabaseContext from '../../../database/context';
 
 function usePlaylists(): Loadable<SpotifyPlaylist[]> {
+  const db = useContext(DatabaseContext);
   const playlists = useRecoilValueLoadable(playlistsQuery);
   const [snapshots, setSnapshots] = useRecoilState(playlistSnapshots);
   const [tracks, setTracks] = useRecoilState(playlistTracks);
@@ -18,13 +23,20 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
 
   const updateSnapshots = useCallback((newSnapshots: PlaylistSnapshots): void => {
     setSnapshots(newSnapshots);
-    storePlaylistSnapshots(newSnapshots);
-  }, [setSnapshots]);
 
-  const updateTracks = useCallback((newPlaylistTracks: StoredPlaylistTracks): void => {
-    setTracks(newPlaylistTracks);
-    storePlaylistTracks(newPlaylistTracks);
-  }, [setTracks]);
+    if (db) {
+      saveSnapshots(db, newSnapshots);
+    }
+  }, [db, setSnapshots]);
+
+  const removeTracks = useCallback((playlistId: string): void => {
+    const newTrackList = { ...tracks };
+    delete newTrackList[playlistId];
+
+    setTracks(newTrackList);
+
+    // @TODO remove tracks from snapshot in db
+  }, [setTracks, tracks]);
 
   useEffect(() => {
     if (playlists.state === 'hasValue' && !isUpdated) {
@@ -38,7 +50,7 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
           const newTrackList = { ...tracks };
           delete newTrackList[playlist.id];
 
-          updateTracks(newTrackList);
+          removeTracks(playlist.id);
         }
 
         return {
@@ -53,11 +65,11 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
     isUpdated,
     playlists.contents,
     playlists.state,
+    removeTracks,
     setSnapshots,
     snapshots,
     tracks,
     updateSnapshots,
-    updateTracks,
   ]);
 
   return playlists;

@@ -11,6 +11,7 @@ import green from '@material-ui/core/colors/green';
 import Routes from './Routes';
 
 import { AuthProvider } from '../Auth/context';
+import { DatabaseProvider } from '../../database/context';
 
 import './App.css';
 
@@ -51,9 +52,11 @@ const App: React.FC = () => {
       <CssBaseline />
       <AuthProvider>
         <RecoilRoot>
-          <div className="App">
-            <Routes />
-          </div>
+          <DatabaseProvider>
+            <div className="App">
+              <Routes />
+            </div>
+          </DatabaseProvider>
         </RecoilRoot>
       </AuthProvider>
     </ThemeProvider>
