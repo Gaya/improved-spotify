@@ -12,11 +12,11 @@ import {
   STORAGE_CACHE_DATA_ARTISTS,
   STORAGE_CACHE_DATA_PLAYLIST_TRACKS,
   STORAGE_CACHE_DATA_TRACK_INFO,
-  STORAGE_PLAYLIST_SNAPSHOTS,
+  STORAGE_CACHE_DATA_PLAYLIST_SNAPSHOTS,
 } from '../consts';
 
 export function getStoredPlaylistSnapshots(): PlaylistSnapshots {
-  const currentData = localStorage.getItem(STORAGE_PLAYLIST_SNAPSHOTS);
+  const currentData = localStorage.getItem(STORAGE_CACHE_DATA_PLAYLIST_SNAPSHOTS);
 
   if (!currentData) {
     return {};
@@ -26,7 +26,7 @@ export function getStoredPlaylistSnapshots(): PlaylistSnapshots {
 }
 
 export function storePlaylistSnapshots(snapshots: PlaylistSnapshots): void {
-  localStorage.setItem(STORAGE_PLAYLIST_SNAPSHOTS, JSON.stringify(snapshots));
+  localStorage.setItem(STORAGE_CACHE_DATA_PLAYLIST_SNAPSHOTS, JSON.stringify(snapshots));
 }
 
 export function getStoredPlaylistTracks(): StoredPlaylistTracks {

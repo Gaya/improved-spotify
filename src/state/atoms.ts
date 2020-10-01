@@ -17,25 +17,25 @@ import {
 
 export const playlistSnapshots = atom<PlaylistSnapshots>({
   key: 'PlaylistSnapshots',
-  default: getStoredPlaylistSnapshots(),
+  default: {}, // getStoredPlaylistSnapshots(),
 });
 
 export const albums = atom<StoredSpotifyAlbums>({
   key: 'Albums',
-  default: getStoredAlbums(),
+  default: {}, // getStoredAlbums(),
 });
 
 export const artists = atom<StoredSpotifyArtists>({
   key: 'Artists',
-  default: getStoredArtists(),
+  default: {}, // getStoredArtists(),
 });
 
 export const trackInfo = atom<StoredSpotifyTrackInfo>({
   key: 'TrackInfo',
-  default: getStoredTrackInfo(),
+  default: {}, // getStoredTrackInfo(),
 });
 
 export const playlistTracks = atom<StoredPlaylistTracks>({
   key: 'PlaylistTracks',
-  default: getStoredPlaylistTracks(),
+  default: {}, // getStoredPlaylistTracks(),
 });

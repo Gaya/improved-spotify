@@ -52,16 +52,16 @@ function useTrackList(id: string): {
     const updatedAlbums = { ...currentAlbums, ...data.albums };
 
     setTrackInfo(updatedTrackInfo);
-    storeTrackInfo(updatedTrackInfo);
+    // storeTrackInfo(updatedTrackInfo);
 
     setArtists(updatedArtists);
-    storeArtists(updatedArtists);
+    // storeArtists(updatedArtists);
 
     setAlbums(updatedAlbums);
-    storeAlbums(updatedAlbums);
+    // storeAlbums(updatedAlbums);
 
     setPlaylistTracks(updatedPlaylistTracks);
-    storePlaylistTracks(updatedPlaylistTracks);
+    // storePlaylistTracks(updatedPlaylistTracks);
   }, [
     currentAlbums,
     currentArtists,

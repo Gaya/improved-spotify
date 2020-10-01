@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexGrow: 1,
   },
+  progress: {
+    width: '100%',
+  },
 }));
 
 const TrackList: React.FC<TrackListProps> = ({ id }) => {
@@ -28,6 +31,8 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
+
+  const { progress, tracks } = useTrackList(id);
 
   useEffect(() => {
     function handleWindowResize(): void {
@@ -43,11 +48,13 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
     return (): void => window.removeEventListener('resize', handleWindowResize);
   }, [theme]);
 
-  const { progress, tracks } = useTrackList(id);
+  useEffect(() => {
+    console.log('mounted');
+  }, []);
 
   return (
     <div className={styles.container}>
-      {progress < 100 && <LinearProgress variant="determinate" value={progress} />}
+      {progress < 100 && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
       {progress === 100 && tracks && (
         <div className={styles.listContainer} ref={containerRef}>
           <List height={height} itemCount={tracks.length} itemSize={30} width="100%">
