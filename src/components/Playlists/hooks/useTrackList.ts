@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -16,8 +17,11 @@ import {
   playlistTracks,
   trackInfo,
 } from '../../../state/atoms';
+import DatabaseContext from '../../../database/context';
+import { storeDataExport } from '../../../database/queries';
 
 function log(...args: string[]): void {
+  // eslint-disable-next-line no-console
   console.info(...args);
 }
 
@@ -25,6 +29,7 @@ function useTrackList(id: string): {
   progress: number;
   tracks: StoredSpotifyPlaylistTrack[];
 } {
+  const db = useContext(DatabaseContext);
   const [currentPlaylistTracks, setPlaylistTracks] = useRecoilState(playlistTracks);
   const [currentTrackInfo, setTrackInfo] = useRecoilState(trackInfo);
   const [currentArtists, setArtists] = useRecoilState(artists);
@@ -40,27 +45,25 @@ function useTrackList(id: string): {
   const updateTrackData = useCallback((data: SpotifyDataExport): void => {
     log('Update cached data');
 
+    if (db) {
+      storeDataExport(db, data);
+    }
+
     const updatedPlaylistTracks = { ...currentPlaylistTracks, [id]: data.playlistTracks };
     const updatedTrackInfo = { ...currentTrackInfo, ...data.tracks };
     const updatedArtists = { ...currentArtists, ...data.artists };
     const updatedAlbums = { ...currentAlbums, ...data.albums };
 
     setTrackInfo(updatedTrackInfo);
-    // storeTrackInfo(updatedTrackInfo);
-
     setArtists(updatedArtists);
-    // storeArtists(updatedArtists);
-
     setAlbums(updatedAlbums);
-    // storeAlbums(updatedAlbums);
-
     setPlaylistTracks(updatedPlaylistTracks);
-    // storePlaylistTracks(updatedPlaylistTracks);
   }, [
     currentAlbums,
     currentArtists,
     currentPlaylistTracks,
     currentTrackInfo,
+    db,
     id,
     setAlbums,
     setArtists,

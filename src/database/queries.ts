@@ -1,6 +1,6 @@
 import { IndexedDBIsDb } from './createDatabase';
 
-import { PlaylistSnapshots } from '../types';
+import { PlaylistSnapshots, SpotifyDataExport } from '../types';
 
 export function getSnapshots(db: IndexedDBIsDb): Promise<PlaylistSnapshots> {
   const keysPromise = db.getAllKeys('snapshots');
@@ -28,5 +28,13 @@ export function removePlaylistTracksByPlaylist(
 ): Promise<void> {
   return db.getAllKeysFromIndex('playlistTracks', 'by-playlist', playlistId)
     .then((keys) => Promise.all(keys.map((key: string) => db.delete('playlistTracks', key))))
+    .then(() => undefined);
+}
+
+export function storeDataExport(db: IndexedDBIsDb, data: SpotifyDataExport): Promise<void> {
+  return Promise.all(data.playlistTracks.map((track) => db.put('playlistTracks', track)))
+    .then(() => Promise.all(Object.entries(data.albums).map(([id, album]) => db.put('albums', album))))
+    .then(() => Promise.all(Object.entries(data.artists).map(([id, artist]) => db.put('artists', artist))))
+    .then(() => Promise.all(Object.entries(data.tracks).map(([id, track]) => db.put('tracks', track))))
     .then(() => undefined);
 }

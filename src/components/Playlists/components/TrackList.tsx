@@ -48,10 +48,6 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
     return (): void => window.removeEventListener('resize', handleWindowResize);
   }, [theme]);
 
-  useEffect(() => {
-    console.log('mounted');
-  }, []);
-
   return (
     <div className={styles.container}>
       {progress < 100 && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
