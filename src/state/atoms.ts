@@ -7,35 +7,28 @@ import {
   StoredSpotifyArtists,
   StoredSpotifyTrackInfo,
 } from '../types';
-import {
-  getStoredAlbums,
-  getStoredArtists,
-  getStoredPlaylistSnapshots,
-  getStoredPlaylistTracks,
-  getStoredTrackInfo,
-} from '../utils/storage';
 
 export const playlistSnapshots = atom<PlaylistSnapshots>({
   key: 'PlaylistSnapshots',
-  default: {}, // getStoredPlaylistSnapshots(),
+  default: {},
 });
 
 export const albums = atom<StoredSpotifyAlbums>({
   key: 'Albums',
-  default: {}, // getStoredAlbums(),
+  default: {},
 });
 
 export const artists = atom<StoredSpotifyArtists>({
   key: 'Artists',
-  default: {}, // getStoredArtists(),
+  default: {},
 });
 
 export const trackInfo = atom<StoredSpotifyTrackInfo>({
   key: 'TrackInfo',
-  default: {}, // getStoredTrackInfo(),
+  default: {},
 });
 
 export const playlistTracks = atom<StoredPlaylistTracks>({
   key: 'PlaylistTracks',
-  default: {}, // getStoredPlaylistTracks(),
+  default: {},
 });
