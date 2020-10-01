@@ -5,7 +5,7 @@ import {
   SpotifyUser,
 } from '../types';
 
-import { getSpotifyPlaylists, getUserInformation } from '../utils/data';
+import { getSpotifyPlaylists, getUserInformation } from '../utils/externalData';
 
 export const userInformationQuery = selector({
   key: 'UserInformation',

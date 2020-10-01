@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 
 import { SpotifyDataExport, SpotifyTrack, StoredSpotifyTrack } from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
-import { getPlaylistTracks } from '../../../utils/data';
+import { getPlaylistTracks } from '../../../utils/externalData';
 import {
   extractTrackData,
   storeAlbums,
