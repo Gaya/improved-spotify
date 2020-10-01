@@ -1,5 +1,8 @@
 import {
-  useCallback, useContext, useEffect, useState,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 import {
   Loadable,
@@ -11,7 +14,7 @@ import { playlistsQuery } from '../../../state/selectors';
 import { PlaylistSnapshots, SpotifyPlaylist } from '../../../types';
 import { playlistSnapshots, playlistTracks } from '../../../state/atoms';
 
-import { saveSnapshots } from '../../../database/queries';
+import { removePlaylistTracksByPlaylist, saveSnapshots } from '../../../database/queries';
 import DatabaseContext from '../../../database/context';
 
 function usePlaylists(): Loadable<SpotifyPlaylist[]> {
@@ -35,8 +38,10 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
 
     setTracks(newTrackList);
 
-    // @TODO remove tracks from snapshot in db
-  }, [setTracks, tracks]);
+    if (db) {
+      removePlaylistTracksByPlaylist(db, playlistId);
+    }
+  }, [db, setTracks, tracks]);
 
   useEffect(() => {
     if (playlists.state === 'hasValue' && !isUpdated) {

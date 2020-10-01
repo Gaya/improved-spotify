@@ -85,7 +85,7 @@ export function storeArtists(artists: StoredSpotifyArtists): void {
   localStorage.setItem(STORAGE_CACHE_DATA_ARTISTS, JSON.stringify(artists));
 }
 
-export function extractTrackData(tracks: SpotifyTrack[]): SpotifyDataExport {
+export function extractTrackData(playlistId: string, tracks: SpotifyTrack[]): SpotifyDataExport {
   const extractedData = tracks.reduce((acc: Omit<SpotifyDataExport, 'tracks'>, { track }) => ({
     trackInfo: {
       ...acc.trackInfo,
@@ -110,7 +110,7 @@ export function extractTrackData(tracks: SpotifyTrack[]): SpotifyDataExport {
 
   return {
     ...extractedData,
-    tracks: tracks.map((track) => ({ ...track, track: track.track.id })),
+    tracks: tracks.map((track) => ({ ...track, playlistId, track: track.track.id })),
   };
 }
 

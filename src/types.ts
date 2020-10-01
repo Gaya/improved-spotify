@@ -158,6 +158,7 @@ export interface SpotifyTrack {
 }
 
 export interface StoredSpotifyTrack extends Omit<SpotifyTrack, 'track'> {
+  playlistId: string;
   track: string;
 }
 

@@ -21,3 +21,12 @@ export function saveSnapshots(db: IndexedDBIsDb, snapshots: PlaylistSnapshots): 
     )))
     .then(() => undefined);
 }
+
+export function removePlaylistTracksByPlaylist(
+  db: IndexedDBIsDb,
+  playlistId: string,
+): Promise<void> {
+  return db.getAllKeysFromIndex('playlistTracks', 'by-playlist', playlistId)
+    .then((keys) => Promise.all(keys.map((key: string) => db.delete('playlistTracks', key))))
+    .then(() => undefined);
+}

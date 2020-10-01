@@ -93,7 +93,7 @@ function useTrackList(id: string): {
           nextRef.current = response.next;
           setIsFetching(false);
         } else {
-          const extracted = extractTrackData(allTracks);
+          const extracted = extractTrackData(id, allTracks);
           updateTrackData(extracted);
         }
       });
