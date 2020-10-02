@@ -1,6 +1,6 @@
 import { IndexedDBIsDb } from './createDatabase';
 
-import { PlaylistSnapshots, SpotifyDataExport } from '../types';
+import { PlaylistSnapshots, SpotifyDataExport, StoredSpotifyPlaylistTrack } from '../types';
 
 export function getSnapshots(db: IndexedDBIsDb): Promise<PlaylistSnapshots> {
   const keysPromise = db.getAllKeys('snapshots');
@@ -26,7 +26,7 @@ export function removePlaylistTracksByPlaylist(
   db: IndexedDBIsDb,
   playlistId: string,
 ): Promise<void> {
-  return db.getAllKeysFromIndex('playlistTracks', 'by-playlist', playlistId)
+  return queryPlaylistTrackKeys(db, playlistId)
     .then((keys) => Promise.all(keys.map((key: string) => db.delete('playlistTracks', key))))
     .then(() => undefined);
 }
@@ -37,4 +37,18 @@ export function storeDataExport(db: IndexedDBIsDb, data: SpotifyDataExport): Pro
     .then(() => Promise.all(Object.entries(data.artists).map(([id, artist]) => db.put('artists', artist))))
     .then(() => Promise.all(Object.entries(data.tracks).map(([id, track]) => db.put('tracks', track))))
     .then(() => undefined);
+}
+
+export function queryPlaylistTrackKeys(
+  db: IndexedDBIsDb,
+  playlistId: string,
+): Promise<string[]> {
+  return db.getAllKeysFromIndex('playlistTracks', 'by-playlist', playlistId);
+}
+
+export function queryPlaylistTracks(
+  db: IndexedDBIsDb,
+  playlistId: string,
+): Promise<StoredSpotifyPlaylistTrack[]> {
+  return db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
 }

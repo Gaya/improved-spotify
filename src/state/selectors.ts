@@ -28,3 +28,8 @@ export const playlistQuery = selectorFamily({
   }): SpotifyPlaylist | undefined => getRecoil(playlistsQuery)
     .find((playlist) => playlist.id === id),
 });
+
+export const playlistTracksQuery = selectorFamily({
+  key: 'PlaylistTracks',
+  get: (id: string) => (): any => [],
+});

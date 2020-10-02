@@ -184,8 +184,13 @@ export interface StoredSpotifyArtists {
   [artistId: string]: SpotifyArtist;
 }
 
+export enum TrackState {
+  VALID = 'VALID',
+  INVALID = 'INVALID',
+}
+
 export interface PlaylistTracksState {
-  [playlistId: string]: boolean;
+  [playlistId: string]: TrackState;
 }
 
 export interface SpotifyDataExport {

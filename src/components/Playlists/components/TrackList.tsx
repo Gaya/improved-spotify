@@ -6,6 +6,7 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import useTrackList from '../hooks/useTrackList';
+import { info } from '../../../utils/logging';
 
 interface TrackListProps {
   id: string;
@@ -32,7 +33,9 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
-  const { progress, tracks } = useTrackList(id);
+  const { progress, tracks, isResolved } = useTrackList(id);
+
+  info(progress, tracks, isResolved);
 
   useEffect(() => {
     function handleWindowResize(): void {
@@ -46,12 +49,12 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
     handleWindowResize();
 
     return (): void => window.removeEventListener('resize', handleWindowResize);
-  }, [theme]);
+  }, [theme, isResolved]);
 
   return (
     <div className={styles.container}>
       {progress < 100 && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
-      {progress === 100 && tracks && (
+      {isResolved && tracks && (
         <div className={styles.listContainer} ref={containerRef}>
           <List height={height} itemCount={tracks.length} itemSize={30} width="100%">
             {({ index, style }): React.ReactElement => (

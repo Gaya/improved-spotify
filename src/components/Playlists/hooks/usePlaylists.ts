@@ -11,7 +11,12 @@ import {
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import { PlaylistSnapshots, PlaylistTracksState, SpotifyPlaylist } from '../../../types';
+import {
+  PlaylistSnapshots,
+  PlaylistTracksState,
+  SpotifyPlaylist,
+  TrackState,
+} from '../../../types';
 import { playlistSnapshots, playlistTracksState } from '../../../state/atoms';
 
 import { saveSnapshots } from '../../../database/queries';
@@ -48,8 +53,8 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
       const playlistTracksStates = playlists.contents
         .reduce((acc: PlaylistTracksState, playlist) => ({
           ...acc,
-          [playlist.id]: Boolean(snapshots[playlist.id]
-            && snapshots[playlist.id] === playlist.snapshot_id),
+          [playlist.id]: snapshots[playlist.id] && snapshots[playlist.id] === playlist.snapshot_id
+            ? TrackState.VALID : TrackState.INVALID,
         }), {});
 
       updateSnapshots(newSnapshots, playlistTracksStates);
