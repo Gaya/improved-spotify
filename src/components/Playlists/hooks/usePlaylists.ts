@@ -7,73 +7,58 @@ import {
 import {
   Loadable,
   useRecoilState,
-  useRecoilValueLoadable,
+  useRecoilValueLoadable, useSetRecoilState,
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import { PlaylistSnapshots, SpotifyPlaylist } from '../../../types';
+import { PlaylistSnapshots, PlaylistTracksState, SpotifyPlaylist } from '../../../types';
 import { playlistSnapshots, playlistTracksState } from '../../../state/atoms';
 
-import { removePlaylistTracksByPlaylist, saveSnapshots } from '../../../database/queries';
+import { saveSnapshots } from '../../../database/queries';
 import DatabaseContext from '../../../database/context';
 
 function usePlaylists(): Loadable<SpotifyPlaylist[]> {
   const db = useContext(DatabaseContext);
   const playlists = useRecoilValueLoadable(playlistsQuery);
   const [snapshots, setSnapshots] = useRecoilState(playlistSnapshots);
-  const [tracksState, setTracksState] = useRecoilState(playlistTracksState);
+  const setTracksState = useSetRecoilState(playlistTracksState);
   const [isUpdated, setIsUpdated] = useState(false);
 
-  const updateSnapshots = useCallback((newSnapshots: PlaylistSnapshots): void => {
+  const updateSnapshots = useCallback((
+    newSnapshots: PlaylistSnapshots,
+    playlistTracksStates: PlaylistTracksState,
+  ): void => {
     setSnapshots(newSnapshots);
+    setTracksState(playlistTracksStates);
 
     if (db) {
       saveSnapshots(db, newSnapshots);
     }
-  }, [db, setSnapshots]);
-
-  const removeTracks = useCallback((playlistId: string): void => {
-    const newTrackList = { ...tracksState };
-    delete newTrackList[playlistId];
-
-    setTracksState(newTrackList);
-
-    if (db) {
-      removePlaylistTracksByPlaylist(db, playlistId);
-    }
-  }, [db, setTracksState, tracksState]);
+  }, [db, setSnapshots, setTracksState]);
 
   useEffect(() => {
     if (playlists.state === 'hasValue' && !isUpdated) {
       setIsUpdated(true);
 
-      const newSnapshots = playlists.contents.reduce((acc: PlaylistSnapshots, playlist) => {
-        if (
-          snapshots[playlist.id]
-          && snapshots[playlist.id] !== playlist.snapshot_id
-        ) {
-          const newTrackList = { ...tracksState };
-          delete newTrackList[playlist.id];
+      const newSnapshots = playlists.contents.reduce((acc: PlaylistSnapshots, playlist) => ({
+        ...acc,
+        [playlist.id]: playlist.snapshot_id,
+      }), {});
 
-          removeTracks(playlist.id);
-        }
-
-        return {
+      const playlistTracksStates = playlists.contents
+        .reduce((acc: PlaylistTracksState, playlist) => ({
           ...acc,
-          [playlist.id]: playlist.snapshot_id,
-        };
-      }, {});
+          [playlist.id]: Boolean(snapshots[playlist.id]
+            && snapshots[playlist.id] === playlist.snapshot_id),
+        }), {});
 
-      updateSnapshots(newSnapshots);
+      updateSnapshots(newSnapshots, playlistTracksStates);
     }
   }, [
     isUpdated,
     playlists.contents,
     playlists.state,
-    removeTracks,
-    setSnapshots,
     snapshots,
-    tracksState,
     updateSnapshots,
   ]);
 
