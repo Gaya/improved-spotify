@@ -6,6 +6,7 @@ import {
   StoredSpotifyPlaylistTrack,
   StoredSpotifyTrack,
 } from '../types';
+import { error } from '../utils/logging';
 
 const version = 1;
 
@@ -88,10 +89,9 @@ function createDatabase(): Promise<IndexedDBIsDb> {
       tracks.createIndex('by-album', 'album');
       tracks.createIndex('by-track-number', 'track_number');
     },
-  }).catch((error) => {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    throw error;
+  }).catch((err) => {
+    error(err);
+    throw err;
   });
 }
 
