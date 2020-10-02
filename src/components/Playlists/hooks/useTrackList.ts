@@ -77,7 +77,7 @@ function useTrackList(id: string): {
           setIsFetching(true);
         } else {
           const extracted = extractTrackData(id, allTracks);
-          storeTrackData(extracted, true);
+          storeTrackData(extracted);
         }
       });
     }

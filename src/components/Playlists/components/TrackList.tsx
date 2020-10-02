@@ -35,8 +35,6 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
 
   const { progress, tracks, isResolved } = useTrackList(id);
 
-  info(progress, tracks, isResolved);
-
   useEffect(() => {
     function handleWindowResize(): void {
       if (containerRef.current) {
