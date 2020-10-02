@@ -33,7 +33,12 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
-  const { progress, tracks, isResolved } = useTrackList(id);
+  const {
+    progress,
+    tracks,
+    showProgress,
+    isResolved,
+  } = useTrackList(id);
 
   useEffect(() => {
     function handleWindowResize(): void {
@@ -51,7 +56,7 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
 
   return (
     <div className={styles.container}>
-      {progress < 100 && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
+      {showProgress && !isResolved && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
       {isResolved && tracks && (
         <div className={styles.listContainer} ref={containerRef}>
           <List height={height} itemCount={tracks.length} itemSize={30} width="100%">

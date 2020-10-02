@@ -22,6 +22,7 @@ function useTrackList(id: string): {
   progress: number;
   tracks: StoredSpotifyPlaylistTrack[];
   isResolved: boolean;
+  showProgress: boolean;
 } {
   const db = useContext(DatabaseContext);
   const [tracksState, setTracksState] = useRecoilState(playlistTracksState);
@@ -29,6 +30,7 @@ function useTrackList(id: string): {
   const [isResolving, setIsResolving] = useState(false);
   const [isResolved, setIsResolved] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const [totalTracks, setTotalTracks] = useState(0);
   const [fetchedTracks, setFetchedTracks] = useState<SpotifyPlaylistTrack[]>([]);
   const [tracks, setTracks] = useState<StoredSpotifyPlaylistTrack[]>([]);
@@ -99,11 +101,12 @@ function useTrackList(id: string): {
       })()
         .then(() => queryPlaylistTracks(db, id))
         .then((result) => {
-          if (result.length > 0 && TrackState.VALID) {
+          if (result.length > 0 && tracksState[id] === TrackState.VALID) {
             // has result... so resolve it!
             updateTrackData(result);
           } else {
             // no results? Start fetching process
+            setShowProgress(true);
             setIsFetching(true);
           }
         });
@@ -114,6 +117,7 @@ function useTrackList(id: string): {
     tracks,
     progress: isResolved ? 100 : ((fetchedTracks.length / totalTracks) || 0) * 100,
     isResolved,
+    showProgress,
   };
 }
 
