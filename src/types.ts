@@ -184,8 +184,8 @@ export interface StoredSpotifyArtists {
   [artistId: string]: SpotifyArtist;
 }
 
-export interface StoredPlaylistTracks {
-  [playlistId: string]: StoredSpotifyPlaylistTrack[];
+export interface PlaylistTracksState {
+  [playlistId: string]: boolean;
 }
 
 export interface SpotifyDataExport {

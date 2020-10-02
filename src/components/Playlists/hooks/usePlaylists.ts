@@ -12,7 +12,7 @@ import {
 
 import { playlistsQuery } from '../../../state/selectors';
 import { PlaylistSnapshots, SpotifyPlaylist } from '../../../types';
-import { playlistSnapshots, playlistTracks } from '../../../state/atoms';
+import { playlistSnapshots, playlistTracksState } from '../../../state/atoms';
 
 import { removePlaylistTracksByPlaylist, saveSnapshots } from '../../../database/queries';
 import DatabaseContext from '../../../database/context';
@@ -21,7 +21,7 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
   const db = useContext(DatabaseContext);
   const playlists = useRecoilValueLoadable(playlistsQuery);
   const [snapshots, setSnapshots] = useRecoilState(playlistSnapshots);
-  const [tracks, setTracks] = useRecoilState(playlistTracks);
+  const [tracksState, setTracksState] = useRecoilState(playlistTracksState);
   const [isUpdated, setIsUpdated] = useState(false);
 
   const updateSnapshots = useCallback((newSnapshots: PlaylistSnapshots): void => {
@@ -33,15 +33,15 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
   }, [db, setSnapshots]);
 
   const removeTracks = useCallback((playlistId: string): void => {
-    const newTrackList = { ...tracks };
+    const newTrackList = { ...tracksState };
     delete newTrackList[playlistId];
 
-    setTracks(newTrackList);
+    setTracksState(newTrackList);
 
     if (db) {
       removePlaylistTracksByPlaylist(db, playlistId);
     }
-  }, [db, setTracks, tracks]);
+  }, [db, setTracksState, tracksState]);
 
   useEffect(() => {
     if (playlists.state === 'hasValue' && !isUpdated) {
@@ -52,7 +52,7 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
           snapshots[playlist.id]
           && snapshots[playlist.id] !== playlist.snapshot_id
         ) {
-          const newTrackList = { ...tracks };
+          const newTrackList = { ...tracksState };
           delete newTrackList[playlist.id];
 
           removeTracks(playlist.id);
@@ -73,7 +73,7 @@ function usePlaylists(): Loadable<SpotifyPlaylist[]> {
     removeTracks,
     setSnapshots,
     snapshots,
-    tracks,
+    tracksState,
     updateSnapshots,
   ]);
 
