@@ -1,63 +1,70 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   Loadable,
   useRecoilState,
-  useRecoilValueLoadable,
+  useRecoilValueLoadable, useSetRecoilState,
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import { PlaylistSnapshots, SpotifyPlaylist, StoredPlaylistTracks } from '../../../types';
-import { playlistSnapshots, playlistTracks } from '../../../state/atoms';
-import { storePlaylistSnapshots, storePlaylistTracks } from '../../../utils/storage';
+import {
+  PlaylistSnapshots,
+  PlaylistTracksState,
+  SpotifyPlaylist,
+  TrackState,
+} from '../../../types';
+import { playlistSnapshots, playlistTracksState } from '../../../state/atoms';
+
+import { saveSnapshots } from '../../../database/queries';
+import DatabaseContext from '../../../database/context';
 
 function usePlaylists(): Loadable<SpotifyPlaylist[]> {
+  const db = useContext(DatabaseContext);
   const playlists = useRecoilValueLoadable(playlistsQuery);
   const [snapshots, setSnapshots] = useRecoilState(playlistSnapshots);
-  const [tracks, setTracks] = useRecoilState(playlistTracks);
+  const setTracksState = useSetRecoilState(playlistTracksState);
   const [isUpdated, setIsUpdated] = useState(false);
 
-  const updateSnapshots = useCallback((newSnapshots: PlaylistSnapshots): void => {
+  const updateSnapshots = useCallback((
+    newSnapshots: PlaylistSnapshots,
+    playlistTracksStates: PlaylistTracksState,
+  ): void => {
     setSnapshots(newSnapshots);
-    storePlaylistSnapshots(newSnapshots);
-  }, [setSnapshots]);
+    setTracksState(playlistTracksStates);
 
-  const updateTracks = useCallback((newPlaylistTracks: StoredPlaylistTracks): void => {
-    setTracks(newPlaylistTracks);
-    storePlaylistTracks(newPlaylistTracks);
-  }, [setTracks]);
+    if (db) {
+      saveSnapshots(db, newSnapshots);
+    }
+  }, [db, setSnapshots, setTracksState]);
 
   useEffect(() => {
     if (playlists.state === 'hasValue' && !isUpdated) {
       setIsUpdated(true);
 
-      const newSnapshots = playlists.contents.reduce((acc: PlaylistSnapshots, playlist) => {
-        if (
-          snapshots[playlist.id]
-          && snapshots[playlist.id] !== playlist.snapshot_id
-        ) {
-          const newTrackList = { ...tracks };
-          delete newTrackList[playlist.id];
+      const newSnapshots = playlists.contents.reduce((acc: PlaylistSnapshots, playlist) => ({
+        ...acc,
+        [playlist.id]: playlist.snapshot_id,
+      }), {});
 
-          updateTracks(newTrackList);
-        }
-
-        return {
+      const playlistTracksStates = playlists.contents
+        .reduce((acc: PlaylistTracksState, playlist) => ({
           ...acc,
-          [playlist.id]: playlist.snapshot_id,
-        };
-      }, {});
+          [playlist.id]: snapshots[playlist.id] && snapshots[playlist.id] === playlist.snapshot_id
+            ? TrackState.VALID : TrackState.INVALID,
+        }), {});
 
-      updateSnapshots(newSnapshots);
+      updateSnapshots(newSnapshots, playlistTracksStates);
     }
   }, [
     isUpdated,
     playlists.contents,
     playlists.state,
-    setSnapshots,
     snapshots,
-    tracks,
     updateSnapshots,
-    updateTracks,
   ]);
 
   return playlists;

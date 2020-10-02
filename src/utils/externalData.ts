@@ -4,7 +4,7 @@ import { get, getPaged } from './authRequest';
 import {
   PagedResponse,
   SpotifyPlaylist,
-  SpotifyTrack,
+  SpotifyPlaylistTrack,
   SpotifyUser,
 } from '../types';
 
@@ -16,6 +16,6 @@ export function getSpotifyPlaylists(): Promise<SpotifyPlaylist[]> {
   return getPaged<SpotifyPlaylist>(SPOTIFY_PLAYLISTS_URI);
 }
 
-export function getPlaylistTracks(uri: string): Promise<PagedResponse<SpotifyTrack>> {
-  return get<PagedResponse<SpotifyTrack>>(uri);
+export function getPlaylistTracks(uri: string): Promise<PagedResponse<SpotifyPlaylistTrack>> {
+  return get<PagedResponse<SpotifyPlaylistTrack>>(uri);
 }

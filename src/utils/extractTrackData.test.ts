@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import tracksData from './storage.test.mocks';
-import { extractTrackData } from './storage';
+import tracksData from './extractTrackData.test.mocks';
+import extractTrackData from './extractTrackData';
 
 describe('extractTrackData', () => {
   it('should change tracks to reference ids', () => {
-    const { tracks } = extractTrackData(tracksData);
+    const { playlistTracks } = extractTrackData('1234', tracksData);
 
     const expectedTracks = [
       {
@@ -19,7 +19,9 @@ describe('extractTrackData', () => {
           type: 'user',
           uri: 'spotify:user:gaya.kessler',
         },
+        id: '1234:1VyO9SeIAsiYAqQfcsx9qt',
         is_local: false,
+        playlistId: '1234',
         primary_color: null,
         track: '1VyO9SeIAsiYAqQfcsx9qt',
         video_thumbnail: {
@@ -37,7 +39,9 @@ describe('extractTrackData', () => {
           type: 'user',
           uri: 'spotify:user:gaya.kessler',
         },
+        id: '1234:5m6v49tXuyUhlaJWa00tyF',
         is_local: false,
+        playlistId: '1234',
         primary_color: null,
         track: '5m6v49tXuyUhlaJWa00tyF',
         video_thumbnail: {
@@ -55,7 +59,9 @@ describe('extractTrackData', () => {
           type: 'user',
           uri: 'spotify:user:gaya.kessler',
         },
+        id: '1234:1vLByYhUN1Nppnwp0KvAbB',
         is_local: false,
+        playlistId: '1234',
         primary_color: null,
         track: '1vLByYhUN1Nppnwp0KvAbB',
         video_thumbnail: {
@@ -64,11 +70,11 @@ describe('extractTrackData', () => {
       },
     ];
 
-    expect(tracks).toEqual(expectedTracks);
+    expect(playlistTracks).toEqual(expectedTracks);
   });
 
   it('should extract track info into structured object', () => {
-    const { trackInfo } = extractTrackData(tracksData);
+    const { tracks } = extractTrackData('1234', tracksData);
 
     const expectedTrackInfo = {
       '1VyO9SeIAsiYAqQfcsx9qt': {
@@ -148,11 +154,11 @@ describe('extractTrackData', () => {
       },
     };
 
-    expect(trackInfo).toEqual(expectedTrackInfo);
+    expect(tracks).toEqual(expectedTrackInfo);
   });
 
   it('should extract artist info into structured object', () => {
-    const { artists } = extractTrackData(tracksData);
+    const { artists } = extractTrackData('1234', tracksData);
 
     const expectedArtists = {
       '3pDqLo5LnCyCBxhKZygkfK': {
@@ -181,7 +187,7 @@ describe('extractTrackData', () => {
   });
 
   it('should extract album info into structured object', () => {
-    const { albums } = extractTrackData(tracksData);
+    const { albums } = extractTrackData('1234', tracksData);
 
     const expectedAlbums = {
       '4xTVgnVf3TVixEp7PgrkjV': {

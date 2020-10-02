@@ -5,7 +5,7 @@ import {
   SpotifyUser,
 } from '../types';
 
-import { getSpotifyPlaylists, getUserInformation } from '../utils/data';
+import { getSpotifyPlaylists, getUserInformation } from '../utils/externalData';
 
 export const userInformationQuery = selector({
   key: 'UserInformation',
@@ -27,4 +27,9 @@ export const playlistQuery = selectorFamily({
     get: getRecoil,
   }): SpotifyPlaylist | undefined => getRecoil(playlistsQuery)
     .find((playlist) => playlist.id === id),
+});
+
+export const playlistTracksQuery = selectorFamily({
+  key: 'PlaylistTracks',
+  get: (id: string) => (): any => [],
 });
