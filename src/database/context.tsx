@@ -1,16 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
-import createDatabase, { IndexedDBIsDb } from './createDatabase';
+import createDatabase, { SrIndexedDB } from './createDatabase';
 
 import FullScreenIndicator from '../components/LoadingIndicator/FullScreenIndicator';
 import { getSnapshots } from './queries';
 import { playlistSnapshots } from '../state/atoms';
 
-const DatabaseContext = createContext<IndexedDBIsDb | undefined>(undefined);
+const DatabaseContext = createContext<SrIndexedDB | undefined>(undefined);
 
 export const DatabaseProvider: React.FC = ({ children }) => {
-  const [isdb, setDb] = useState<IndexedDBIsDb>();
+  const [isdb, setDb] = useState<SrIndexedDB>();
   const setSnapshots = useSetRecoilState(playlistSnapshots);
 
   useEffect(() => {

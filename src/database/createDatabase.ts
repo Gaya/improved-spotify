@@ -10,7 +10,7 @@ import { error } from '../utils/logging';
 
 const version = 1;
 
-interface IsDb extends DBSchema {
+interface SrDb extends DBSchema {
   snapshots: {
     key: string;
     value: string;
@@ -51,10 +51,10 @@ interface IsDb extends DBSchema {
   };
 }
 
-export type IndexedDBIsDb = IDBPDatabase<IsDb>;
+export type SrIndexedDB = IDBPDatabase<SrDb>;
 
-function createDatabase(): Promise<IndexedDBIsDb> {
-  return openDB<IsDb>('ISDB', version, {
+function createDatabase(): Promise<SrIndexedDB> {
+  return openDB<SrDb>('SRDB', version, {
     upgrade(db) {
       // SNAPSHOTS
       db.createObjectStore('snapshots');

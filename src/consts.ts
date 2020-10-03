@@ -10,6 +10,6 @@ export const SPOTIFY_ME_URI = `${SPOTIFY_API_URI}/v1/me`;
 export const SPOTIFY_PLAYLISTS_URI = `${SPOTIFY_ME_URI}/playlists`;
 export const SPOTIFY_PLAYLIST_TRACKS = `${SPOTIFY_API_URI}/v1/playlists/{id}/tracks`;
 
-export const STORAGE_AUTH_CODE_VERIFIER = 'IS_AUTH_CODE_VERIFIER';
-export const STORAGE_AUTH_STATE = 'IS_AUTH_STATE';
-export const STORAGE_TOKEN = 'IS_TOKEN';
+export const STORAGE_AUTH_CODE_VERIFIER = 'SR_AUTH_CODE_VERIFIER';
+export const STORAGE_AUTH_STATE = 'SR_AUTH_STATE';
+export const STORAGE_TOKEN = 'SR_TOKEN';

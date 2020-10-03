@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from '@material-ui/core';
+
+import Button from '@material-ui/core/Button';
 
 import { createAuthUrl } from '../utils';
 import useAuthStrings from '../hooks/useAuthStrings';
@@ -18,7 +19,9 @@ const AuthButton: React.FC = () => {
   const authUrl = createAuthUrl(codeChallenge, state);
 
   return (
-    <Link href={authUrl}>Authenticate with Spotify</Link>
+    <Button href={authUrl} variant="outlined" size="large" color="primary">
+      Authenticate with Spotify
+    </Button>
   );
 };
 

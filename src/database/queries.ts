@@ -1,8 +1,8 @@
-import { IndexedDBIsDb } from './createDatabase';
+import { SrIndexedDB } from './createDatabase';
 
 import { PlaylistSnapshots, SpotifyDataExport, StoredSpotifyPlaylistTrack } from '../types';
 
-export function getSnapshots(db: IndexedDBIsDb): Promise<PlaylistSnapshots> {
+export function getSnapshots(db: SrIndexedDB): Promise<PlaylistSnapshots> {
   const keysPromise = db.getAllKeys('snapshots');
   const valuesPromise = db.getAll('snapshots');
 
@@ -13,7 +13,7 @@ export function getSnapshots(db: IndexedDBIsDb): Promise<PlaylistSnapshots> {
     ));
 }
 
-export function saveSnapshots(db: IndexedDBIsDb, snapshots: PlaylistSnapshots): Promise<void> {
+export function saveSnapshots(db: SrIndexedDB, snapshots: PlaylistSnapshots): Promise<void> {
   return db
     .clear('snapshots')
     .then(() => Promise.all(Object.entries(snapshots).map(
@@ -23,7 +23,7 @@ export function saveSnapshots(db: IndexedDBIsDb, snapshots: PlaylistSnapshots): 
 }
 
 export function removePlaylistTracksByPlaylist(
-  db: IndexedDBIsDb,
+  db: SrIndexedDB,
   playlistId: string,
 ): Promise<void> {
   return queryPlaylistTrackKeys(db, playlistId)
@@ -31,7 +31,7 @@ export function removePlaylistTracksByPlaylist(
     .then(() => undefined);
 }
 
-export function storeDataExport(db: IndexedDBIsDb, data: SpotifyDataExport): Promise<void> {
+export function storeDataExport(db: SrIndexedDB, data: SpotifyDataExport): Promise<void> {
   return Promise.all(data.playlistTracks.map((track) => db.put('playlistTracks', track)))
     .then(() => Promise.all(Object.entries(data.albums).map(([id, album]) => db.put('albums', album))))
     .then(() => Promise.all(Object.entries(data.artists).map(([id, artist]) => db.put('artists', artist))))
@@ -40,14 +40,14 @@ export function storeDataExport(db: IndexedDBIsDb, data: SpotifyDataExport): Pro
 }
 
 export function queryPlaylistTrackKeys(
-  db: IndexedDBIsDb,
+  db: SrIndexedDB,
   playlistId: string,
 ): Promise<string[]> {
   return db.getAllKeysFromIndex('playlistTracks', 'by-playlist', playlistId);
 }
 
 export function queryPlaylistTracks(
-  db: IndexedDBIsDb,
+  db: SrIndexedDB,
   playlistId: string,
 ): Promise<StoredSpotifyPlaylistTrack[]> {
   return db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
