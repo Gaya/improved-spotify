@@ -6,6 +6,7 @@ import {
   useRef,
 } from 'react';
 import { useRecoilState } from 'recoil';
+import { isAfter, parseJSON } from 'date-fns';
 
 import {
   PagedResponse,
@@ -110,12 +111,7 @@ function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrack
 const byDateAdded = (
   a: StoredSpotifyPlaylistTrack,
   b: StoredSpotifyPlaylistTrack,
-): number => (a.added_at > b.added_at ? 1 : -1);
-
-const byDateAddedDesc = (
-  a: StoredSpotifyPlaylistTrack,
-  b: StoredSpotifyPlaylistTrack,
-): number => (a.added_at < b.added_at ? 1 : -1);
+): number => (isAfter(parseJSON(a.added_at), parseJSON(b.added_at)) ? 1 : -1);
 
 function useTrackList(id: string): {
   progress: number;
