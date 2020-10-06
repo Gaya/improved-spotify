@@ -4,6 +4,19 @@ export interface Loadable {
   error?: Error;
 }
 
+export type LoadableValue<T> =
+  | Readonly<{
+  state: 'hasValue';
+  contents: T;
+}>
+  | Readonly<{
+  state: 'hasError';
+  contents: Error;
+}>
+  | Readonly<{
+  state: 'loading';
+}>;
+
 export enum ContentType {
   json = 'application/json',
   formUrlEncoded = 'application/x-www-form-urlencoded',

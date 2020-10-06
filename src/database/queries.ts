@@ -1,6 +1,11 @@
 import { SrIndexedDB } from './createDatabase';
 
-import { PlaylistSnapshots, SpotifyDataExport, StoredSpotifyPlaylistTrack } from '../types';
+import {
+  PlaylistSnapshots,
+  SpotifyDataExport,
+  StoredSpotifyPlaylistTrack,
+  StoredSpotifyTrack,
+} from '../types';
 
 export function getSnapshots(db: SrIndexedDB): Promise<PlaylistSnapshots> {
   const keysPromise = db.getAllKeys('snapshots');
@@ -51,4 +56,11 @@ export function queryPlaylistTracks(
   playlistId: string,
 ): Promise<StoredSpotifyPlaylistTrack[]> {
   return db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
+}
+
+export function queryTrackInfo(
+  db: SrIndexedDB,
+  trackId: string,
+): Promise<StoredSpotifyTrack | undefined> {
+  return db.get('tracks', trackId);
 }
