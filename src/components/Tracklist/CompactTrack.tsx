@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
+    paddingRight: 4,
   },
   artist: {
     flexGrow: 0,
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
+    paddingRight: 4,
   },
   album: {
     flexShrink: 0,
@@ -32,10 +34,12 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
+    paddingRight: 4,
   },
   duration: {
     flexShrink: 0,
     width: '5%',
+    minWidth: 65,
     textAlign: 'right',
     whiteSpace: 'nowrap',
   },

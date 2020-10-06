@@ -1,7 +1,7 @@
 import {
   useCallback,
   useContext,
-  useEffect,
+  useEffect, useMemo,
   useReducer,
   useRef,
 } from 'react';
@@ -107,6 +107,16 @@ function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrack
   }
 }
 
+const byDateAdded = (
+  a: StoredSpotifyPlaylistTrack,
+  b: StoredSpotifyPlaylistTrack,
+): number => (a.added_at > b.added_at ? 1 : -1);
+
+const byDateAddedDesc = (
+  a: StoredSpotifyPlaylistTrack,
+  b: StoredSpotifyPlaylistTrack,
+): number => (a.added_at < b.added_at ? 1 : -1);
+
 function useTrackList(id: string): {
   progress: number;
   tracks: StoredSpotifyPlaylistTrack[];
@@ -129,6 +139,8 @@ function useTrackList(id: string): {
   } = state;
 
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
+
+  const sortedTracks = useMemo(() => [...tracks].sort(byDateAdded), [tracks]);
 
   // update tracks in state
   const updateTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]) => {
@@ -208,7 +220,7 @@ function useTrackList(id: string): {
   }, [db, id, isResolved, isResolving, needsFetching, tracksState, updateTrackData]);
 
   return {
-    tracks,
+    tracks: sortedTracks,
     progress: isResolved ? 100 : ((fetchedTracks.length / totalTracks) || 0) * 100,
     isResolved,
     showProgress,
