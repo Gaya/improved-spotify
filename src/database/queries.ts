@@ -2,7 +2,9 @@ import { SrIndexedDB } from './createDatabase';
 
 import {
   PlaylistSnapshots,
+  SpotifyArtist,
   SpotifyDataExport,
+  StoredSpotifyAlbum,
   StoredSpotifyPlaylistTrack,
   StoredSpotifyTrack,
 } from '../types';
@@ -63,4 +65,18 @@ export function queryTrackInfo(
   trackId: string,
 ): Promise<StoredSpotifyTrack | undefined> {
   return db.get('tracks', trackId);
+}
+
+export function queryArtistInfo(
+  db: SrIndexedDB,
+  artistId: string,
+): Promise<SpotifyArtist | undefined> {
+  return db.get('artists', artistId);
+}
+
+export function queryAlbumInfo(
+  db: SrIndexedDB,
+  albumId: string,
+): Promise<StoredSpotifyAlbum | undefined> {
+  return db.get('albums', albumId);
 }

@@ -31,18 +31,23 @@ const useStyles = makeStyles((theme) => ({
   topBarTitle: {
     flexGrow: 0,
     width: '45%',
+    paddingRight: 4,
   },
   topBarArtist: {
     flexGrow: 0,
     width: '25%',
+    paddingRight: 4,
   },
   topBarAlbum: {
     flexShrink: 0,
     width: '25%',
+    paddingRight: 4,
   },
   topBarDuration: {
     flexShrink: 0,
     width: '5%',
+    minWidth: 65,
+    textAlign: 'right',
   },
   listContainer: {
     display: 'flex',

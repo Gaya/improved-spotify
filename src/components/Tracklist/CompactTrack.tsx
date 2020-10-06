@@ -6,10 +6,8 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import useTrackInfo from './hooks/useTrackInfo';
 import formatDuration from '../../utils/formatDuration';
 
-interface CompactTrackProps {
-  id: string;
-  style: React.CSSProperties;
-}
+import AlbumLink from './AlbumLink';
+import ArtistLink from './ArtistLink';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -53,12 +51,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CompactTrack: React.FC<CompactTrackProps> = ({ style, id }: CompactTrackProps) => {
+interface CompactTrackProps {
+  id: string;
+  style: React.CSSProperties;
+}
+
+const CompactTrack: React.FC<CompactTrackProps> = ({ style, id }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const track = useTrackInfo(id);
 
-  if (track.state === 'loading' || track.state === 'hasError') {
+  if (track.state !== 'hasValue') {
     return (
       <div key={id} className={styles.track} style={style} />
     );
@@ -67,8 +70,10 @@ const CompactTrack: React.FC<CompactTrackProps> = ({ style, id }: CompactTrackPr
   return (
     <div key={id} className={styles.track} style={style}>
       <div className={styles.title}>{track.contents.name}</div>
-      <div className={styles.artist}>{track.contents.artists.join(', ')}</div>
-      <div className={styles.album}>{track.contents.album}</div>
+      <div className={styles.artist}>
+        {track.contents.artists.map((artist) => <ArtistLink key={artist} id={artist} />)}
+      </div>
+      <div className={styles.album}><AlbumLink id={track.contents.album} /></div>
       <div className={styles.duration}>{formatDuration(track.contents.duration_ms)}</div>
     </div>
   );
