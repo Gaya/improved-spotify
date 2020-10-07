@@ -10,7 +10,7 @@ import useTrackList from '../hooks/useTrackList';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
 
 import CompactTrackList from '../../Tracklist/components/CompactTrackList';
-import AlbumTrackList from '../../Tracklist/components/AlbumTrackList';
+import AlbumList from '../../Tracklist/components/AlbumListContainer';
 
 import { PlaylistView } from '../../../types';
 
@@ -79,7 +79,7 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
       {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
         && <CompactTrackList tracks={tracks} />}
       {isResolved && tracks && viewAs === PlaylistView.ALBUM
-        && <AlbumTrackList tracks={tracks} />}
+        && <AlbumList tracks={tracks} />}
     </div>
   );
 };
