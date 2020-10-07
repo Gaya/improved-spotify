@@ -2,15 +2,25 @@ import React from 'react';
 
 import { StoredSpotifyPlaylistTrack } from '../../../types';
 
+import useAlbumsFromTracks from '../hooks/useAlbumsFromTracks';
+
 interface AlbumTrackListProps {
   tracks: StoredSpotifyPlaylistTrack[];
 }
 
-const AlbumTrackList: React.FC<AlbumTrackListProps> = () => {
-  const test = 1;
+const AlbumTrackList: React.FC<AlbumTrackListProps> = ({ tracks }) => {
+  const albums = useAlbumsFromTracks(tracks);
+
+  if (albums.state !== 'hasValue') {
+    return null;
+  }
 
   return (
-    <div>Albums</div>
+    <div>
+      {albums.contents.map((album) => (
+        <div key={album.id}>{album.name}</div>
+      ))}
+    </div>
   );
 };
 

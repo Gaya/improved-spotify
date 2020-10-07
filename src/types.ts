@@ -107,7 +107,7 @@ export interface SpotifyArtist {
   uri: string;
 }
 
-interface SpotifyAlbum {
+export interface SpotifyAlbum {
   album_type: string;
   artists: SpotifyArtist[];
   available_markets: string[];
@@ -212,4 +212,9 @@ export interface SpotifyDataExport {
   tracks: StoredSpotifyTrackInfo;
   artists: StoredSpotifyArtists;
   albums: StoredSpotifyAlbums;
+}
+
+export enum PlaylistView {
+  PLAYLIST = 'PLAYLIST',
+  ALBUM = 'ALBUM',
 }

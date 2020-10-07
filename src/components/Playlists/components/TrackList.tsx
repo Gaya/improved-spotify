@@ -7,16 +7,15 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 
 import useTrackList from '../hooks/useTrackList';
+import { getStoredPlaylistView, storePlaylistView } from '../utils';
+
 import CompactTrackList from '../../Tracklist/components/CompactTrackList';
 import AlbumTrackList from '../../Tracklist/components/AlbumTrackList';
 
+import { PlaylistView } from '../../../types';
+
 interface TrackListProps {
   id: string;
-}
-
-enum ViewType {
-  PLAYLIST = 'PLAYLIST',
-  ALBUM = 'ALBUM',
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -44,10 +43,11 @@ const useStyles = makeStyles((theme) => ({
 const TrackList: React.FC<TrackListProps> = ({ id }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
-  const [viewAs, setViewAs] = useState<ViewType>(ViewType.PLAYLIST);
+  const [viewAs, setViewAs] = useState<PlaylistView>(getStoredPlaylistView());
 
-  const onSelectView = (viewType: ViewType): void => {
+  const onSelectView = (viewType: PlaylistView): void => {
     setViewAs(viewType);
+    storePlaylistView(viewType);
   };
 
   const {
@@ -63,21 +63,23 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
       <div className={styles.viewContainer}>
         <ButtonGroup size="small">
           <Button
-            variant={viewAs === ViewType.PLAYLIST ? 'contained' : 'outlined'}
-            onClick={(): void => onSelectView(ViewType.PLAYLIST)}
+            variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
+            onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
           >
             Playlist
           </Button>
           <Button
-            variant={viewAs === ViewType.ALBUM ? 'contained' : 'outlined'}
-            onClick={(): void => onSelectView(ViewType.ALBUM)}
+            variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
+            onClick={(): void => onSelectView(PlaylistView.ALBUM)}
           >
             Albums
           </Button>
         </ButtonGroup>
       </div>
-      {isResolved && tracks && viewAs === ViewType.PLAYLIST && <CompactTrackList tracks={tracks} />}
-      {isResolved && tracks && viewAs === ViewType.ALBUM && <AlbumTrackList tracks={tracks} />}
+      {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
+        && <CompactTrackList tracks={tracks} />}
+      {isResolved && tracks && viewAs === PlaylistView.ALBUM
+        && <AlbumTrackList tracks={tracks} />}
     </div>
   );
 };
