@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useArtistInfo from './hooks/useArtistInfo';
+import useArtistInfo from '../hooks/useArtistInfo';
 
 interface ArtistLinkProps {
   id: string;

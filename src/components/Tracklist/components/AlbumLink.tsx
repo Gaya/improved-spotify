@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useAlbumInfo from './hooks/useAlbumInfo';
+import useAlbumInfo from '../hooks/useAlbumInfo';
 
 interface AlbumLinkProps {
   id: string;

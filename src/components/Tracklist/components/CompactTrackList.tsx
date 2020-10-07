@@ -4,10 +4,10 @@ import { FixedSizeList as List } from 'react-window';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import { StoredSpotifyPlaylistTrack } from '../../types';
+import { StoredSpotifyPlaylistTrack } from '../../../types';
 import CompactTrack from './CompactTrack';
 
-interface TrackListProps {
+interface CompactTrackListProps {
   tracks: StoredSpotifyPlaylistTrack[];
 }
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CompactTrackList: React.FC<TrackListProps> = ({ tracks }) => {
+const CompactTrackList: React.FC<CompactTrackListProps> = ({ tracks }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);

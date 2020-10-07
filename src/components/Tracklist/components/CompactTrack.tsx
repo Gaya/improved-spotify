@@ -3,10 +3,10 @@ import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import formatDuration from '../../utils/formatDuration';
-import { StoredSpotifyPlaylistTrack } from '../../types';
+import formatDuration from '../../../utils/formatDuration';
+import { StoredSpotifyPlaylistTrack } from '../../../types';
 
-import useTrackInfo from './hooks/useTrackInfo';
+import useTrackInfo from '../hooks/useTrackInfo';
 import AlbumLink from './AlbumLink';
 import ArtistLink from './ArtistLink';
 
