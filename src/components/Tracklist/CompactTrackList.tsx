@@ -86,7 +86,7 @@ const CompactTrackList: React.FC<TrackListProps> = ({ tracks }) => {
       <div className={styles.listContainer} ref={containerRef}>
         <List height={height} itemCount={tracks.length} itemSize={36} width="100%">
           {({ index, style }): React.ReactElement => (
-            <CompactTrack id={tracks[index].track} style={style} />
+            <CompactTrack playlistTrack={tracks[index]} style={style} />
           )}
         </List>
       </div>

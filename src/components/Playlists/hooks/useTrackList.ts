@@ -6,7 +6,6 @@ import {
   useRef,
 } from 'react';
 import { useRecoilState } from 'recoil';
-import { isAfter, parseJSON } from 'date-fns';
 
 import {
   PagedResponse,
@@ -108,10 +107,10 @@ function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrack
   }
 }
 
-const byDateAdded = (
+const byIndex = (
   a: StoredSpotifyPlaylistTrack,
   b: StoredSpotifyPlaylistTrack,
-): number => (isAfter(parseJSON(a.added_at), parseJSON(b.added_at)) ? 1 : -1);
+): number => (a.index > b.index ? 1 : -1);
 
 function useTrackList(id: string): {
   progress: number;
@@ -136,7 +135,7 @@ function useTrackList(id: string): {
 
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
 
-  const sortedTracks = useMemo(() => [...tracks].sort(byDateAdded), [tracks]);
+  const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
 
   // update tracks in state
   const updateTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]) => {

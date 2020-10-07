@@ -31,8 +31,9 @@ function extractTrackData(
 
   return {
     ...extractedData,
-    playlistTracks: tracks.map((track) => ({
+    playlistTracks: tracks.map((track, index) => ({
       ...track,
+      index,
       playlistId,
       track: track.track.id,
       id: `${playlistId}:${track.track.id}`,

@@ -3,9 +3,10 @@ import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import useTrackInfo from './hooks/useTrackInfo';
 import formatDuration from '../../utils/formatDuration';
+import { StoredSpotifyPlaylistTrack } from '../../types';
 
+import useTrackInfo from './hooks/useTrackInfo';
 import AlbumLink from './AlbumLink';
 import ArtistLink from './ArtistLink';
 
@@ -52,13 +53,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface CompactTrackProps {
-  id: string;
+  playlistTrack: StoredSpotifyPlaylistTrack;
   style: React.CSSProperties;
 }
 
-const CompactTrack: React.FC<CompactTrackProps> = ({ style, id }) => {
+const CompactTrack: React.FC<CompactTrackProps> = ({ style, playlistTrack }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
+  const { track: id } = playlistTrack;
   const track = useTrackInfo(id);
 
   if (track.state !== 'hasValue') {
