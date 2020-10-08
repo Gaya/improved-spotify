@@ -16,10 +16,16 @@ export const getPaged = <T>(
 ): Promise<T[]> => getValidToken()
     .then((token) => getPagedPlain<T>(uri, params, token.access_token));
 
+export const postWithoutParsing = (
+  uri: string,
+  data: PostData = {},
+  contentType: ContentType = ContentType.json,
+): Promise<Response> => getValidToken()
+  .then((token) => postPlain(uri, data, contentType, token.access_token));
+
 export const post = <S>(
   uri: string,
   data: PostData = {},
   contentType: ContentType = ContentType.json,
-): Promise<S> => getValidToken()
-    .then((token) => postPlain(uri, data, contentType, token.access_token))
+): Promise<S> => postWithoutParsing(uri, data, contentType)
     .then((response) => response.json());

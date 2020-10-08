@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -8,8 +8,11 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { SpotifyAlbum } from '../../../types';
+import { addToQueue, getAlbumTracks } from '../../../utils/externalData';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -48,12 +51,44 @@ interface AlbumListItemProps {
   style: React.CSSProperties;
 }
 
+function promiseSerial<T>(promises: Promise<T>[], results: T[] = []): Promise<T[]> {
+  if (promises.length === 0) {
+    return Promise.resolve(results);
+  }
+
+  const [next, ...remaining] = promises;
+
+  return next.then((result) => promiseSerial(remaining, [...results, result]));
+}
+
 const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const [isHovering, setIsHovering] = useState(false);
+  const [isQueuing, setIsQueuing] = useState(false);
+  const [queueTooltip, setQueueTooltip] = useState(false);
+
+  const showQueueTooltip = (): void => {
+    setQueueTooltip(true);
+    setTimeout(() => setQueueTooltip(false), 3000);
+  };
 
   const artistsText = album.artists.map((a) => a.name).join(', ');
+
+  const addAlbumToQueue = useCallback(() => {
+    if (isQueuing) {
+      return;
+    }
+
+    setIsQueuing(true);
+
+    getAlbumTracks(album.id)
+      .then((tracks) => promiseSerial(tracks.map((track) => addToQueue(track.uri))))
+      .then(() => {
+        setIsQueuing(false);
+        showQueueTooltip();
+      });
+  }, [album.id, isQueuing]);
 
   return (
     <div style={style} key={album.id} className={styles.container}>
@@ -65,11 +100,27 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
           style={{ backgroundImage: `url(${album.images[0].url})` }}
         >
           <ButtonGroup
-            className={classNames(styles.buttons, { [styles.buttonsHover]: isHovering })}
+            className={
+              classNames(styles.buttons, { [styles.buttonsHover]: isHovering || isQueuing })
+            }
             orientation="vertical"
           >
             <Button size="large" startIcon={<PlayArrowIcon />}>Play Now</Button>
-            <Button size="large" startIcon={<QueueMusicIcon />}>Add to Queue</Button>
+            <Tooltip
+              open={queueTooltip}
+              title="Added to Queue"
+              disableFocusListener
+              disableHoverListener
+              disableTouchListener
+            >
+              <Button
+                size="large"
+                startIcon={isQueuing ? <CircularProgress size={16} color="inherit" /> : <QueueMusicIcon />}
+                onClick={addAlbumToQueue}
+              >
+                Add to Queue
+              </Button>
+            </Tooltip>
           </ButtonGroup>
         </div>
         <Typography noWrap>
