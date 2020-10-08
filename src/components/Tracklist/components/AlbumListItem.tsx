@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -18,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(4),
   },
   album: {
     width: 260,
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   cover: {
     borderWidth: 1,
     borderStyle: 'solid',
+    backgroundColor: theme.palette.background.paper,
     borderColor: '#010102',
     boxShadow: '0 0 8px rgba(0, 0, 0, 0.5)',
     marginBottom: theme.spacing(1),
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface AlbumListItemProps {
   album: SpotifyAlbum;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 }
 
 function promiseSerial<T>(promises: Promise<T>[], results: T[] = []): Promise<T[]> {
@@ -105,7 +107,6 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
             }
             orientation="vertical"
           >
-            <Button size="large" startIcon={<PlayArrowIcon />}>Play Now</Button>
             <Tooltip
               open={queueTooltip}
               title="Added to Queue"

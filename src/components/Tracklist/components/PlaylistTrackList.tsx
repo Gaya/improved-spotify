@@ -3,6 +3,7 @@ import { FixedSizeList as List } from 'react-window';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
+import Container from '@material-ui/core/Container';
 
 import { StoredSpotifyPlaylistTrack } from '../../../types';
 import PlaylistTrackListItem from './PlaylistTrackListItem';
@@ -77,18 +78,22 @@ const PlaylistTrackList: React.FC<PlaylistTrackListProps> = ({ tracks }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.topBar}>
-        <div className={styles.topBarTitle}>Title</div>
-        <div className={styles.topBarArtist}>Artist</div>
-        <div className={styles.topBarAlbum}>Album</div>
-        <div className={styles.topBarDuration}>Time</div>
-      </div>
+      <Container>
+        <div className={styles.topBar}>
+          <div className={styles.topBarTitle}>Title</div>
+          <div className={styles.topBarArtist}>Artist</div>
+          <div className={styles.topBarAlbum}>Album</div>
+          <div className={styles.topBarDuration}>Time</div>
+        </div>
+      </Container>
       <div className={styles.listContainer} ref={containerRef}>
-        <List height={height} itemCount={tracks.length} itemSize={36} width="100%">
-          {({ index, style }): React.ReactElement => (
-            <PlaylistTrackListItem playlistTrack={tracks[index]} style={style} />
-          )}
-        </List>
+        <Container>
+          <List height={height} itemCount={tracks.length} itemSize={36} width="100%">
+            {({ index, style }): React.ReactElement => (
+              <PlaylistTrackListItem playlistTrack={tracks[index]} style={style} />
+            )}
+          </List>
+        </Container>
       </div>
     </div>
   );

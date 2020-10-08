@@ -5,6 +5,7 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
 
 import useTrackList from '../hooks/useTrackList';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     paddingTop: theme.spacing(3),
     flexDirection: 'column',
+    overflowY: 'hidden',
   },
   listContainer: {
     display: 'flex',
@@ -59,24 +61,28 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
 
   return (
     <div className={styles.container}>
-      {showProgress && !isResolved && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
+      {showProgress && !isResolved && (
+        <Container>
+          <LinearProgress className={styles.progress} variant="determinate" value={progress} />
+        </Container>
+      )}
       {isResolved && (
-        <div className={styles.viewContainer}>
+        <Container className={styles.viewContainer}>
           <ButtonGroup size="small">
-            <Button
-              variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
-              onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
-            >
-              Playlist
-            </Button>
             <Button
               variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
               onClick={(): void => onSelectView(PlaylistView.ALBUM)}
             >
               Albums
             </Button>
+            <Button
+              variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
+              onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
+            >
+              Playlist
+            </Button>
           </ButtonGroup>
-        </div>
+        </Container>
       )}
       {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
         && <PlaylistTrackList tracks={tracks} />}

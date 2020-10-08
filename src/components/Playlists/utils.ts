@@ -5,11 +5,11 @@ export function getStoredPlaylistView(): PlaylistView {
   const type = localStorage.getItem(STORAGE_VIEW_SETTINGS);
 
   switch (type) {
-    case 'ALBUM':
-      return PlaylistView.ALBUM;
-    default:
     case 'PLAYLIST':
       return PlaylistView.PLAYLIST;
+    default:
+    case 'ALBUM':
+      return PlaylistView.ALBUM;
   }
 }
 

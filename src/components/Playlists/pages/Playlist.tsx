@@ -4,6 +4,7 @@ import { useRecoilValueLoadable } from 'recoil';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@material-ui/core/Container';
 
 import { playlistQuery } from '../../../state/selectors';
 
@@ -39,15 +40,17 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   return (
     <Layout>
       <PageContainer>
-        {playlist.state !== 'hasValue' && <LoadingIndicator />}
+        {playlist.state !== 'hasValue' && <Container><LoadingIndicator /></Container>}
         {playlist.state === 'hasValue' && playlist.contents && (
           <>
-            <section className={styles.topBar}>
-              <div className={styles.topBarImage}>
-                <Image key={`Image_${id}`} id={id} />
-              </div>
-              <PlaylistInfo playlist={playlist.contents} />
-            </section>
+            <Container>
+              <section className={styles.topBar}>
+                <div className={styles.topBarImage}>
+                  <Image key={`Image_${id}`} id={id} />
+                </div>
+                <PlaylistInfo playlist={playlist.contents} />
+              </section>
+            </Container>
             <TrackList key={`TrackList_${id}`} id={id} />
           </>
         )}
