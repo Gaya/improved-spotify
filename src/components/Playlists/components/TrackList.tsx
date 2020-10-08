@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import useTrackList from '../hooks/useTrackList';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
 
-import CompactTrackList from '../../Tracklist/components/CompactTrackList';
+import PlaylistTrackList from '../../Tracklist/components/PlaylistTrackList';
 import AlbumList from '../../Tracklist/components/AlbumListContainer';
 
 import { PlaylistView } from '../../../types';
@@ -60,24 +60,26 @@ const TrackList: React.FC<TrackListProps> = ({ id }) => {
   return (
     <div className={styles.container}>
       {showProgress && !isResolved && <LinearProgress className={styles.progress} variant="determinate" value={progress} />}
-      <div className={styles.viewContainer}>
-        <ButtonGroup size="small">
-          <Button
-            variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
-            onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
-          >
-            Playlist
-          </Button>
-          <Button
-            variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
-            onClick={(): void => onSelectView(PlaylistView.ALBUM)}
-          >
-            Albums
-          </Button>
-        </ButtonGroup>
-      </div>
+      {isResolved && (
+        <div className={styles.viewContainer}>
+          <ButtonGroup size="small">
+            <Button
+              variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
+              onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
+            >
+              Playlist
+            </Button>
+            <Button
+              variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
+              onClick={(): void => onSelectView(PlaylistView.ALBUM)}
+            >
+              Albums
+            </Button>
+          </ButtonGroup>
+        </div>
+      )}
       {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
-        && <CompactTrackList tracks={tracks} />}
+        && <PlaylistTrackList tracks={tracks} />}
       {isResolved && tracks && viewAs === PlaylistView.ALBUM
         && <AlbumList tracks={tracks} />}
     </div>

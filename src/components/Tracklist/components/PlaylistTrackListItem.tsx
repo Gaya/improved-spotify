@@ -52,12 +52,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface CompactTrackProps {
+interface PlaylistTrackListItem {
   playlistTrack: StoredSpotifyPlaylistTrack;
   style: React.CSSProperties;
 }
 
-const CompactTrack: React.FC<CompactTrackProps> = ({ style, playlistTrack }) => {
+const PlaylistTrackListItem: React.FC<PlaylistTrackListItem> = ({ style, playlistTrack }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const { track: id } = playlistTrack;
@@ -81,4 +81,4 @@ const CompactTrack: React.FC<CompactTrackProps> = ({ style, playlistTrack }) => 
   );
 };
 
-export default CompactTrack;
+export default PlaylistTrackListItem;

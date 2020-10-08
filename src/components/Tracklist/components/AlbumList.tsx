@@ -1,11 +1,15 @@
 import React, {
-  useEffect, useReducer, useRef, useState,
+  useEffect,
+  useReducer,
+  useRef,
 } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import { SpotifyAlbum } from '../../../types';
+
+import AlbumListItem from './AlbumListItem';
 
 const useStyles = makeStyles({
   listContainer: {
@@ -48,8 +52,9 @@ const AlbumList: React.FC<AlbumTrackListProps> = ({ albums }) => {
     return (): void => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
-  const columns = dimensions.width ? Math.floor(dimensions.width / 200) : 0;
-  const rows = columns ? Math.ceil(albums.length / columns) : 0;
+  const columns = dimensions.width ? Math.floor(dimensions.width / 284) : 0;
+  const rows = albums.length && columns ? Math.ceil(albums.length / columns) : 0;
+  const columnWidth = columns ? dimensions.width / columns : 0;
 
   return (
     <div className={styles.listContainer} ref={containerRef}>
@@ -58,18 +63,18 @@ const AlbumList: React.FC<AlbumTrackListProps> = ({ albums }) => {
         rowCount={rows}
         width={dimensions.width}
         height={dimensions.height}
-        columnWidth={dimensions.width / columns}
-        rowHeight={200}
+        columnWidth={columnWidth}
+        rowHeight={380}
       >
-        {({ columnIndex, rowIndex, style }) => (
-          <div style={style}>
-            Item
-            {' '}
-            {rowIndex}
-            ,
-            {columnIndex}
-          </div>
-        )}
+        {({ columnIndex, rowIndex, style }): React.ReactElement | null => {
+          const album = albums[(rowIndex * columns) + columnIndex];
+
+          if (!album) {
+            return null;
+          }
+
+          return <AlbumListItem style={style} album={albums[(rowIndex * columns) + columnIndex]} />;
+        }}
       </Grid>
     </div>
   );

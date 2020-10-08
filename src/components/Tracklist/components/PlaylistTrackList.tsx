@@ -5,11 +5,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
 import { StoredSpotifyPlaylistTrack } from '../../../types';
-import CompactTrack from './CompactTrack';
-
-interface CompactTrackListProps {
-  tracks: StoredSpotifyPlaylistTrack[];
-}
+import PlaylistTrackListItem from './PlaylistTrackListItem';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -55,7 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CompactTrackList: React.FC<CompactTrackListProps> = ({ tracks }) => {
+interface PlaylistTrackListProps {
+  tracks: StoredSpotifyPlaylistTrack[];
+}
+
+const PlaylistTrackList: React.FC<PlaylistTrackListProps> = ({ tracks }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -86,7 +86,7 @@ const CompactTrackList: React.FC<CompactTrackListProps> = ({ tracks }) => {
       <div className={styles.listContainer} ref={containerRef}>
         <List height={height} itemCount={tracks.length} itemSize={36} width="100%">
           {({ index, style }): React.ReactElement => (
-            <CompactTrack playlistTrack={tracks[index]} style={style} />
+            <PlaylistTrackListItem playlistTrack={tracks[index]} style={style} />
           )}
         </List>
       </div>
@@ -94,4 +94,4 @@ const CompactTrackList: React.FC<CompactTrackListProps> = ({ tracks }) => {
   );
 };
 
-export default CompactTrackList;
+export default PlaylistTrackList;
