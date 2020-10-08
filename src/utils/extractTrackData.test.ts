@@ -76,6 +76,78 @@ describe('extractTrackData', () => {
     expect(playlistTracks).toEqual(expectedTracks);
   });
 
+  it('should add offset to indexes', () => {
+    const { playlistTracks } = extractTrackData('1234', tracksData, 100);
+
+    const expectedTracks = [
+      {
+        added_at: '2016-07-22T22:49:09Z',
+        added_by: {
+          external_urls: {
+            spotify: 'https://open.spotify.com/user/gaya.kessler',
+          },
+          href: 'https://api.spotify.com/v1/users/gaya.kessler',
+          id: 'gaya.kessler',
+          type: 'user',
+          uri: 'spotify:user:gaya.kessler',
+        },
+        id: '1234:1VyO9SeIAsiYAqQfcsx9qt',
+        index: 100,
+        is_local: false,
+        playlistId: '1234',
+        primary_color: null,
+        track: '1VyO9SeIAsiYAqQfcsx9qt',
+        video_thumbnail: {
+          url: null,
+        },
+      },
+      {
+        added_at: '2019-05-05T09:04:44Z',
+        added_by: {
+          external_urls: {
+            spotify: 'https://open.spotify.com/user/gaya.kessler',
+          },
+          href: 'https://api.spotify.com/v1/users/gaya.kessler',
+          id: 'gaya.kessler',
+          type: 'user',
+          uri: 'spotify:user:gaya.kessler',
+        },
+        id: '1234:5m6v49tXuyUhlaJWa00tyF',
+        index: 101,
+        is_local: false,
+        playlistId: '1234',
+        primary_color: null,
+        track: '5m6v49tXuyUhlaJWa00tyF',
+        video_thumbnail: {
+          url: null,
+        },
+      },
+      {
+        added_at: '2016-07-22T22:49:09Z',
+        added_by: {
+          external_urls: {
+            spotify: 'https://open.spotify.com/user/gaya.kessler',
+          },
+          href: 'https://api.spotify.com/v1/users/gaya.kessler',
+          id: 'gaya.kessler',
+          type: 'user',
+          uri: 'spotify:user:gaya.kessler',
+        },
+        id: '1234:1vLByYhUN1Nppnwp0KvAbB',
+        index: 102,
+        is_local: false,
+        playlistId: '1234',
+        primary_color: null,
+        track: '1vLByYhUN1Nppnwp0KvAbB',
+        video_thumbnail: {
+          url: null,
+        },
+      },
+    ];
+
+    expect(playlistTracks).toEqual(expectedTracks);
+  });
+
   it('should extract track info into structured object', () => {
     const { tracks } = extractTrackData('1234', tracksData);
 

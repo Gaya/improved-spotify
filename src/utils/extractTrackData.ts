@@ -6,6 +6,7 @@ import {
 function extractTrackData(
   playlistId: string,
   tracks: SpotifyPlaylistTrack[],
+  offset = 0,
 ): SpotifyDataExport {
   const extractedData = tracks.reduce((acc: Omit<SpotifyDataExport, 'playlistTracks'>, { track }) => ({
     tracks: {
@@ -33,7 +34,7 @@ function extractTrackData(
     ...extractedData,
     playlistTracks: tracks.map((track, index) => ({
       ...track,
-      index,
+      index: index + offset,
       playlistId,
       track: track.track.id,
       id: `${playlistId}:${track.track.id}`,

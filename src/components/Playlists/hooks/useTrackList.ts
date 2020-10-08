@@ -43,6 +43,11 @@ const defaultState: UseTrackListState = {
   tracks: [],
 };
 
+interface FinishTrackData {
+  type: 'FINISH_TRACK_DATA';
+  payload: StoredSpotifyPlaylistTrack[];
+}
+
 interface UpdateTrackData {
   type: 'UPDATE_TRACK_DATA';
   payload: StoredSpotifyPlaylistTrack[];
@@ -66,7 +71,7 @@ interface ReceiveTracks {
 }
 
 type UseTrackListAction = UpdateTrackData | StartFetching | StartResolving | ReceiveTracks
-  | ContinueFetching;
+  | ContinueFetching | FinishTrackData;
 
 function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrackListState {
   switch (action.type) {
@@ -96,7 +101,12 @@ function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrack
     case 'UPDATE_TRACK_DATA':
       return {
         ...state,
-        tracks: action.payload,
+        tracks: [...state.tracks, ...action.payload],
+      };
+    case 'FINISH_TRACK_DATA':
+      return {
+        ...state,
+        tracks: [...state.tracks, ...action.payload],
         isResolved: true,
         isResolving: false,
         needsFetching: false,
@@ -137,28 +147,34 @@ function useTrackList(id: string): {
 
   const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
 
-  // update tracks in state
-  const updateTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]) => {
-    dispatch({
-      type: 'UPDATE_TRACK_DATA',
-      payload: playlistTracks,
-    });
-  }, []);
-
   // store tracks in database
-  const storeTrackData = useCallback((data: SpotifyDataExport): void => {
+  const storeTrackData = useCallback((
+    data: SpotifyDataExport,
+    end = false,
+  ): void => {
     if (db) {
-      info('Save cached data to database');
+      info('Save received data to database');
       storeDataExport(db, data)
         .then(() => {
-          setTracksState({
-            ...tracksState,
-            [id]: TrackState.VALID,
-          });
-          updateTrackData(data.playlistTracks);
+          if (end) {
+            setTracksState({
+              ...tracksState,
+              [id]: TrackState.VALID,
+            });
+
+            dispatch({
+              type: 'FINISH_TRACK_DATA',
+              payload: data.playlistTracks,
+            });
+          } else {
+            dispatch({
+              type: 'UPDATE_TRACK_DATA',
+              payload: data.playlistTracks,
+            });
+          }
         });
     }
-  }, [db, id, setTracksState, tracksState, updateTrackData]);
+  }, [db, id, setTracksState, tracksState]);
 
   // fetching mechanism
   useEffect(() => {
@@ -177,14 +193,11 @@ function useTrackList(id: string): {
           payload: response,
         });
 
-        if (!response.next) {
-          const allTracks = [...fetchedTracks, ...response.items];
-          const extracted = extractTrackData(id, allTracks);
-          storeTrackData(extracted);
-        }
+        const extracted = extractTrackData(id, response.items, response.offset);
+        storeTrackData(extracted, !response.next);
       });
     }
-  }, [fetchedTracks, id, isResolved, isResolving, needsFetching, storeTrackData]);
+  }, [id, isResolved, isResolving, needsFetching, storeTrackData]);
 
   // find tracks in cache or start fetching
   useEffect(() => {
@@ -205,14 +218,18 @@ function useTrackList(id: string): {
           if (result.length > 0 && tracksState[id] === TrackState.VALID) {
             // has result... so resolve it!
             info('Using cached data from database');
-            updateTrackData(result);
+
+            dispatch({
+              type: 'FINISH_TRACK_DATA',
+              payload: result,
+            });
           } else {
             // no results? Start fetching process
             dispatch({ type: 'START_FETCHING' });
           }
         });
     }
-  }, [db, id, isResolved, isResolving, needsFetching, tracksState, updateTrackData]);
+  }, [db, id, isResolved, isResolving, needsFetching, tracksState]);
 
   return {
     tracks: sortedTracks,
