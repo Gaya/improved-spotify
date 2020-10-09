@@ -5,13 +5,13 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 
 import useTrackList from '../hooks/useTrackList';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
 
 import PlaylistTrackList from '../../Tracklist/components/PlaylistTrackList';
 import AlbumList from '../../Tracklist/components/AlbumListContainer';
+import Container from '../../Container/Container';
 
 import { PlaylistView } from '../../../types';
 

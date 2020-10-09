@@ -1,10 +1,9 @@
 import React from 'react';
 
-import Container from '@material-ui/core/Container';
-
 import { StoredSpotifyPlaylistTrack } from '../../../types';
 
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
+import CenteredContainer from '../../CenteredContainer/CenteredContainer';
 
 import useAlbumsFromTracks from '../hooks/useAlbumsFromTracks';
 
@@ -18,11 +17,11 @@ const AlbumListContainer: React.FC<AlbumTrackListContainerProps> = ({ tracks }) 
   const albums = useAlbumsFromTracks(tracks);
 
   if (albums.state === 'loading') {
-    return <Container><LoadingIndicator /></Container>;
+    return <CenteredContainer><LoadingIndicator /></CenteredContainer>;
   }
 
   if (albums.state === 'hasError') {
-    return <Container><div>Error loading albums</div></Container>;
+    return <CenteredContainer><div>Error loading albums</div></CenteredContainer>;
   }
 
   return (

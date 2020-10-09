@@ -4,13 +4,13 @@ import { useRecoilValueLoadable } from 'recoil';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Container from '@material-ui/core/Container';
 
 import { playlistQuery } from '../../../state/selectors';
 
 import Layout from '../../App/Layout';
 import PageContainer from '../../App/PageContainer';
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
+import Container from '../../Container/Container';
 
 import Image from '../components/Image';
 import PlaylistInfo from '../components/PlaylistInfo';

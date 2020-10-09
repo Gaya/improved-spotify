@@ -3,9 +3,11 @@ import { FixedSizeList as List } from 'react-window';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
-import Container from '@material-ui/core/Container';
 
 import { StoredSpotifyPlaylistTrack } from '../../../types';
+
+import Container from '../../Container/Container';
+
 import PlaylistTrackListItem from './PlaylistTrackListItem';
 
 const useStyles = makeStyles((theme) => ({
