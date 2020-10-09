@@ -39,6 +39,7 @@ interface TrackListProps {
   isResolved: boolean;
   showProgress: boolean;
   viewAs: PlaylistView;
+  selectedArtist?: string;
 }
 
 const TrackList: React.FC<TrackListProps> = ({
@@ -47,6 +48,7 @@ const TrackList: React.FC<TrackListProps> = ({
   progress,
   tracks,
   viewAs,
+  selectedArtist,
 }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
@@ -60,8 +62,8 @@ const TrackList: React.FC<TrackListProps> = ({
       )}
       {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
         && <PlaylistTrackList tracks={tracks} />}
-      {isResolved && tracks && viewAs === PlaylistView.ALBUM
-        && <AlbumList tracks={tracks} />}
+      {isResolved && tracks && (viewAs === PlaylistView.ALBUM || viewAs === PlaylistView.ARTIST)
+        && <AlbumList selectedArtist={selectedArtist} tracks={tracks} />}
     </div>
   );
 };

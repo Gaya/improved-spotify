@@ -40,7 +40,7 @@ function useArtistsFromTracks(
   }, [artists]);
 
   useEffect(() => {
-    if (db && tracks.length > 0) {
+    if (db) {
       Promise.all(tracks.map((track) => queryTrackInfo(db, track.track)))
         .then((results) => results
           .reduce(

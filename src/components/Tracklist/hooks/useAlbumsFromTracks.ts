@@ -39,20 +39,25 @@ function sortByArtistsAndAlbum(a: SpotifyAlbum, b: SpotifyAlbum): number {
 
 function useAlbumsFromTracks(
   tracks: StoredSpotifyPlaylistTrack[],
+  selectedArtist?: string,
 ): LoadableValue<SpotifyAlbum[]> {
   const db = useContext(DatabaseContext);
   const [albums, setAlbums] = useState<SpotifyAlbum[]>();
 
   const sortedAlbums = useMemo(() => {
     if (albums) {
-      return [...albums].sort(sortByArtistsAndAlbum);
+      return [...albums]
+        .filter((album): boolean => (selectedArtist
+          ? !!album.artists.find((artist) => artist.id === selectedArtist)
+          : true))
+        .sort(sortByArtistsAndAlbum);
     }
 
     return [];
-  }, [albums]);
+  }, [albums, selectedArtist]);
 
   useEffect(() => {
-    if (db && tracks.length > 0) {
+    if (db) {
       Promise.all(tracks.map((track) => queryTrackInfo(db, track.track)))
         .then((results) => results
           .reduce(

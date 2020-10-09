@@ -63,6 +63,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const playlist = useRecoilValueLoadable(playlistQuery(id));
 
   const [viewAs, setViewAs] = useState<PlaylistView>(getStoredPlaylistView());
+  const [selectedArtist, setSelectedArtist] = useState<string | undefined>();
 
   const onSelectView = (viewType: PlaylistView): void => {
     setViewAs(viewType);
@@ -83,7 +84,11 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
         {playlist.state === 'hasValue' && playlist.contents && (
           <div className={styles.container}>
             {viewAs === PlaylistView.ARTIST && (
-              <ArtistsList tracks={tracks} />
+              <ArtistsList
+                tracks={tracks}
+                selected={selectedArtist}
+                setSelected={setSelectedArtist}
+              />
             )}
             <div className={styles.playlistContent}>
               <Container>
@@ -122,6 +127,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 showProgress={showProgress}
                 isResolved={isResolved}
                 viewAs={viewAs}
+                selectedArtist={selectedArtist}
                 key={`TrackList_${id}`}
               />
             </div>

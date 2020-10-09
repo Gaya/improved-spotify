@@ -11,10 +11,11 @@ import AlbumList from './AlbumList';
 
 interface AlbumTrackListContainerProps {
   tracks: StoredSpotifyPlaylistTrack[];
+  selectedArtist?: string;
 }
 
-const AlbumListContainer: React.FC<AlbumTrackListContainerProps> = ({ tracks }) => {
-  const albums = useAlbumsFromTracks(tracks);
+const AlbumListContainer: React.FC<AlbumTrackListContainerProps> = ({ tracks, selectedArtist }) => {
+  const albums = useAlbumsFromTracks(tracks, selectedArtist);
 
   if (albums.state === 'loading') {
     return <CenteredContainer><LoadingIndicator /></CenteredContainer>;
