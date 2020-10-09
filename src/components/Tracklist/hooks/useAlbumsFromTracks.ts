@@ -1,9 +1,15 @@
 import {
-  useContext, useEffect, useMemo, useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 
 import {
-  LoadableValue, SpotifyAlbum, StoredSpotifyAlbum, StoredSpotifyPlaylistTrack,
+  LoadableValue,
+  SpotifyAlbum,
+  StoredSpotifyAlbum,
+  StoredSpotifyPlaylistTrack,
 } from '../../../types';
 import DatabaseContext from '../../../database/context';
 import { queryTrackInfo, queryAlbumInfo, queryArtistInfo } from '../../../database/queries';
@@ -46,7 +52,7 @@ function useAlbumsFromTracks(
   }, [albums]);
 
   useEffect(() => {
-    if (db) {
+    if (db && tracks.length > 0) {
       Promise.all(tracks.map((track) => queryTrackInfo(db, track.track)))
         .then((results) => results
           .reduce(

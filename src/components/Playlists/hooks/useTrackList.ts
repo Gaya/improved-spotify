@@ -70,8 +70,12 @@ interface ReceiveTracks {
   payload: PagedResponse<SpotifyPlaylistTrack>;
 }
 
+interface Reset {
+  type: 'RESET';
+}
+
 type UseTrackListAction = UpdateTrackData | StartFetching | StartResolving | ReceiveTracks
-  | ContinueFetching | FinishTrackData;
+  | ContinueFetching | FinishTrackData | Reset;
 
 function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrackListState {
   switch (action.type) {
@@ -112,6 +116,8 @@ function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrack
         needsFetching: false,
         fetchedTracks: [],
       };
+    case 'RESET':
+      return defaultState;
     default:
       return state;
   }
@@ -146,6 +152,11 @@ function useTrackList(id: string): {
   const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
 
   const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
+
+  useEffect(() => {
+    info(`Reset for ${id}`);
+    dispatch({ type: 'RESET' });
+  }, [id]);
 
   // store tracks in database
   const storeTrackData = useCallback((

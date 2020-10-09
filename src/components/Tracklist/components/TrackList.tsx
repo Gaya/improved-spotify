@@ -4,8 +4,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import PlaylistTrackList from '../../Tracklist/components/PlaylistTrackList';
-import AlbumList from '../../Tracklist/components/AlbumListContainer';
+import PlaylistTrackList from './PlaylistTrackList';
+import AlbumList from './AlbumListContainer';
 import Container from '../../Container/Container';
 
 import { PlaylistView, StoredSpotifyPlaylistTrack } from '../../../types';

@@ -15,12 +15,13 @@ import PageContainer from '../../App/PageContainer';
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 import Container from '../../Container/Container';
 import CenteredContainer from '../../CenteredContainer/CenteredContainer';
+import TrackList from '../../Tracklist/components/TrackList';
 
 import Image from '../components/Image';
 import PlaylistInfo from '../components/PlaylistInfo';
-import TrackList from '../components/TrackList';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
 import useTrackList from '../hooks/useTrackList';
+import ArtistsList from '../../Tracklist/components/ArtistsList';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -82,7 +83,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
         {playlist.state === 'hasValue' && playlist.contents && (
           <div className={styles.container}>
             {viewAs === PlaylistView.ARTIST && (
-              <div>Artists</div>
+              <ArtistsList tracks={tracks} />
             )}
             <div className={styles.playlistContent}>
               <Container>
