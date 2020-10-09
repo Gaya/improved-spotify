@@ -1,6 +1,7 @@
 import {
   SPOTIFY_ALBUM_TRACKS,
   SPOTIFY_ME_URI,
+  SPOTIFY_PLAYER_CURRENT_URI,
   SPOTIFY_PLAYER_QUEUE_URI,
   SPOTIFY_PLAYLISTS_URI,
 } from '../consts';
@@ -8,6 +9,7 @@ import {
 import { get, getPaged, postWithoutParsing } from './authRequest';
 import {
   PagedResponse,
+  SpotifyCurrentTrack,
   SpotifyPlaylist,
   SpotifyPlaylistTrack,
   SpotifyTrackInfo,
@@ -32,4 +34,8 @@ export function addToQueue(uri: string): Promise<Response> {
 
 export function getAlbumTracks(id: string): Promise<SpotifyTrackInfo[]> {
   return getPaged<SpotifyTrackInfo>(SPOTIFY_ALBUM_TRACKS.replace('{id}', id));
+}
+
+export function getCurrentPlaying(): Promise<SpotifyCurrentTrack> {
+  return get(SPOTIFY_PLAYER_CURRENT_URI);
 }

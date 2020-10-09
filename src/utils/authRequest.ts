@@ -3,12 +3,22 @@ import { get as getPlain, post as postPlain, getPaged as getPagedPlain } from '.
 
 import { ContentType, PostData, QueryStringData } from '../types';
 
+function parseResponse<S>(response: Response): Promise<S> {
+  const contentType = response.headers.get('content-type');
+
+  if (contentType && contentType.indexOf('application/json') === 0) {
+    return response.json();
+  }
+
+  throw new Error('No content');
+}
+
 export const get = <S>(
   uri: string,
   params: QueryStringData = {},
 ): Promise<S> => getValidToken()
     .then((token) => getPlain(uri, params, token.access_token))
-    .then((response) => response.json());
+    .then((response) => parseResponse<S>(response));
 
 export const getPaged = <T>(
   uri: string,
@@ -20,12 +30,17 @@ export const postWithoutParsing = (
   uri: string,
   data: PostData = {},
   contentType: ContentType = ContentType.json,
-): Promise<Response> => getValidToken()
-  .then((token) => postPlain(uri, data, contentType, token.access_token));
+): Promise<Response> => getValidToken().then((token) => postPlain(
+  uri,
+  data,
+  contentType,
+  token.access_token,
+));
 
 export const post = <S>(
   uri: string,
   data: PostData = {},
   contentType: ContentType = ContentType.json,
-): Promise<S> => postWithoutParsing(uri, data, contentType)
-    .then((response) => response.json());
+): Promise<S> => postWithoutParsing(uri,
+    data,
+    contentType).then((response) => parseResponse<S>(response));

@@ -170,6 +170,13 @@ export interface SpotifyPlaylistTrack {
   };
 }
 
+export interface SpotifyCurrentTrack {
+  timestamp: number;
+  progress_ms: number;
+  is_playing: boolean;
+  item: SpotifyTrackInfo;
+}
+
 export interface StoredSpotifyPlaylistTrack extends Omit<SpotifyPlaylistTrack, 'track'> {
   index: number;
   id: string;

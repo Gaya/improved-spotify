@@ -1,12 +1,12 @@
 import React from 'react';
 
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import UserMenu from '../User/UserMenu';
 import CompactPlaylists from '../Playlists/components/CompactPlaylists';
+import Player from '../Player/Player';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -23,12 +23,16 @@ const useStyles = makeStyles((theme) => ({
     borderRightColor: '#010102',
     overflow: 'auto',
   },
-  toolbar: {
+  toolbarContainer: {
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: theme.palette.divider,
     flexGrow: 0,
     flexShrink: 0,
+    height: 74,
+  },
+  toolbar: {
+    minHeight: 74,
   },
   content: {
     width: '100%',
@@ -50,11 +54,11 @@ const Layout: React.FC = ({ children }) => {
         <CompactPlaylists />
       </section>
       <section className={styles.content}>
-        <section className={styles.toolbar}>
-          <Toolbar variant="dense">
-            <Typography className={styles.title}>
-              Room for play controls
-            </Typography>
+        <section className={styles.toolbarContainer}>
+          <Toolbar className={styles.toolbar} variant="dense">
+            <div className={styles.title}>
+              <Player />
+            </div>
             <UserMenu />
           </Toolbar>
         </section>
