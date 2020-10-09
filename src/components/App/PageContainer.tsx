@@ -1,24 +1,33 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    paddingTop: theme.spacing(3),
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
     overflowY: 'hidden',
   },
+  containerPadding: {
+    paddingTop: theme.spacing(3),
+  },
 }));
 
-const PageContainer: React.FC = ({ children }) => {
+interface PageContainerProps {
+  topPadding?: boolean;
+}
+
+const PageContainer: React.FC<PageContainerProps> = ({ children, topPadding = false }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 
   return (
-    <div className={styles.container}>{children}</div>
+    <div className={classNames(styles.container, { [styles.containerPadding]: topPadding })}>
+      {children}
+    </div>
   );
 };
 

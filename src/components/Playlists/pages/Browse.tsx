@@ -7,7 +7,7 @@ import Container from '../../Container/Container';
 
 const Browse: React.FC = () => (
   <Layout>
-    <PageContainer>
+    <PageContainer topPadding>
       <Container>
         <PageTitle>
           Browse Your Playlists

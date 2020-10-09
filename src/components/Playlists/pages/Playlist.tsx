@@ -8,16 +8,17 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 
 import { playlistQuery } from '../../../state/selectors';
+import { PlaylistView } from '../../../types';
 
 import Layout from '../../App/Layout';
 import PageContainer from '../../App/PageContainer';
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 import Container from '../../Container/Container';
+import CenteredContainer from '../../CenteredContainer/CenteredContainer';
 
 import Image from '../components/Image';
 import PlaylistInfo from '../components/PlaylistInfo';
 import TrackList from '../components/TrackList';
-import { PlaylistView } from '../../../types';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
 import useTrackList from '../hooks/useTrackList';
 
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     flexDirection: 'column',
     overflowY: 'hidden',
+    paddingTop: theme.spacing(3),
   },
   topBar: {
     display: 'flex',
@@ -76,7 +78,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   return (
     <Layout>
       <PageContainer>
-        {playlist.state !== 'hasValue' && <Container><LoadingIndicator /></Container>}
+        {playlist.state !== 'hasValue' && <CenteredContainer><LoadingIndicator /></CenteredContainer>}
         {playlist.state === 'hasValue' && playlist.contents && (
           <div className={styles.container}>
             {viewAs === PlaylistView.ARTIST && (
