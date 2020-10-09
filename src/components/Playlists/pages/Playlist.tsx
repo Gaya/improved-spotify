@@ -19,8 +19,20 @@ import PlaylistInfo from '../components/PlaylistInfo';
 import TrackList from '../components/TrackList';
 import { PlaylistView } from '../../../types';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
+import useTrackList from '../hooks/useTrackList';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexGrow: 1,
+    overflowY: 'hidden',
+  },
+  playlistContent: {
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'column',
+    overflowY: 'hidden',
+  },
   topBar: {
     display: 'flex',
     flexShrink: 0,
@@ -54,38 +66,63 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
     storePlaylistView(viewType);
   };
 
+  const {
+    progress,
+    tracks,
+    showProgress,
+    isResolved,
+  } = useTrackList(id);
+
   return (
     <Layout>
       <PageContainer>
         {playlist.state !== 'hasValue' && <Container><LoadingIndicator /></Container>}
         {playlist.state === 'hasValue' && playlist.contents && (
-          <>
-            <Container>
-              <section className={styles.topBar}>
-                <div className={styles.topBarImage}>
-                  <Image key={`Image_${id}`} id={id} />
-                </div>
-                <PlaylistInfo playlist={playlist.contents} />
-              </section>
-            </Container>
-            <Container className={styles.viewContainer}>
-              <ButtonGroup size="small">
-                <Button
-                  variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
-                  onClick={(): void => onSelectView(PlaylistView.ALBUM)}
-                >
-                  Albums
-                </Button>
-                <Button
-                  variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
-                  onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
-                >
-                  Playlist
-                </Button>
-              </ButtonGroup>
-            </Container>
-            <TrackList viewAs={viewAs} key={`TrackList_${id}`} id={id} />
-          </>
+          <div className={styles.container}>
+            {viewAs === PlaylistView.ARTIST && (
+              <div>Artists</div>
+            )}
+            <div className={styles.playlistContent}>
+              <Container>
+                <section className={styles.topBar}>
+                  <div className={styles.topBarImage}>
+                    <Image key={`Image_${id}`} id={id} />
+                  </div>
+                  <PlaylistInfo playlist={playlist.contents} />
+                </section>
+              </Container>
+              <Container className={styles.viewContainer}>
+                <ButtonGroup size="small">
+                  <Button
+                    variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
+                    onClick={(): void => onSelectView(PlaylistView.ALBUM)}
+                  >
+                    Albums
+                  </Button>
+                  <Button
+                    variant={viewAs === PlaylistView.ARTIST ? 'contained' : 'outlined'}
+                    onClick={(): void => onSelectView(PlaylistView.ARTIST)}
+                  >
+                    Artists
+                  </Button>
+                  <Button
+                    variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
+                    onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
+                  >
+                    Playlist
+                  </Button>
+                </ButtonGroup>
+              </Container>
+              <TrackList
+                progress={progress}
+                tracks={tracks}
+                showProgress={showProgress}
+                isResolved={isResolved}
+                viewAs={viewAs}
+                key={`TrackList_${id}`}
+              />
+            </div>
+          </div>
         )}
       </PageContainer>
     </Layout>

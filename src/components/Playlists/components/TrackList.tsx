@@ -4,13 +4,11 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import useTrackList from '../hooks/useTrackList';
-
 import PlaylistTrackList from '../../Tracklist/components/PlaylistTrackList';
 import AlbumList from '../../Tracklist/components/AlbumListContainer';
 import Container from '../../Container/Container';
 
-import { PlaylistView } from '../../../types';
+import { PlaylistView, StoredSpotifyPlaylistTrack } from '../../../types';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,20 +34,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface TrackListProps {
-  id: string;
+  progress: number;
+  tracks: StoredSpotifyPlaylistTrack[];
+  isResolved: boolean;
+  showProgress: boolean;
   viewAs: PlaylistView;
 }
 
-const TrackList: React.FC<TrackListProps> = ({ id, viewAs }) => {
+const TrackList: React.FC<TrackListProps> = ({
+  showProgress,
+  isResolved,
+  progress,
+  tracks,
+  viewAs,
+}) => {
   const theme = useTheme();
   const styles = useStyles(theme);
-
-  const {
-    progress,
-    tracks,
-    showProgress,
-    isResolved,
-  } = useTrackList(id);
 
   return (
     <div className={styles.container}>

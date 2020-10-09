@@ -217,4 +217,5 @@ export interface SpotifyDataExport {
 export enum PlaylistView {
   PLAYLIST = 'PLAYLIST',
   ALBUM = 'ALBUM',
+  ARTIST = 'ARTIST',
 }
