@@ -54,11 +54,13 @@ const useStyles = makeStyles((theme) => ({
     width: 60,
     flexShrink: 0,
     marginTop: -5,
+    paddingRight: theme.spacing(2),
+    textAlign: 'right',
   },
   progressEnd: {
     width: 60,
     flexShrink: 0,
-    textAlign: 'right',
+    paddingLeft: theme.spacing(2),
     marginTop: -5,
   },
 }));
