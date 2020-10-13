@@ -174,14 +174,13 @@ export interface SpotifyCurrentTrack {
   timestamp: number;
   progress_ms: number;
   is_playing: boolean;
-  item: SpotifyTrackInfo;
+  item?: SpotifyTrackInfo;
 }
 
-export interface StoredSpotifyPlaylistTrack extends Omit<SpotifyPlaylistTrack, 'track'> {
+export interface StoredSpotifyPlaylistTrack extends SpotifyPlaylistTrack {
   index: number;
   id: string;
   playlistId: string;
-  track: string;
 }
 
 export interface StoredSpotifyTrack extends Omit<SpotifyTrackInfo, 'album' | 'artists'> {

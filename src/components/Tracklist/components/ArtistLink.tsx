@@ -1,23 +1,11 @@
 import React from 'react';
 
-import useArtistInfo from '../hooks/useArtistInfo';
+import { SpotifyArtist } from '../../../types';
 
 interface ArtistLinkProps {
-  id: string;
+  artist: SpotifyArtist;
 }
 
-const ArtistLink: React.FC<ArtistLinkProps> = ({ id }) => {
-  const artist = useArtistInfo(id);
-
-  if (artist.state === 'loading') {
-    return null;
-  }
-
-  if (artist.state === 'hasError') {
-    return <>Error loading artist</>;
-  }
-
-  return <>{artist.contents.name}</>;
-};
+const ArtistLink: React.FC<ArtistLinkProps> = ({ artist }) => <>{artist.name}</>;
 
 export default ArtistLink;

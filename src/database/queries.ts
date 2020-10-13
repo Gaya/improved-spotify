@@ -2,11 +2,7 @@ import { SrIndexedDB } from './createDatabase';
 
 import {
   PlaylistSnapshots,
-  SpotifyArtist,
-  SpotifyDataExport,
-  StoredSpotifyAlbum,
   StoredSpotifyPlaylistTrack,
-  StoredSpotifyTrack,
 } from '../types';
 
 export function getSnapshots(db: SrIndexedDB): Promise<PlaylistSnapshots> {
@@ -38,11 +34,11 @@ export function removePlaylistTracksByPlaylist(
     .then(() => undefined);
 }
 
-export function storeDataExport(db: SrIndexedDB, data: SpotifyDataExport): Promise<void> {
-  return Promise.all(data.playlistTracks.map((track) => db.put('playlistTracks', track)))
-    .then(() => Promise.all(Object.entries(data.albums).map(([id, album]) => db.put('albums', album))))
-    .then(() => Promise.all(Object.entries(data.artists).map(([id, artist]) => db.put('artists', artist))))
-    .then(() => Promise.all(Object.entries(data.tracks).map(([id, track]) => db.put('tracks', track))))
+export function storePlaylistTracks(
+  db: SrIndexedDB,
+  playlistTracks: StoredSpotifyPlaylistTrack[],
+): Promise<void> {
+  return Promise.all(playlistTracks.map((track) => db.put('playlistTracks', track)))
     .then(() => undefined);
 }
 
@@ -58,25 +54,4 @@ export function queryPlaylistTracks(
   playlistId: string,
 ): Promise<StoredSpotifyPlaylistTrack[]> {
   return db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
-}
-
-export function queryTrackInfo(
-  db: SrIndexedDB,
-  trackId: string,
-): Promise<StoredSpotifyTrack | undefined> {
-  return db.get('tracks', trackId);
-}
-
-export function queryArtistInfo(
-  db: SrIndexedDB,
-  artistId: string,
-): Promise<SpotifyArtist | undefined> {
-  return db.get('artists', artistId);
-}
-
-export function queryAlbumInfo(
-  db: SrIndexedDB,
-  albumId: string,
-): Promise<StoredSpotifyAlbum | undefined> {
-  return db.get('albums', albumId);
 }

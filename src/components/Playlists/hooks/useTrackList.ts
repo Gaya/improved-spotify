@@ -9,7 +9,9 @@ import { useRecoilState } from 'recoil';
 
 import {
   PagedResponse,
-  SpotifyDataExport, SpotifyPlaylistTrack, StoredSpotifyPlaylistTrack, TrackState,
+  SpotifyPlaylistTrack,
+  StoredSpotifyPlaylistTrack,
+  TrackState,
 } from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
 import { getPlaylistTracks } from '../../../utils/externalData';
@@ -19,7 +21,7 @@ import DatabaseContext from '../../../database/context';
 import {
   queryPlaylistTracks,
   removePlaylistTracksByPlaylist,
-  storeDataExport,
+  storePlaylistTracks,
 } from '../../../database/queries';
 import { playlistTracksState } from '../../../state/atoms';
 
@@ -149,23 +151,24 @@ function useTrackList(id: string): {
     tracks,
   } = state;
 
-  const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
+  const nextRef = useRef<string | undefined>();
 
   const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
 
   useEffect(() => {
     info(`Switching to playlist ${id}`);
+    nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
     dispatch({ type: 'RESET' });
   }, [id]);
 
   // store tracks in database
   const storeTrackData = useCallback((
-    data: SpotifyDataExport,
+    playlistTracks: StoredSpotifyPlaylistTrack[],
     end = false,
   ): void => {
     if (db) {
       info('Save received data to database');
-      storeDataExport(db, data)
+      storePlaylistTracks(db, playlistTracks)
         .then(() => {
           if (end) {
             setTracksState({
@@ -175,12 +178,12 @@ function useTrackList(id: string): {
 
             dispatch({
               type: 'FINISH_TRACK_DATA',
-              payload: data.playlistTracks,
+              payload: playlistTracks,
             });
           } else {
             dispatch({
               type: 'UPDATE_TRACK_DATA',
-              payload: data.playlistTracks,
+              payload: playlistTracks,
             });
           }
         });
@@ -189,7 +192,7 @@ function useTrackList(id: string): {
 
   // fetching mechanism
   useEffect(() => {
-    if (isResolving && needsFetching && !isResolved) {
+    if (isResolving && needsFetching && !isResolved && nextRef.current) {
       dispatch({ type: 'CONTINUE_FETCHING' });
 
       info(`Fetching ${nextRef.current}`);

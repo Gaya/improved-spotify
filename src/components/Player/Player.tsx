@@ -96,7 +96,7 @@ const Player: React.FC = () => {
           <SkipNextIcon />
         </IconButton>
       </div>
-      {currentlyPlaying && (
+      {currentlyPlaying && currentlyPlaying.item && (
         <div className={styles.currentlyPlaying}>
           <div className={styles.songName}>
             <Typography>{currentlyPlaying.item.name}</Typography>

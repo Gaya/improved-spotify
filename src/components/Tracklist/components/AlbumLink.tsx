@@ -1,23 +1,11 @@
 import React from 'react';
 
-import useAlbumInfo from '../hooks/useAlbumInfo';
+import { SpotifyAlbum } from '../../../types';
 
 interface AlbumLinkProps {
-  id: string;
+  album: SpotifyAlbum;
 }
 
-const AlbumLink: React.FC<AlbumLinkProps> = ({ id }) => {
-  const album = useAlbumInfo(id);
-
-  if (album.state === 'loading') {
-    return null;
-  }
-
-  if (album.state === 'hasError') {
-    return <>Error loading album</>;
-  }
-
-  return <>{album.contents.name}</>;
-};
+const AlbumLink: React.FC<AlbumLinkProps> = ({ album }) => <>{album.name}</>;
 
 export default AlbumLink;
