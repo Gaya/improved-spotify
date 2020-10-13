@@ -128,7 +128,6 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 isResolved={isResolved}
                 viewAs={viewAs}
                 selectedArtist={selectedArtist}
-                key={`TrackList_${id}`}
               />
             </div>
           </div>

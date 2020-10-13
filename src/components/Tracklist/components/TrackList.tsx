@@ -61,9 +61,9 @@ const TrackList: React.FC<TrackListProps> = ({
         </Container>
       )}
       {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
-        && <PlaylistTrackList tracks={tracks} />}
+        && <PlaylistTrackList key={`playlist_${viewAs}`} tracks={tracks} />}
       {isResolved && tracks && (viewAs === PlaylistView.ALBUM || viewAs === PlaylistView.ARTIST)
-        && <AlbumList selectedArtist={selectedArtist} tracks={tracks} />}
+        && <AlbumList key={`albums_${viewAs}`} selectedArtist={selectedArtist} tracks={tracks} />}
     </div>
   );
 };
