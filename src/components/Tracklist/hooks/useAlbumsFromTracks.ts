@@ -1,15 +1,9 @@
-import {
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { useMemo } from 'react';
 
 import {
-  LoadableValue,
   SpotifyAlbum,
   StoredSpotifyPlaylistTrack,
 } from '../../../types';
-import DatabaseContext from '../../../database/context';
 
 function sortByArtistsAndAlbum(a: SpotifyAlbum, b: SpotifyAlbum): number {
   const aArtists = a.artists.map((artist) => artist.name).join('');
@@ -37,32 +31,20 @@ function sortByArtistsAndAlbum(a: SpotifyAlbum, b: SpotifyAlbum): number {
 function useAlbumsFromTracks(
   tracks: StoredSpotifyPlaylistTrack[],
   selectedArtist?: string,
-): LoadableValue<SpotifyAlbum[]> {
-  const db = useContext(DatabaseContext);
-  const [albums, setAlbums] = useState<SpotifyAlbum[]>();
-
-  const sortedAlbums = useMemo(() => {
-    if (albums) {
-      return [...albums]
-        .filter((album): boolean => (selectedArtist
-          ? !!album.artists.find((artist) => artist.id === selectedArtist)
-          : true))
-        .sort(sortByArtistsAndAlbum);
+): SpotifyAlbum[] {
+  const albums = tracks.reduce((acc: SpotifyAlbum[], playlistTrack) => {
+    if (acc.find((album) => album.id === playlistTrack.track.album.id)) {
+      return acc;
     }
 
-    return [];
-  }, [albums, selectedArtist]);
+    return [...acc, playlistTrack.track.album];
+  }, []);
 
-  if (albums) {
-    return {
-      state: 'hasValue',
-      contents: sortedAlbums,
-    };
-  }
-
-  return {
-    state: 'loading',
-  };
+  return useMemo(() => [...albums]
+    .filter((album): boolean => (selectedArtist
+      ? !!album.artists.find((artist) => artist.id === selectedArtist)
+      : true))
+    .sort(sortByArtistsAndAlbum), [albums, selectedArtist]);
 }
 
 export default useAlbumsFromTracks;

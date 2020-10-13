@@ -3,11 +3,12 @@ import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import { SpotifyAlbum } from '../../../types';
+import { StoredSpotifyPlaylistTrack } from '../../../types';
 
 import Container from '../../Container/Container';
 
 import AlbumListItem from './AlbumListItem';
+import useAlbumsFromTracks from '../hooks/useAlbumsFromTracks';
 
 const useStyles = makeStyles((theme) => ({
   listContainer: {
@@ -25,12 +26,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface AlbumTrackListProps {
-  albums: SpotifyAlbum[];
+  tracks: StoredSpotifyPlaylistTrack[];
+  selectedArtist?: string;
 }
 
-const AlbumList: React.FC<AlbumTrackListProps> = ({ albums }) => {
+const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks, selectedArtist }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
+
+  const albums = useAlbumsFromTracks(tracks, selectedArtist);
 
   return (
     <div className={styles.listContainer}>
