@@ -4,29 +4,31 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import useTheme from '@material-ui/core/styles/useTheme';
 
 import { StoredSpotifyPlaylistTrack } from '../../../types';
 import useArtistsFromTracks from '../hooks/useArtistsFromTracks';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: 220,
     flexShrink: 0,
     borderRightStyle: 'solid',
-    borderRightWidth: 2,
-    borderRightColor: '#010102',
+    borderRightWidth: 1,
+    borderRightColor: theme.palette.divider,
     overflowY: 'scroll',
   },
-});
+}));
 
 interface ArtistsListProps {
   tracks: StoredSpotifyPlaylistTrack[];
   selected?: string;
-  setSelected: (id: string) => void;
+  setSelected: (id?: string) => void;
 }
 
 const ArtistsList: React.FC<ArtistsListProps> = ({ tracks, setSelected, selected }) => {
-  const styles = useStyles();
+  const theme = useTheme();
+  const styles = useStyles(theme);
   const artists = useArtistsFromTracks(tracks);
 
   return (
@@ -37,7 +39,7 @@ const ArtistsList: React.FC<ArtistsListProps> = ({ tracks, setSelected, selected
             key={artist.id}
             selected={selected === artist.id}
             button
-            onClick={(): void => setSelected(artist.id)}
+            onClick={(): void => setSelected(selected === artist.id ? undefined : artist.id)}
           >
             <ListItemText>{artist.name}</ListItemText>
           </ListItem>
