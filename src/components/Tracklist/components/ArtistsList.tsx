@@ -32,7 +32,7 @@ const ArtistsList: React.FC<ArtistsListProps> = ({ tracks, setSelected, selected
   return (
     <div className={styles.container}>
       <List>
-        {artists.state === 'hasValue' && artists.contents.map((artist) => (
+        {artists.map((artist) => (
           <ListItem
             key={artist.id}
             selected={selected === artist.id}

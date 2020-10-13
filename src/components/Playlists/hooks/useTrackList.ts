@@ -19,7 +19,7 @@ import DatabaseContext from '../../../database/context';
 import {
   queryPlaylistTracks,
   removePlaylistTracksByPlaylist,
-  storeDataExport,
+  storePlaylistTracks,
 } from '../../../database/queries';
 import { playlistTracksState } from '../../../state/atoms';
 
@@ -160,12 +160,12 @@ function useTrackList(id: string): {
 
   // store tracks in database
   const storeTrackData = useCallback((
-    data: SpotifyDataExport,
+    playlistTracks: StoredSpotifyPlaylistTrack[],
     end = false,
   ): void => {
     if (db) {
       info('Save received data to database');
-      storeDataExport(db, data)
+      storePlaylistTracks(db, playlistTracks)
         .then(() => {
           if (end) {
             setTracksState({
@@ -175,12 +175,12 @@ function useTrackList(id: string): {
 
             dispatch({
               type: 'FINISH_TRACK_DATA',
-              payload: data.playlistTracks,
+              payload: playlistTracks,
             });
           } else {
             dispatch({
               type: 'UPDATE_TRACK_DATA',
-              payload: data.playlistTracks,
+              payload: playlistTracks,
             });
           }
         });

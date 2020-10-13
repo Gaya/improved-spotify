@@ -6,7 +6,6 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import formatDuration from '../../../utils/formatDuration';
 import { StoredSpotifyPlaylistTrack } from '../../../types';
 
-import useTrackInfo from '../hooks/useTrackInfo';
 import AlbumLink from './AlbumLink';
 import ArtistLink from './ArtistLink';
 
@@ -60,23 +59,16 @@ interface PlaylistTrackListItem {
 const PlaylistTrackListItem: React.FC<PlaylistTrackListItem> = ({ style, playlistTrack }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
-  const { track: id } = playlistTrack;
-  const track = useTrackInfo(id);
-
-  if (track.state !== 'hasValue') {
-    return (
-      <div key={id} className={styles.track} style={style} />
-    );
-  }
+  const { track } = playlistTrack;
 
   return (
-    <div key={id} className={styles.track} style={style}>
-      <div className={styles.title}>{track.contents.name}</div>
+    <div key={track.id} className={styles.track} style={style}>
+      <div className={styles.title}>{track.name}</div>
       <div className={styles.artist}>
-        {track.contents.artists.map((artist) => <ArtistLink key={artist} id={artist} />)}
+        {track.artists.map((artist) => <ArtistLink key={artist.id} artist={artist} />)}
       </div>
-      <div className={styles.album}><AlbumLink id={track.contents.album} /></div>
-      <div className={styles.duration}>{formatDuration(track.contents.duration_ms)}</div>
+      <div className={styles.album}><AlbumLink album={track.album} /></div>
+      <div className={styles.duration}>{formatDuration(track.duration_ms)}</div>
     </div>
   );
 };
