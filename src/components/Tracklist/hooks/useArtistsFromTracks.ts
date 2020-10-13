@@ -19,7 +19,7 @@ function useArtistsFromTracks(
   tracks: StoredSpotifyPlaylistTrack[],
 ): SpotifyArtist[] {
   const artists = tracks.reduce((acc: SpotifyArtist[], playlistTrack) => {
-    const newArtists = playlistTrack.track.artists
+    const newArtists = playlistTrack.track.album.artists
       .filter((artist) => !acc.find((accArtist) => accArtist.id === artist.id));
 
     return [...acc, ...newArtists];
