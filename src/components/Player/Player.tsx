@@ -72,7 +72,9 @@ const Player: React.FC = () => {
 
   const isPlaying = !!(currentlyPlaying && currentlyPlaying.is_playing);
 
-  const fetchCurrentlyPlaying = (): Promise<void> => getCurrentPlaying().then(setCurrentlyPlaying);
+  const fetchCurrentlyPlaying = (): Promise<void> => getCurrentPlaying()
+    .catch(() => undefined)
+    .then(setCurrentlyPlaying);
 
   useEffect(() => {
     const refreshData = setInterval(fetchCurrentlyPlaying, 1000);
