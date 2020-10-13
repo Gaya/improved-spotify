@@ -154,7 +154,7 @@ function useTrackList(id: string): {
   const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
 
   useEffect(() => {
-    info(`Reset for ${id}`);
+    info(`Switching to playlist ${id}`);
     dispatch({ type: 'RESET' });
   }, [id]);
 
