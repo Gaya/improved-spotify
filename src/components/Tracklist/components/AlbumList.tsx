@@ -66,7 +66,7 @@ const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks, selectedArtist }) =>
   const albums = useAlbumsFromTracks(tracks, selectedArtist);
 
   const columnMinWidth = 260 + theme.spacing(2);
-  const rowHeight = 360;
+  const rowHeight = 380;
   const columnCount = Math.floor(dimensions.width / columnMinWidth);
   const columnWidth = columnCount ? dimensions.width / columnCount : 0;
   const rowCount = columnCount ? Math.ceil(albums.length / columnCount) : 0;
