@@ -174,7 +174,7 @@ export interface SpotifyCurrentTrack {
   timestamp: number;
   progress_ms: number;
   is_playing: boolean;
-  item: SpotifyTrackInfo;
+  item?: SpotifyTrackInfo;
 }
 
 export interface StoredSpotifyPlaylistTrack extends SpotifyPlaylistTrack {

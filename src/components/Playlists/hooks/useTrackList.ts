@@ -151,12 +151,13 @@ function useTrackList(id: string): {
     tracks,
   } = state;
 
-  const nextRef = useRef(SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id));
+  const nextRef = useRef<string | undefined>();
 
   const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
 
   useEffect(() => {
     info(`Switching to playlist ${id}`);
+    nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
     dispatch({ type: 'RESET' });
   }, [id]);
 
@@ -191,7 +192,7 @@ function useTrackList(id: string): {
 
   // fetching mechanism
   useEffect(() => {
-    if (isResolving && needsFetching && !isResolved) {
+    if (isResolving && needsFetching && !isResolved && nextRef.current) {
       dispatch({ type: 'CONTINUE_FETCHING' });
 
       info(`Fetching ${nextRef.current}`);
