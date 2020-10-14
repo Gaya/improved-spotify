@@ -2,11 +2,20 @@ import {
   SPOTIFY_ALBUM_TRACKS,
   SPOTIFY_ME_URI,
   SPOTIFY_PLAYER_CURRENT_URI,
+  SPOTIFY_PLAYER_NEXT_URI,
+  SPOTIFY_PLAYER_PAUSE_URI,
+  SPOTIFY_PLAYER_PLAY_URI,
+  SPOTIFY_PLAYER_PREVIOUS_URI,
   SPOTIFY_PLAYER_QUEUE_URI,
   SPOTIFY_PLAYLISTS_URI,
 } from '../consts';
 
-import { get, getPaged, postWithoutParsing } from './authRequest';
+import {
+  get,
+  getPaged,
+  postWithoutParsing,
+  putWithoutParsing,
+} from './authRequest';
 import {
   PagedResponse,
   SpotifyCurrentTrack,
@@ -38,4 +47,20 @@ export function getAlbumTracks(id: string): Promise<SpotifyTrackInfo[]> {
 
 export function getCurrentPlaying(): Promise<SpotifyCurrentTrack> {
   return get(SPOTIFY_PLAYER_CURRENT_URI);
+}
+
+export function playerNext(): Promise<Response> {
+  return postWithoutParsing(SPOTIFY_PLAYER_NEXT_URI);
+}
+
+export function playerPrevious(): Promise<Response> {
+  return postWithoutParsing(SPOTIFY_PLAYER_PREVIOUS_URI);
+}
+
+export function playerPlay(options?: { context_uri?: string; uris?: string[] }): Promise<Response> {
+  return putWithoutParsing(SPOTIFY_PLAYER_PLAY_URI);
+}
+
+export function playerPause(): Promise<Response> {
+  return putWithoutParsing(SPOTIFY_PLAYER_PAUSE_URI);
 }

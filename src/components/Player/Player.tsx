@@ -10,7 +10,13 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { getCurrentPlaying } from '../../utils/externalData';
+import {
+  getCurrentPlaying,
+  playerNext,
+  playerPause,
+  playerPlay,
+  playerPrevious,
+} from '../../utils/externalData';
 import { SpotifyCurrentTrack } from '../../types';
 import formatDuration from '../../utils/formatDuration';
 
@@ -86,13 +92,21 @@ const Player: React.FC = () => {
   return (
     <div className={styles.player}>
       <div className={styles.controls}>
-        <IconButton>
+        <IconButton onClick={(): void => { playerPrevious(); }}>
           <SkipPreviousIcon />
         </IconButton>
-        <IconButton>
+        <IconButton
+          onClick={(): void => {
+            if (isPlaying) {
+              playerPause();
+            } else {
+              playerPlay();
+            }
+          }}
+        >
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
-        <IconButton>
+        <IconButton onClick={(): void => { playerNext(); }}>
           <SkipNextIcon />
         </IconButton>
       </div>

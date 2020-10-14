@@ -30,11 +30,13 @@ export const postWithoutParsing = (
   uri: string,
   data: PostData = {},
   contentType: ContentType = ContentType.json,
+  method = 'POST',
 ): Promise<Response> => getValidToken().then((token) => postPlain(
   uri,
   data,
   contentType,
   token.access_token,
+  method,
 ));
 
 export const post = <S>(
@@ -44,3 +46,9 @@ export const post = <S>(
 ): Promise<S> => postWithoutParsing(uri,
     data,
     contentType).then((response) => parseResponse<S>(response));
+
+export const putWithoutParsing = (
+  uri: string,
+  data: PostData = {},
+  contentType: ContentType = ContentType.json,
+): Promise<Response> => postWithoutParsing(uri, data, contentType, 'PUT');

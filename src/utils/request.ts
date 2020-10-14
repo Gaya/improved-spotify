@@ -55,11 +55,12 @@ export function post(
   data: PostData = {},
   contentType: ContentType = ContentType.json,
   accessToken?: string,
+  method = 'POST',
 ): Promise<Response> {
   return fetch(
     uri,
     {
-      method: 'POST',
+      method,
       headers: headersWithAccessToken({
         Accept: 'application/json',
         'Content-Type': contentType,
