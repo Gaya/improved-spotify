@@ -32,10 +32,15 @@ function useAlbumsFromTracks(
   tracks: StoredSpotifyPlaylistTrack[],
   selectedArtist?: string,
 ): SpotifyAlbum[] {
+  // to improve looking up albums we use a reference object
+  const addedAlbums: { [key: string]: boolean } = {};
+
   const albums = tracks.reduce((acc: SpotifyAlbum[], playlistTrack) => {
-    if (acc.find((album) => album.id === playlistTrack.track.album.id)) {
+    if (addedAlbums[playlistTrack.track.album.id]) {
       return acc;
     }
+
+    addedAlbums[playlistTrack.track.album.id] = true;
 
     return [...acc, playlistTrack.track.album];
   }, []);
