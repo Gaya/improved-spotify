@@ -32,20 +32,27 @@ function useAlbumsFromTracks(
   tracks: StoredSpotifyPlaylistTrack[],
   selectedArtist?: string,
 ): SpotifyAlbum[] {
-  // to improve looking up albums we use a reference object
-  const addedAlbums: { [key: string]: boolean } = {};
+  const albums = useMemo(() => {
+    // to improve looking up albums we use a reference object
+    const addedAlbums: { [key: string]: boolean } = {};
 
-  const albums = tracks.reduce((acc: SpotifyAlbum[], playlistTrack) => {
-    if (addedAlbums[playlistTrack.track.album.id]) {
-      return acc;
-    }
+    return tracks.reduce((acc: SpotifyAlbum[], playlistTrack) => {
+      if (addedAlbums[playlistTrack.track.album.id]) {
+        return acc;
+      }
 
-    addedAlbums[playlistTrack.track.album.id] = true;
+      addedAlbums[playlistTrack.track.album.id] = true;
 
-    return [...acc, playlistTrack.track.album];
-  }, []);
+      return [
+        ...acc,
+        {
+          ...playlistTrack.track.album,
+          artistsPlain: playlistTrack.track.album.artists.map((a) => a.id),
+        }];
+    }, []);
+  }, [tracks]);
 
-  return useMemo(() => [...albums]
+  return useMemo(() => albums
     .filter((album): boolean => (selectedArtist
       ? !!album.artists.find((artist) => artist.id === selectedArtist)
       : true))
