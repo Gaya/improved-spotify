@@ -58,7 +58,7 @@ export function playerPrevious(): Promise<Response> {
 }
 
 export function playerPlay(options?: { context_uri?: string; uris?: string[] }): Promise<Response> {
-  return putWithoutParsing(SPOTIFY_PLAYER_PLAY_URI);
+  return putWithoutParsing(SPOTIFY_PLAYER_PLAY_URI, options);
 }
 
 export function playerPause(): Promise<Response> {

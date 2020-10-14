@@ -27,7 +27,7 @@ export interface QueryStringData {
 }
 
 export interface PostData {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | string[] | undefined;
 }
 
 export interface AuthToken {

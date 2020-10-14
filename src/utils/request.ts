@@ -34,7 +34,10 @@ function bodyForContentType(data: PostData, contentType: ContentType): string | 
   switch (contentType) {
     case ContentType.formUrlEncoded: {
       const body = new URLSearchParams();
-      Object.entries(data).forEach(([key, value]) => body.set(key, value.toString()));
+      Object.entries(data).forEach(([key, value]) => {
+        if (!value) return;
+        body.set(key, value.toString());
+      });
       return body;
     }
     default:

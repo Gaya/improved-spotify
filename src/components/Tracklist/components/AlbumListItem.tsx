@@ -7,11 +7,12 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { SpotifyAlbum } from '../../../types';
-import { addToQueue, getAlbumTracks } from '../../../utils/externalData';
+import { addToQueue, getAlbumTracks, playerPlay } from '../../../utils/externalData';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -67,6 +68,7 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const [isHovering, setIsHovering] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isQueuing, setIsQueuing] = useState(false);
   const [queueTooltip, setQueueTooltip] = useState(false);
 
@@ -76,6 +78,20 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
   };
 
   const artistsText = album.artists.map((a) => a.name).join(', ');
+
+  const playAlbum = useCallback(() => {
+    if (isPlaying) {
+      return;
+    }
+
+    setIsPlaying(true);
+
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    playerPlay({ context_uri: album.uri })
+      .then(() => {
+        setIsPlaying(false);
+      });
+  }, [album.uri, isPlaying]);
 
   const addAlbumToQueue = useCallback(() => {
     if (isQueuing) {
@@ -107,6 +123,13 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
             }
             orientation="vertical"
           >
+            <Button
+              size="large"
+              startIcon={isQueuing ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
+              onClick={playAlbum}
+            >
+              Play Now
+            </Button>
             <Tooltip
               open={queueTooltip}
               title="Added to Queue"
