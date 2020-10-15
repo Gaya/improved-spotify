@@ -65,7 +65,10 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const [viewAs, setViewAs] = useState<PlaylistView>(getStoredPlaylistView());
   const [selectedArtist, setSelectedArtist] = useState<string | undefined>();
 
+  const resetSelectedArtist = (): void => setSelectedArtist(undefined);
+
   const onSelectView = (viewType: PlaylistView): void => {
+    resetSelectedArtist();
     setViewAs(viewType);
     storePlaylistView(viewType);
   };
@@ -88,6 +91,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 tracks={tracks}
                 selected={selectedArtist}
                 setSelected={setSelectedArtist}
+                resetSelectedArtist={resetSelectedArtist}
               />
             )}
             <div className={styles.playlistContent}>

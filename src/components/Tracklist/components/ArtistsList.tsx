@@ -24,9 +24,15 @@ interface ArtistsListProps {
   tracks: StoredSpotifyPlaylistTrack[];
   selected?: string;
   setSelected: (id?: string) => void;
+  resetSelectedArtist: () => void;
 }
 
-const ArtistsList: React.FC<ArtistsListProps> = ({ tracks, setSelected, selected }) => {
+const ArtistsList: React.FC<ArtistsListProps> = ({
+  tracks,
+  setSelected,
+  resetSelectedArtist,
+  selected,
+}) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const artists = useArtistsFromTracks(tracks);
@@ -39,7 +45,9 @@ const ArtistsList: React.FC<ArtistsListProps> = ({ tracks, setSelected, selected
             key={artist.id}
             selected={selected === artist.id}
             button
-            onClick={(): void => setSelected(selected === artist.id ? undefined : artist.id)}
+            onClick={(): void => (selected === artist.id
+              ? resetSelectedArtist()
+              : setSelected(artist.id))}
           >
             <ListItemText>{artist.name}</ListItemText>
           </ListItem>
