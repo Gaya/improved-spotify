@@ -132,7 +132,7 @@ export function hasToken(): boolean {
 export function getValidToken(): Promise<AuthToken> {
   const token = getStoredToken();
 
-  if (token.received + (token.expires_in * 1000) < +new Date()) {
+  if (token.received + (token.expires_in * 100) < +new Date()) {
     return refreshToken(token);
   }
 
