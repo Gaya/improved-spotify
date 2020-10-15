@@ -22,6 +22,7 @@ import PlaylistInfo from '../components/PlaylistInfo';
 import useTrackList from '../hooks/useTrackList';
 import ArtistsList from '../../Tracklist/components/ArtistsList';
 import usePlaylistPage from '../hooks/usePlaylistPage';
+import ViewPicker from '../components/ViewPicker';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -102,26 +103,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 </section>
               </Container>
               <Container className={styles.viewContainer}>
-                <ButtonGroup size="small">
-                  <Button
-                    variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
-                    onClick={(): void => selectView(PlaylistView.ALBUM)}
-                  >
-                    Albums
-                  </Button>
-                  <Button
-                    variant={viewAs === PlaylistView.ARTIST ? 'contained' : 'outlined'}
-                    onClick={(): void => selectView(PlaylistView.ARTIST)}
-                  >
-                    Artists
-                  </Button>
-                  <Button
-                    variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
-                    onClick={(): void => selectView(PlaylistView.PLAYLIST)}
-                  >
-                    Playlist
-                  </Button>
-                </ButtonGroup>
+                <ViewPicker viewAs={viewAs} onSelectView={selectView} />
               </Container>
               <TrackList
                 progress={progress}
