@@ -170,11 +170,22 @@ export interface SpotifyPlaylistTrack {
   };
 }
 
-export interface SpotifyCurrentTrack {
+export interface SpotifyCurrentPlayer {
   timestamp: number;
+  device: {
+    id: string;
+    is_active: boolean;
+    is_restricted: boolean;
+    name: string;
+    type: string;
+    volume_percent: number;
+  };
   progress_ms: number;
   is_playing: boolean;
-  item?: SpotifyTrackInfo;
+  currently_playing_type: 'track' | 'episode' | 'ad' | 'unknown';
+  item: SpotifyTrackInfo | null;
+  shuffle_state: boolean;
+  repeat_state: 'off' | 'track' | 'context';
 }
 
 export interface StoredSpotifyPlaylistTrack extends SpotifyPlaylistTrack {

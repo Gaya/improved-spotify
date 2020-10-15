@@ -17,7 +17,7 @@ import {
   playerPlay,
   playerPrevious,
 } from '../../utils/externalData';
-import { SpotifyCurrentTrack } from '../../types';
+import { SpotifyCurrentPlayer } from '../../types';
 import formatDuration from '../../utils/formatDuration';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 const Player: React.FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<SpotifyCurrentTrack>();
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<SpotifyCurrentPlayer>();
 
   const isPlaying = !!(currentlyPlaying && currentlyPlaying.is_playing);
 
