@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
 
@@ -19,9 +19,9 @@ import TrackList from '../../Tracklist/components/TrackList';
 
 import Image from '../components/Image';
 import PlaylistInfo from '../components/PlaylistInfo';
-import { getStoredPlaylistView, storePlaylistView } from '../utils';
 import useTrackList from '../hooks/useTrackList';
 import ArtistsList from '../../Tracklist/components/ArtistsList';
+import usePlaylistPage from '../hooks/usePlaylistPage';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -62,16 +62,14 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const styles = useStyles(theme);
   const playlist = useRecoilValueLoadable(playlistQuery(id));
 
-  const [viewAs, setViewAs] = useState<PlaylistView>(getStoredPlaylistView());
-  const [selectedArtist, setSelectedArtist] = useState<string | undefined>();
+  const {
+    state,
+    selectArtist,
+    selectView,
+    resetArtist,
+  } = usePlaylistPage();
 
-  const resetSelectedArtist = (): void => setSelectedArtist(undefined);
-
-  const onSelectView = (viewType: PlaylistView): void => {
-    resetSelectedArtist();
-    setViewAs(viewType);
-    storePlaylistView(viewType);
-  };
+  const { viewAs, selectedArtist } = state;
 
   const {
     progress,
@@ -90,8 +88,8 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
               <ArtistsList
                 tracks={tracks}
                 selected={selectedArtist}
-                setSelected={setSelectedArtist}
-                resetSelectedArtist={resetSelectedArtist}
+                setSelected={selectArtist}
+                resetSelectedArtist={resetArtist}
               />
             )}
             <div className={styles.playlistContent}>
@@ -107,19 +105,19 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 <ButtonGroup size="small">
                   <Button
                     variant={viewAs === PlaylistView.ALBUM ? 'contained' : 'outlined'}
-                    onClick={(): void => onSelectView(PlaylistView.ALBUM)}
+                    onClick={(): void => selectView(PlaylistView.ALBUM)}
                   >
                     Albums
                   </Button>
                   <Button
                     variant={viewAs === PlaylistView.ARTIST ? 'contained' : 'outlined'}
-                    onClick={(): void => onSelectView(PlaylistView.ARTIST)}
+                    onClick={(): void => selectView(PlaylistView.ARTIST)}
                   >
                     Artists
                   </Button>
                   <Button
                     variant={viewAs === PlaylistView.PLAYLIST ? 'contained' : 'outlined'}
-                    onClick={(): void => onSelectView(PlaylistView.PLAYLIST)}
+                    onClick={(): void => selectView(PlaylistView.PLAYLIST)}
                   >
                     Playlist
                   </Button>

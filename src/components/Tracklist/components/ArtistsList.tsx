@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 interface ArtistsListProps {
   tracks: StoredSpotifyPlaylistTrack[];
   selected?: string;
-  setSelected: (id?: string) => void;
+  setSelected: (id: string) => void;
   resetSelectedArtist: () => void;
 }
 
