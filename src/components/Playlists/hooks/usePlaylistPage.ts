@@ -4,6 +4,7 @@ import { PlaylistView } from '../../../types';
 import { getStoredPlaylistView, storePlaylistView } from '../utils';
 
 interface PlaylistPageState {
+  filter: string;
   viewAs: PlaylistView;
   selectedArtist: string | undefined;
 }
@@ -22,9 +23,15 @@ interface ActionResetArtist {
   type: 'RESET_ARTIST';
 }
 
-type PlaylistPageAction = ActionViewAs | ActionSelectArtist | ActionResetArtist;
+interface ActionSetFilter {
+  type: 'SET_FILTER';
+  payload: string;
+}
+
+type PlaylistPageAction = ActionViewAs | ActionSelectArtist | ActionResetArtist | ActionSetFilter;
 
 const defaultState: PlaylistPageState = {
+  filter: '',
   viewAs: getStoredPlaylistView(),
   selectedArtist: undefined,
 };
@@ -47,6 +54,11 @@ function reducer(state = defaultState, action: PlaylistPageAction): PlaylistPage
         ...state,
         selectedArtist: undefined,
       };
+    case 'SET_FILTER':
+      return {
+        ...state,
+        filter: action.payload,
+      };
     default:
       return state;
   }
@@ -54,9 +66,10 @@ function reducer(state = defaultState, action: PlaylistPageAction): PlaylistPage
 
 interface UsePlaylistPage {
   state: PlaylistPageState;
-  selectView: (view: PlaylistView) => void;
-  selectArtist: (artist: string) => void;
-  resetArtist: () => void;
+  selectView(view: PlaylistView): void;
+  selectArtist(artist: string): void;
+  resetArtist(): void;
+  setFilter(filter: string): void;
 }
 
 function usePlaylistPage(): UsePlaylistPage {
@@ -82,11 +95,19 @@ function usePlaylistPage(): UsePlaylistPage {
     dispatch({ type: 'RESET_ARTIST' });
   };
 
+  const setFilter = (filter: string): void => {
+    dispatch({
+      type: 'SET_FILTER',
+      payload: filter,
+    });
+  };
+
   return {
     state,
     selectView,
     selectArtist,
     resetArtist,
+    setFilter,
   };
 }
 

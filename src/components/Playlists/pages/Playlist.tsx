@@ -21,6 +21,7 @@ import useTrackList from '../hooks/useTrackList';
 import ArtistsList from '../../Tracklist/components/ArtistsList';
 import usePlaylistPage from '../hooks/usePlaylistPage';
 import ViewPicker from '../components/ViewPicker';
+import Filter from '../components/Filter';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   viewContainer: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: theme.spacing(3),
   },
@@ -66,9 +67,10 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
     selectArtist,
     selectView,
     resetArtist,
+    setFilter,
   } = usePlaylistPage();
 
-  const { viewAs, selectedArtist } = state;
+  const { filter, viewAs, selectedArtist } = state;
 
   const {
     progress,
@@ -101,6 +103,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 </section>
               </Container>
               <Container className={styles.viewContainer}>
+                <Filter value={filter} onChange={setFilter} />
                 <ViewPicker viewAs={viewAs} onSelectView={selectView} />
               </Container>
               <TrackList
