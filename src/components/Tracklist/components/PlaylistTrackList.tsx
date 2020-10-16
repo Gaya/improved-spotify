@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FixedSizeList as List } from 'react-window';
+import { useRecoilValue } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import { StoredSpotifyPlaylistTrack } from '../../../types';
+import { currentPlaylistTracks } from '../../../state/atoms';
 
 import Container from '../../Container/Container';
 
@@ -54,11 +55,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface PlaylistTrackListProps {
-  tracks: StoredSpotifyPlaylistTrack[];
-}
+const PlaylistTrackList: React.FC = () => {
+  const tracks = useRecoilValue(currentPlaylistTracks);
 
-const PlaylistTrackList: React.FC<PlaylistTrackListProps> = ({ tracks }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);

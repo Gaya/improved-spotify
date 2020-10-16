@@ -23,7 +23,7 @@ import {
   removePlaylistTracksByPlaylist,
   storePlaylistTracks,
 } from '../../../database/queries';
-import { currentPlaylistTracks, playlistTracksState } from '../../../state/atoms';
+import { currentPlaylistTracks, playlistSelectedArtist, playlistTracksState } from '../../../state/atoms';
 
 interface UseTrackListState {
   isResolving: boolean;
@@ -139,6 +139,7 @@ function useTrackList(id: string): {
   const db = useContext(DatabaseContext);
   const [tracksState, setTracksState] = useRecoilState(playlistTracksState);
   const setCurrentTracksState = useSetRecoilState(currentPlaylistTracks);
+  const setSelectedArtist = useSetRecoilState(playlistSelectedArtist);
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
@@ -158,10 +159,15 @@ function useTrackList(id: string): {
 
   useEffect(() => {
     info(`Switching to playlist ${id}`);
-    nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
+
+    // reset recoil atoms
     setCurrentTracksState([]);
+    setSelectedArtist(undefined);
+
+    // reset hook state
+    nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
     dispatch({ type: 'RESET' });
-  }, [id, setCurrentTracksState]);
+  }, [id, setCurrentTracksState, setSelectedArtist]);
 
   const onFinishTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]): void => {
     dispatch({
@@ -248,7 +254,7 @@ function useTrackList(id: string): {
           }
         });
     }
-  }, [db, id, isResolved, isResolving, needsFetching, tracksState]);
+  }, [db, id, isResolved, isResolving, needsFetching, onFinishTrackData, tracksState]);
 
   return {
     tracks: sortedTracks,

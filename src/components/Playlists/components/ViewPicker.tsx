@@ -1,17 +1,20 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import { PlaylistView } from '../../../types';
-import { playlistViewAs } from '../../../state/atoms';
+import { playlistSelectedArtist, playlistViewAs } from '../../../state/atoms';
+
 import { storePlaylistView } from '../utils';
 
 const ViewPicker: React.FC = () => {
   const [viewAs, onSelectView] = useRecoilState(playlistViewAs);
+  const setSelectedArtist = useSetRecoilState(playlistSelectedArtist);
 
   const onHandleSelect = (view: PlaylistView) => (): void => {
+    setSelectedArtist(undefined);
     onSelectView(view);
     storePlaylistView(view);
   };

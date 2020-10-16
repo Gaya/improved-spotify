@@ -65,7 +65,6 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
 
   const {
     progress,
-    tracks,
     showProgress,
     isResolved,
   } = useTrackList(id);
@@ -94,7 +93,6 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
               </Container>
               <TrackList
                 progress={progress}
-                tracks={tracks}
                 showProgress={showProgress}
                 isResolved={isResolved}
               />

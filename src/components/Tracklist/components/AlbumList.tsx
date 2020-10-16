@@ -5,13 +5,11 @@ import { useRecoilValue } from 'recoil';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import { StoredSpotifyPlaylistTrack } from '../../../types';
-import { playlistSelectedArtist } from '../../../state/atoms';
+import { sortedAndFilteredAlbums } from '../../../state/selectors';
 
 import Container from '../../Container/Container';
 
 import AlbumListItem from './AlbumListItem';
-import useAlbumsFromTracks from '../hooks/useAlbumsFromTracks';
 
 const useStyles = makeStyles((theme) => ({
   listContainer: {
@@ -29,18 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface AlbumTrackListProps {
-  tracks: StoredSpotifyPlaylistTrack[];
-}
-
 interface Dimensions {
   height: number;
   width: number;
 }
 
-const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks }) => {
-  const selectedArtist = useRecoilValue(playlistSelectedArtist);
-
+const AlbumList: React.FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -66,7 +58,7 @@ const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks }) => {
     return (): void => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
-  const albums = useAlbumsFromTracks(tracks, selectedArtist);
+  const albums = useRecoilValue(sortedAndFilteredAlbums);
 
   const columnMinWidth = 260 + theme.spacing(2);
   const rowHeight = 380;

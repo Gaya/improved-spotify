@@ -5,7 +5,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { PlaylistView, StoredSpotifyPlaylistTrack } from '../../../types';
+import { PlaylistView } from '../../../types';
 import { playlistViewAs } from '../../../state/atoms';
 
 import Container from '../../Container/Container';
@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 
 interface TrackListProps {
   progress: number;
-  tracks: StoredSpotifyPlaylistTrack[];
   isResolved: boolean;
   showProgress: boolean;
 }
@@ -47,7 +46,6 @@ const TrackList: React.FC<TrackListProps> = ({
   showProgress,
   isResolved,
   progress,
-  tracks,
 }) => {
   const viewAs = useRecoilValue(playlistViewAs);
 
@@ -61,10 +59,10 @@ const TrackList: React.FC<TrackListProps> = ({
           <LinearProgress className={styles.progress} variant="determinate" value={progress} />
         </Container>
       )}
-      {isResolved && tracks && viewAs === PlaylistView.PLAYLIST
-        && <PlaylistTrackList key={`playlist_${viewAs}`} tracks={tracks} />}
-      {isResolved && tracks && (viewAs === PlaylistView.ALBUM || viewAs === PlaylistView.ARTIST)
-        && <AlbumList key={`albums_${viewAs}`} tracks={tracks} />}
+      {isResolved && viewAs === PlaylistView.PLAYLIST
+        && <PlaylistTrackList key={`playlist_${viewAs}`} />}
+      {isResolved && (viewAs === PlaylistView.ALBUM || viewAs === PlaylistView.ARTIST)
+        && <AlbumList key={`albums_${viewAs}`} />}
     </div>
   );
 };
