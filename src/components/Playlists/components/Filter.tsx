@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
+import classNames from 'classnames';
 
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -11,9 +12,13 @@ import { playlistSearchFilter } from '../../../state/atoms';
 
 const useStyles = makeStyles((theme) => ({
   input: {
-    backgroundColor: theme.palette.divider,
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
+    transition: 'background-color 0.2s ease',
+    borderRadius: 4,
+  },
+  inputFocused: {
+    backgroundColor: theme.palette.divider,
   },
 }));
 
@@ -23,13 +28,18 @@ const Filter: React.FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
 
+  const [hasFocus, setFocus] = useState(false);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     onChange(event.target.value);
   };
 
   return (
     <Input
-      className={styles.input}
+      disableUnderline
+      className={classNames(styles.input, { [styles.inputFocused]: hasFocus })}
+      onFocus={(): void => setFocus(true)}
+      onBlur={(): void => setFocus(false)}
       placeholder="Filter"
       value={value}
       onChange={handleChange}
