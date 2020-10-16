@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import List from '@material-ui/core/List';
@@ -7,10 +7,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import { StoredSpotifyPlaylistTrack } from '../../../types';
 import { playlistSelectedArtist } from '../../../state/atoms';
 
-import useArtistsFromTracks from '../hooks/useArtistsFromTracks';
+import { artistsFromCurrentTracks } from '../../../state/selectors';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -23,16 +22,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface ArtistsListProps {
-  tracks: StoredSpotifyPlaylistTrack[];
-}
-
-const ArtistsList: React.FC<ArtistsListProps> = ({ tracks }) => {
+const ArtistsList: React.FC = () => {
   const [selected, setSelected] = useRecoilState(playlistSelectedArtist);
+  const artists = useRecoilValue(artistsFromCurrentTracks);
 
   const theme = useTheme();
   const styles = useStyles(theme);
-  const artists = useArtistsFromTracks(tracks);
 
   return (
     <div className={styles.container}>

@@ -77,7 +77,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
         {playlist.state === 'hasValue' && playlist.contents && (
           <div className={styles.container}>
             {viewAs === PlaylistView.ARTIST && (
-              <ArtistsList tracks={tracks} />
+              <ArtistsList />
             )}
             <div className={styles.playlistContent}>
               <Container>

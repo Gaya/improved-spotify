@@ -1,6 +1,11 @@
 import { atom } from 'recoil';
 
-import { PlaylistSnapshots, PlaylistTracksState, PlaylistView } from '../types';
+import {
+  PlaylistSnapshots,
+  PlaylistTracksState,
+  PlaylistView,
+  StoredSpotifyPlaylistTrack,
+} from '../types';
 import { getStoredPlaylistView } from '../components/Playlists/utils';
 
 export const playlistSnapshots = atom<PlaylistSnapshots>({
@@ -26,4 +31,9 @@ export const playlistSelectedArtist = atom<string | undefined>({
 export const playlistSearchFilter = atom<string>({
   key: 'PlaylistSearchFilter',
   default: '',
+});
+
+export const currentPlaylistTracks = atom<StoredSpotifyPlaylistTrack[]>({
+  key: 'CurrentPlaylistTracks',
+  default: [],
 });

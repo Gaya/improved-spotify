@@ -5,7 +5,7 @@ import {
   useReducer,
   useRef,
 } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import {
   PagedResponse,
@@ -23,7 +23,7 @@ import {
   removePlaylistTracksByPlaylist,
   storePlaylistTracks,
 } from '../../../database/queries';
-import { playlistTracksState } from '../../../state/atoms';
+import { currentPlaylistTracks, playlistTracksState } from '../../../state/atoms';
 
 interface UseTrackListState {
   isResolving: boolean;
@@ -138,6 +138,7 @@ function useTrackList(id: string): {
 } {
   const db = useContext(DatabaseContext);
   const [tracksState, setTracksState] = useRecoilState(playlistTracksState);
+  const setCurrentTracksState = useSetRecoilState(currentPlaylistTracks);
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
@@ -158,8 +159,18 @@ function useTrackList(id: string): {
   useEffect(() => {
     info(`Switching to playlist ${id}`);
     nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
+    setCurrentTracksState([]);
     dispatch({ type: 'RESET' });
-  }, [id]);
+  }, [id, setCurrentTracksState]);
+
+  const onFinishTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]): void => {
+    dispatch({
+      type: 'FINISH_TRACK_DATA',
+      payload: playlistTracks,
+    });
+
+    setCurrentTracksState([...state.tracks, ...playlistTracks]);
+  }, [setCurrentTracksState, state.tracks]);
 
   // store tracks in database
   const storeTrackData = useCallback((
@@ -176,10 +187,7 @@ function useTrackList(id: string): {
               [id]: TrackState.VALID,
             });
 
-            dispatch({
-              type: 'FINISH_TRACK_DATA',
-              payload: playlistTracks,
-            });
+            onFinishTrackData(playlistTracks);
           } else {
             dispatch({
               type: 'UPDATE_TRACK_DATA',
@@ -188,7 +196,7 @@ function useTrackList(id: string): {
           }
         });
     }
-  }, [db, id, setTracksState, tracksState]);
+  }, [db, id, onFinishTrackData, setTracksState, tracksState]);
 
   // fetching mechanism
   useEffect(() => {
@@ -233,10 +241,7 @@ function useTrackList(id: string): {
             // has result... so resolve it!
             info('Using cached data from database');
 
-            dispatch({
-              type: 'FINISH_TRACK_DATA',
-              payload: result,
-            });
+            onFinishTrackData(result);
           } else {
             // no results? Start fetching process
             dispatch({ type: 'START_FETCHING' });
