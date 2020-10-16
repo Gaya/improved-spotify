@@ -174,7 +174,7 @@ function useTrackList(id: string): {
     // reset hook state
     nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
     dispatch({ type: 'RESET' });
-  }, [id, setCurrentTracksState, setSelectedArtist]);
+  }, [id, setCurrentTracksState, setFilter, setSelectedArtist]);
 
   const onFinishTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]): void => {
     dispatch({
