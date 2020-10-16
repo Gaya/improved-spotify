@@ -23,7 +23,12 @@ import {
   removePlaylistTracksByPlaylist,
   storePlaylistTracks,
 } from '../../../database/queries';
-import { currentPlaylistTracks, playlistSelectedArtist, playlistTracksState } from '../../../state/atoms';
+import {
+  currentPlaylistTracks,
+  playlistSearchFilter,
+  playlistSelectedArtist,
+  playlistTracksState,
+} from '../../../state/atoms';
 
 interface UseTrackListState {
   isResolving: boolean;
@@ -140,6 +145,7 @@ function useTrackList(id: string): {
   const [tracksState, setTracksState] = useRecoilState(playlistTracksState);
   const setCurrentTracksState = useSetRecoilState(currentPlaylistTracks);
   const setSelectedArtist = useSetRecoilState(playlistSelectedArtist);
+  const setFilter = useSetRecoilState(playlistSearchFilter);
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
@@ -163,6 +169,7 @@ function useTrackList(id: string): {
     // reset recoil atoms
     setCurrentTracksState([]);
     setSelectedArtist(undefined);
+    setFilter('');
 
     // reset hook state
     nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);

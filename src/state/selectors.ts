@@ -9,7 +9,7 @@ import {
 
 import { getSpotifyPlaylists, getUserInformation } from '../utils/externalData';
 
-import { currentPlaylistTracks, playlistSelectedArtist } from './atoms';
+import { currentPlaylistTracks, playlistSearchFilter, playlistSelectedArtist } from './atoms';
 
 export const userInformationQuery = selector({
   key: 'UserInformation',
@@ -121,10 +121,20 @@ export const sortedAndFilteredAlbums = selector({
   get({ get: getRecoil }): SpotifyAlbum[] {
     const selectedArtist = getRecoil(playlistSelectedArtist);
     const albums = getRecoil(albumsFromCurrentTracks);
+    const filter = getRecoil(playlistSearchFilter);
 
-    return albums.filter((album): boolean => (selectedArtist
-      ? !!album.artists.find((artist) => artist.id === selectedArtist)
-      : true))
+    const matchExpression = new RegExp(filter, 'gi');
+
+    return albums
+      .filter((album): boolean => (selectedArtist
+        ? !!album.artists.find((artist) => artist.id === selectedArtist)
+        : true))
+      .filter((album): boolean => (filter
+        ? (
+          !!album.name.match(matchExpression)
+          || album.artists.some((artist) => artist.name.match(matchExpression))
+        )
+        : true))
       .sort(sortByArtistsAndAlbum);
   },
 });
