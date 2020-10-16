@@ -1,15 +1,40 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 
-interface FilterProps {
-  value: string;
-  onChange(value: string): void;
-}
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
+import useTheme from '@material-ui/core/styles/useTheme';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
-const Filter: React.FC<FilterProps> = ({ value, onChange }) => {
-  const test = 1;
+import { playlistSearchFilter } from '../../../state/atoms';
+
+const useStyles = makeStyles((theme) => ({
+  input: {
+    backgroundColor: theme.palette.divider,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+  },
+}));
+
+const Filter: React.FC = () => {
+  const [value, onChange] = useRecoilState(playlistSearchFilter);
+
+  const theme = useTheme();
+  const styles = useStyles(theme);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    onChange(event.target.value);
+  };
 
   return (
-    <div>Filter</div>
+    <Input
+      className={styles.input}
+      placeholder="Filter"
+      value={value}
+      onChange={handleChange}
+      startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+    />
   );
 };
 

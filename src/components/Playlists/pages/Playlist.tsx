@@ -1,12 +1,13 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import { playlistQuery } from '../../../state/selectors';
 import { PlaylistView } from '../../../types';
+import { playlistViewAs } from '../../../state/atoms';
 
 import Layout from '../../App/Layout';
 import PageContainer from '../../App/PageContainer';
@@ -14,12 +15,11 @@ import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 import Container from '../../Container/Container';
 import CenteredContainer from '../../CenteredContainer/CenteredContainer';
 import TrackList from '../../Tracklist/components/TrackList';
+import ArtistsList from '../../Tracklist/components/ArtistsList';
 
 import Image from '../components/Image';
 import PlaylistInfo from '../components/PlaylistInfo';
 import useTrackList from '../hooks/useTrackList';
-import ArtistsList from '../../Tracklist/components/ArtistsList';
-import usePlaylistPage from '../hooks/usePlaylistPage';
 import ViewPicker from '../components/ViewPicker';
 import Filter from '../components/Filter';
 
@@ -61,16 +61,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const playlist = useRecoilValueLoadable(playlistQuery(id));
-
-  const {
-    state,
-    selectArtist,
-    selectView,
-    resetArtist,
-    setFilter,
-  } = usePlaylistPage();
-
-  const { filter, viewAs, selectedArtist } = state;
+  const viewAs = useRecoilValue(playlistViewAs);
 
   const {
     progress,
@@ -86,12 +77,7 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
         {playlist.state === 'hasValue' && playlist.contents && (
           <div className={styles.container}>
             {viewAs === PlaylistView.ARTIST && (
-              <ArtistsList
-                tracks={tracks}
-                selected={selectedArtist}
-                setSelected={selectArtist}
-                resetSelectedArtist={resetArtist}
-              />
+              <ArtistsList tracks={tracks} />
             )}
             <div className={styles.playlistContent}>
               <Container>
@@ -103,16 +89,14 @@ const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
                 </section>
               </Container>
               <Container className={styles.viewContainer}>
-                <Filter value={filter} onChange={setFilter} />
-                <ViewPicker viewAs={viewAs} onSelectView={selectView} />
+                <Filter />
+                <ViewPicker />
               </Container>
               <TrackList
                 progress={progress}
                 tracks={tracks}
                 showProgress={showProgress}
                 isResolved={isResolved}
-                viewAs={viewAs}
-                selectedArtist={selectedArtist}
               />
             </div>
           </div>

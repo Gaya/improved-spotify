@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
+import { useRecoilValue } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
 import { StoredSpotifyPlaylistTrack } from '../../../types';
+import { playlistSelectedArtist } from '../../../state/atoms';
 
 import Container from '../../Container/Container';
 
@@ -29,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 
 interface AlbumTrackListProps {
   tracks: StoredSpotifyPlaylistTrack[];
-  selectedArtist?: string;
 }
 
 interface Dimensions {
@@ -37,7 +38,9 @@ interface Dimensions {
   width: number;
 }
 
-const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks, selectedArtist }) => {
+const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks }) => {
+  const selectedArtist = useRecoilValue(playlistSelectedArtist);
+
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -97,9 +100,6 @@ const AlbumList: React.FC<AlbumTrackListProps> = ({ tracks, selectedArtist }) =>
             return null;
           }}
         </Grid>
-        {/* <div className={styles.albumGrid}> */}
-        {/*  {albums.map((album) => <AlbumListItem key={album.id} album={album} />)} */}
-        {/* </div> */}
       </div>
     </Container>
   );
