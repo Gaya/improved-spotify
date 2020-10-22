@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import Layout from '../../App/Layout';
@@ -12,6 +14,12 @@ import Container from '../../Container/Container';
 import usePlaylists from '../hooks/usePlaylists';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    overflowY: 'hidden',
+  },
   playlistImage: {
     width: 260,
     height: 260,
@@ -24,14 +32,20 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   playlistContainer: {
-    marginTop: theme.spacing(3),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-    gap: `${theme.spacing(2)}px`,
+    columnGap: `${theme.spacing(2)}px`,
+    rowGap: `${theme.spacing(4)}px`,
     overflowY: 'scroll',
   },
   playlistItem: {
-    width: 260,
+    width: 260 + theme.spacing(2),
+    display: 'block',
+  },
+  playlistName: {
+    textTransform: 'none',
   },
 }));
 
@@ -44,7 +58,7 @@ const Browse: React.FC = () => {
   return (
     <Layout>
       <PageContainer topPadding>
-        <Container>
+        <Container className={styles.container}>
           <PageTitle>
             Browse Your Playlists
           </PageTitle>
@@ -52,13 +66,18 @@ const Browse: React.FC = () => {
           {playlists.state === 'hasValue' && (
             <div className={styles.playlistContainer}>
               {playlists.contents.map((playlist) => (
-                <div className={styles.playlistItem} key={playlist.id}>
+                <Button
+                  to={`/playlist/${playlist.id}`}
+                  component={Link}
+                  className={styles.playlistItem}
+                  key={playlist.id}
+                >
                   <div
                     className={styles.playlistImage}
                     style={{ backgroundImage: `url(${playlist.images[0].url})` }}
                   />
-                  <Typography noWrap>{playlist.name}</Typography>
-                </div>
+                  <Typography className={styles.playlistName} noWrap>{playlist.name}</Typography>
+                </Button>
               ))}
             </div>
           )}
