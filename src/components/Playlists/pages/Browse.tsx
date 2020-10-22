@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     columnGap: `${theme.spacing(2)}px`,
     rowGap: `${theme.spacing(4)}px`,
     overflowY: 'scroll',
+    justifyItems: 'center',
   },
   playlistItem: {
     width: 260 + theme.spacing(2),
