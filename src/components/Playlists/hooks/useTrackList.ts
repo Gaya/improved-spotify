@@ -130,14 +130,8 @@ function reducer(state: UseTrackListState, action: UseTrackListAction): UseTrack
   }
 }
 
-const byIndex = (
-  a: StoredSpotifyPlaylistTrack,
-  b: StoredSpotifyPlaylistTrack,
-): number => (a.index > b.index ? 1 : -1);
-
 function useTrackList(id: string): {
   progress: number;
-  tracks: StoredSpotifyPlaylistTrack[];
   isResolved: boolean;
   showProgress: boolean;
 } {
@@ -161,14 +155,6 @@ function useTrackList(id: string): {
 
   const nextRef = useRef<string | undefined>();
 
-  const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
-
-  useEffect(() => {
-    if (isResolved && tracks) {
-      setCurrentTracksState([...tracks]);
-    }
-  }, [isResolved, setCurrentTracksState, tracks]);
-
   useEffect(() => {
     info(`Switching to playlist ${id}`);
 
@@ -181,6 +167,13 @@ function useTrackList(id: string): {
     nextRef.current = SPOTIFY_PLAYLIST_TRACKS.replace('{id}', id);
     dispatch({ type: 'RESET' });
   }, [id, setCurrentTracksState, setFilter, setSelectedArtist]);
+
+  useEffect(() => {
+    if (isResolved && tracks) {
+      info('Updating tracks in recoil state');
+      setCurrentTracksState([...tracks]);
+    }
+  }, [isResolved, setCurrentTracksState, tracks]);
 
   const onFinishTrackData = useCallback((playlistTracks: StoredSpotifyPlaylistTrack[]): void => {
     dispatch({
@@ -268,7 +261,6 @@ function useTrackList(id: string): {
   }, [db, id, isResolved, isResolving, needsFetching, onFinishTrackData, tracksState]);
 
   return {
-    tracks: sortedTracks,
     progress: isResolved ? 100 : ((fetchedTracks.length / totalTracks) || 0) * 100,
     isResolved,
     showProgress,
