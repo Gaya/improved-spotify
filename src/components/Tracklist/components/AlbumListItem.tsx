@@ -11,7 +11,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { SpotifyAlbum } from '../../../types';
+import { SpotifyAlbum, SpotifyTrackInfo } from '../../../types';
 import { addToQueue, getAlbumTracks, playerPlay } from '../../../utils/externalData';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
 interface AlbumListItemProps {
   album: SpotifyAlbum;
   style?: React.CSSProperties;
+}
+function queueTracks(tracks: SpotifyTrackInfo[]): Promise<Response[]> {
+  return promiseSerial(tracks.map((track) => addToQueue(track.uri)));
 }
 
 function promiseSerial<T>(promises: Promise<T>[], results: T[] = []): Promise<T[]> {
@@ -101,7 +104,7 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
     setIsQueuing(true);
 
     getAlbumTracks(album.id)
-      .then((tracks) => promiseSerial(tracks.map((track) => addToQueue(track.uri))))
+      .then((tracks) => queueTracks(tracks))
       .then(() => {
         setIsQueuing(false);
         showQueueTooltip();
