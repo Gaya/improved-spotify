@@ -164,6 +164,12 @@ function useTrackList(id: string): {
   const sortedTracks = useMemo(() => [...tracks].sort(byIndex), [tracks]);
 
   useEffect(() => {
+    if (isResolved && tracks) {
+      setCurrentTracksState([...tracks]);
+    }
+  }, [isResolved, setCurrentTracksState, tracks]);
+
+  useEffect(() => {
     info(`Switching to playlist ${id}`);
 
     // reset recoil atoms
@@ -181,9 +187,7 @@ function useTrackList(id: string): {
       type: 'FINISH_TRACK_DATA',
       payload: playlistTracks,
     });
-
-    setCurrentTracksState([...state.tracks, ...playlistTracks]);
-  }, [setCurrentTracksState, state.tracks]);
+  }, []);
 
   // store tracks in database
   const storeTrackData = useCallback((
