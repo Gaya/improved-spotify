@@ -4,7 +4,7 @@ import {
   SpotifyAlbum,
   SpotifyArtist,
   SpotifyPlaylist,
-  SpotifyUser,
+  SpotifyUser, StoredSpotifyPlaylistTrack,
 } from '../types';
 
 import { getSpotifyPlaylists, getUserInformation } from '../utils/externalData';
@@ -136,5 +136,25 @@ export const sortedAndFilteredAlbums = selector({
         )
         : true))
       .sort(sortByArtistsAndAlbum);
+  },
+});
+
+function sortByIndex(a: StoredSpotifyPlaylistTrack, b: StoredSpotifyPlaylistTrack): number {
+  if (a.index > b.index) {
+    return 1;
+  }
+
+  if (a.index < b.index) {
+    return -1;
+  }
+
+  return 0;
+}
+
+export const sortedCurrentTracks = selector({
+  key: 'SortedCurrentTracks',
+  get({ get: getRecoil }): StoredSpotifyPlaylistTrack[] {
+    return [...getRecoil(currentPlaylistTracks)]
+      .sort(sortByIndex);
   },
 });

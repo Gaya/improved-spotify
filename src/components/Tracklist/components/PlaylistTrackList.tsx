@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 
-import { currentPlaylistTracks } from '../../../state/atoms';
+import { sortedCurrentTracks } from '../../../state/selectors';
 
 import Container from '../../Container/Container';
 
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlaylistTrackList: React.FC = () => {
-  const tracks = useRecoilValue(currentPlaylistTracks);
+  const tracks = useRecoilValue(sortedCurrentTracks);
 
   const theme = useTheme();
   const styles = useStyles(theme);
