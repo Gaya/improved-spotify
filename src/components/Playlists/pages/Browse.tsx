@@ -10,6 +10,8 @@ import Layout from '../../App/Layout';
 import PageTitle from '../../PageTitle/PageTitle';
 import PageContainer from '../../App/PageContainer';
 import Container from '../../Container/Container';
+import CenteredContainer from '../../CenteredContainer/CenteredContainer';
+import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
 import usePlaylists from '../hooks/usePlaylists';
 
@@ -63,6 +65,7 @@ const Browse: React.FC = () => {
             Browse Your Playlists
           </PageTitle>
 
+          {playlists.state !== 'hasValue' && <CenteredContainer><LoadingIndicator /></CenteredContainer>}
           {playlists.state === 'hasValue' && (
             <div className={styles.playlistContainer}>
               {playlists.contents.map((playlist) => (
