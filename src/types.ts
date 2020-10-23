@@ -17,19 +17,6 @@ export type LoadableValue<T> =
   state: 'loading';
 }>;
 
-export enum ContentType {
-  json = 'application/json',
-  formUrlEncoded = 'application/x-www-form-urlencoded',
-}
-
-export interface QueryStringData {
-  [key: string]: string | number | boolean;
-}
-
-export interface PostData {
-  [key: string]: string | number | boolean | string[] | undefined;
-}
-
 export interface AuthToken {
   access_token: string;
   token_type: 'Bearer';
@@ -40,16 +27,6 @@ export interface AuthToken {
 
 export interface StoredAuthToken extends AuthToken {
   received: number;
-}
-
-export interface PagedResponse<S> {
-  href: string;
-  items: S[];
-  limit: number;
-  next: string | null;
-  offset: number;
-  previous: string | null;
-  total: number;
 }
 
 export interface PlaylistSnapshots {
@@ -194,39 +171,6 @@ export interface StoredSpotifyPlaylistTrack extends SpotifyPlaylistTrack {
   playlistId: string;
 }
 
-export interface StoredSpotifyTrack extends Omit<SpotifyTrackInfo, 'album' | 'artists'> {
-  album: string;
-  artists: string[];
-}
-
-export interface StoredSpotifyTrackInfo {
-  [trackId: string]: StoredSpotifyTrack;
-}
-
-export interface StoredSpotifyAlbum extends Omit<SpotifyAlbum, 'artists'> {
-  artists: string[];
-}
-
-export interface StoredSpotifyAlbums {
-  [albumId: string]: StoredSpotifyAlbum;
-}
-
-export interface StoredSpotifyArtists {
-  [artistId: string]: SpotifyArtist;
-}
-
-export enum TrackState {
-  VALID = 'VALID',
-  INVALID = 'INVALID',
-}
-
 export interface PlaylistTracksState {
   [playlistId: string]: TrackState;
-}
-
-export interface SpotifyDataExport {
-  playlistTracks: StoredSpotifyPlaylistTrack[];
-  tracks: StoredSpotifyTrackInfo;
-  artists: StoredSpotifyArtists;
-  albums: StoredSpotifyAlbums;
 }

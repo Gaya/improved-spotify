@@ -10,8 +10,6 @@ import {
 } from '../../consts';
 import {
   AuthToken,
-  ContentType,
-  PostData,
   StoredAuthToken,
 } from '../../types';
 

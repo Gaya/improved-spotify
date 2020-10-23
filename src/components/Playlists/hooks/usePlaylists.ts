@@ -11,12 +11,7 @@ import {
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import {
-  PlaylistSnapshots,
-  PlaylistTracksState,
-  SpotifyPlaylist,
-  TrackState,
-} from '../../../types';
+import { PlaylistSnapshots, PlaylistTracksState, SpotifyPlaylist } from '../../../types';
 import { playlistSnapshots, playlistTracksState } from '../../../state/atoms';
 
 import { saveSnapshots } from '../../../database/queries';
