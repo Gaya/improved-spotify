@@ -11,7 +11,6 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { SpotifyAlbum, SpotifyTrackInfo } from '../../../types';
 import { addToQueue, getAlbumTracks, playerPlay } from '../../../utils/externalData';
 
 const useStyles = makeStyles((theme) => ({

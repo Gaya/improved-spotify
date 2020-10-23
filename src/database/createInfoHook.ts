@@ -5,7 +5,6 @@ import {
   useState,
 } from 'react';
 
-import { LoadableValue } from '../types';
 import DatabaseContext from './context';
 import { SrIndexedDB } from './createDatabase';
 

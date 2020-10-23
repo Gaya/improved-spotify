@@ -15,13 +15,6 @@ import {
   postWithoutParsing,
   putWithoutParsing,
 } from './authRequest';
-import {
-  SpotifyCurrentPlayer,
-  SpotifyPlaylist,
-  SpotifyPlaylistTrack,
-  SpotifyTrackInfo,
-  SpotifyUser,
-} from '../types';
 
 export function getUserInformation(): Promise<SpotifyUser> {
   return get(SPOTIFY_ME_URI);

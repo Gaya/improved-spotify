@@ -4,7 +4,6 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 
-import { SpotifyPlaylist } from '../../../types';
 import htmlDecode from '../../../utils/htmlDecode';
 
 const useStyles = makeStyles((theme) => ({

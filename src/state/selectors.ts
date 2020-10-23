@@ -1,12 +1,5 @@
 import { selector, selectorFamily } from 'recoil';
 
-import {
-  SpotifyAlbum,
-  SpotifyArtist,
-  SpotifyPlaylist,
-  SpotifyUser, StoredSpotifyPlaylistTrack,
-} from '../types';
-
 import { getSpotifyPlaylists, getUserInformation } from '../utils/externalData';
 
 import { currentPlaylistTracks, playlistSearchFilter, playlistSelectedArtist } from './atoms';

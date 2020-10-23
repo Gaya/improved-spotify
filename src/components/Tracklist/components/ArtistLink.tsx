@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { SpotifyArtist } from '../../../types';
-
 interface ArtistLinkProps {
   artist: SpotifyArtist;
 }

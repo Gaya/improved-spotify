@@ -3,8 +3,6 @@ import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MUIAvatar from '@material-ui/core/Avatar';
 
-import { SpotifyUser } from '../../types';
-
 const useStyles = makeStyles({
   avatar: {
     width: 30,

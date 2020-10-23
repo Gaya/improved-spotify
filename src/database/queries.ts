@@ -1,10 +1,5 @@
 import { SrIndexedDB } from './createDatabase';
 
-import {
-  PlaylistSnapshots,
-  StoredSpotifyPlaylistTrack,
-} from '../types';
-
 export function getSnapshots(db: SrIndexedDB): Promise<PlaylistSnapshots> {
   const keysPromise = db.getAllKeys('snapshots');
   const valuesPromise = db.getAll('snapshots');

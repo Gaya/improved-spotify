@@ -8,10 +8,6 @@ import {
   STORAGE_AUTH_STATE,
   STORAGE_TOKEN,
 } from '../../consts';
-import {
-  AuthToken,
-  StoredAuthToken,
-} from '../../types';
 
 export function generateRandomString(length: number): string {
   let text = '';

@@ -1,5 +1,3 @@
-import { SpotifyPlaylistTrack, StoredSpotifyPlaylistTrack } from '../types';
-
 function extractTrackData(
   playlistId: string,
   tracks: SpotifyPlaylistTrack[],

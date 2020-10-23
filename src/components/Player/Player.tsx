@@ -17,7 +17,6 @@ import {
   playerPlay,
   playerPrevious,
 } from '../../utils/externalData';
-import { SpotifyCurrentPlayer } from '../../types';
 import formatDuration from '../../utils/formatDuration';
 
 const useStyles = makeStyles((theme) => ({

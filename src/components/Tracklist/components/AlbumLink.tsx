@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { SpotifyAlbum } from '../../../types';
-
 interface AlbumLinkProps {
   album: SpotifyAlbum;
 }

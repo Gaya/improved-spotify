@@ -7,11 +7,11 @@ import {
 import {
   Loadable,
   useRecoilState,
-  useRecoilValueLoadable, useSetRecoilState,
+  useRecoilValueLoadable,
+  useSetRecoilState,
 } from 'recoil';
 
 import { playlistsQuery } from '../../../state/selectors';
-import { PlaylistSnapshots, PlaylistTracksState, SpotifyPlaylist } from '../../../types';
 import { playlistSnapshots, playlistTracksState } from '../../../state/atoms';
 
 import { saveSnapshots } from '../../../database/queries';

@@ -2,8 +2,6 @@ import { useEffect, useReducer } from 'react';
 
 import { createAuthStrings } from '../utils';
 
-import { Loadable } from '../../../types';
-
 interface LoadableAuthString extends Loadable {
   codeChallenge: string;
   state: string;

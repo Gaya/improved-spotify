@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { SpotifyPlaylistTrack, StoredSpotifyPlaylistTrack } from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
 import { getPlaylistTracks } from '../../../utils/externalData';
 import extractTrackData from '../../../utils/extractTrackData';
