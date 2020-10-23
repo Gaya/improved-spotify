@@ -90,11 +90,17 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
     setIsPlaying(true);
 
     // eslint-disable-next-line @typescript-eslint/camelcase
-    playerPlay({ context_uri: album.uri })
+    getAlbumTracks(album.id)
+      .then((tracks) => {
+        const [firstTrack, ...otherTracks] = tracks;
+
+        playerPlay({ uris: [firstTrack.uri] })
+          .then(() => queueTracks(otherTracks));
+      })
       .then(() => {
         setIsPlaying(false);
       });
-  }, [album.uri, isPlaying]);
+  }, [album.id, isPlaying]);
 
   const addAlbumToQueue = useCallback(() => {
     if (isQueuing) {
