@@ -1,7 +1,7 @@
 import {
   useCallback,
   useContext,
-  useEffect, useMemo,
+  useEffect,
   useReducer,
   useRef,
 } from 'react';
