@@ -5,7 +5,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { PlaylistView } from '../../../types';
 import { playlistViewAs } from '../../../state/atoms';
 
 import Container from '../../Container/Container';

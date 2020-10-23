@@ -4,7 +4,6 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-import { PlaylistView } from '../../../types';
 import { playlistSelectedArtist, playlistViewAs } from '../../../state/atoms';
 
 import { storePlaylistView } from '../utils';

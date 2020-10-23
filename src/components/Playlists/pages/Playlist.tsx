@@ -6,7 +6,6 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import { playlistQuery } from '../../../state/selectors';
-import { PlaylistView } from '../../../types';
 import { playlistViewAs } from '../../../state/atoms';
 
 import Layout from '../../App/Layout';

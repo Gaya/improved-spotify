@@ -1,11 +1,6 @@
 import { atom } from 'recoil';
 
-import {
-  PlaylistSnapshots,
-  PlaylistTracksState,
-  PlaylistView,
-  StoredSpotifyPlaylistTrack,
-} from '../types';
+import { PlaylistSnapshots, PlaylistTracksState, StoredSpotifyPlaylistTrack } from '../types';
 import { getStoredPlaylistView } from '../components/Playlists/utils';
 
 export const playlistSnapshots = atom<PlaylistSnapshots>({

@@ -93,6 +93,8 @@ function getAuthScopes(): string {
     'user-modify-playback-state',
     'user-read-currently-playing',
     'streaming',
+    'user-read-email',
+    'user-read-private',
   ];
 
   return scopes.join(' ');

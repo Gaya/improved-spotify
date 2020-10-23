@@ -230,9 +230,3 @@ export interface SpotifyDataExport {
   artists: StoredSpotifyArtists;
   albums: StoredSpotifyAlbums;
 }
-
-export enum PlaylistView {
-  PLAYLIST = 'PLAYLIST',
-  ALBUM = 'ALBUM',
-  ARTIST = 'ARTIST',
-}
