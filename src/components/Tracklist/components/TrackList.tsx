@@ -6,6 +6,7 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { playlistViewAs } from '../../../state/atoms';
+import { PlaylistView } from '../../../enums';
 
 import Container from '../../Container/Container';
 

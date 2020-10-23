@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 
 import { getStoredPlaylistView } from '../components/Playlists/utils';
+import { PlaylistView } from '../enums';
 
 export const playlistSnapshots = atom<PlaylistSnapshots>({
   key: 'PlaylistSnapshots',

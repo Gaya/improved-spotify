@@ -1,3 +1,5 @@
+import { ContentType } from '../enums';
+
 export function urlWithQueryString(url: string, data?: QueryStringData): string {
   if (!data || Object.keys(data).length === 0) {
     return url;

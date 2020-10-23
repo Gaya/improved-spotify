@@ -7,6 +7,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import { playlistQuery } from '../../../state/selectors';
 import { playlistViewAs } from '../../../state/atoms';
+import { PlaylistView } from '../../../enums';
 
 import Layout from '../../App/Layout';
 import PageContainer from '../../App/PageContainer';

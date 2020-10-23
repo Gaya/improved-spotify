@@ -1,15 +1,4 @@
 declare global {
-  enum PlaylistView {
-    PLAYLIST = 'PLAYLIST',
-    ALBUM = 'ALBUM',
-    ARTIST = 'ARTIST',
-  }
-
-  enum TrackState {
-    VALID = 'VALID',
-    INVALID = 'INVALID',
-  }
-
   interface Loadable {
     isLoading: boolean;
     isResolving: boolean;

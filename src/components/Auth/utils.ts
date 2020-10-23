@@ -8,6 +8,7 @@ import {
   STORAGE_AUTH_STATE,
   STORAGE_TOKEN,
 } from '../../consts';
+import { ContentType } from '../../enums';
 
 export function generateRandomString(length: number): string {
   let text = '';

@@ -1,4 +1,6 @@
 import { getValidToken } from '../components/Auth/utils';
+import { ContentType } from '../enums';
+
 import { get as getPlain, post as postPlain, getPaged as getPagedPlain } from './request';
 
 function parseResponse<S>(response: Response): Promise<S> {

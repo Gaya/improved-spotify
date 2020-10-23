@@ -1,9 +1,4 @@
 declare global {
-  enum ContentType {
-    json = 'application/json',
-    formUrlEncoded = 'application/x-www-form-urlencoded',
-  }
-
   interface PagedResponse<S> {
     href: string;
     items: S[];

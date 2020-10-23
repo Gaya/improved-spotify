@@ -23,6 +23,7 @@ import {
   playlistSelectedArtist,
   playlistTracksState,
 } from '../../../state/atoms';
+import { TrackState } from '../../../enums';
 
 interface UseTrackListState {
   isResolving: boolean;

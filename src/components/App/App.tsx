@@ -8,10 +8,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import pink from '@material-ui/core/colors/pink';
 import green from '@material-ui/core/colors/green';
 
-import Routes from './Routes';
+import { DatabaseProvider } from '../../database/context';
 
 import { AuthProvider } from '../Auth/context';
-import { DatabaseProvider } from '../../database/context';
+import { PlayerProvider } from '../Player/context';
+
+import Routes from './Routes';
 
 import './App.css';
 
@@ -51,13 +53,15 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <RecoilRoot>
-          <DatabaseProvider>
-            <div className="App">
-              <Routes />
-            </div>
-          </DatabaseProvider>
-        </RecoilRoot>
+        <PlayerProvider>
+          <RecoilRoot>
+            <DatabaseProvider>
+              <div className="App">
+                <Routes />
+              </div>
+            </DatabaseProvider>
+          </RecoilRoot>
+        </PlayerProvider>
       </AuthProvider>
     </ThemeProvider>
   );
