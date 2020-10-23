@@ -16,7 +16,6 @@ import {
   putWithoutParsing,
 } from './authRequest';
 import {
-  PagedResponse,
   SpotifyCurrentPlayer,
   SpotifyPlaylist,
   SpotifyPlaylistTrack,
