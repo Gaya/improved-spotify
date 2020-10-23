@@ -1,4 +1,5 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { log } from '../../utils/logging';
 
 interface PlayerContextValues {
   player: string;
@@ -9,17 +10,25 @@ const PlayerContext = createContext<PlayerContextValues>({
 });
 
 export const PlayerProvider: React.FC = ({ children }) => {
+  const [player, setPlayer] = useState('');
+
   const value = {
-    player: '',
+    player,
   };
 
   useEffect(() => {
+    log('Load Spotify Player');
+
+    // add script to body
     const script = document.createElement('script');
     script.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
     document.body.appendChild(script);
 
+    // wait for loading
     window.onSpotifyWebPlaybackSDKReady = (): void => {
-      console.log('Loaded');
+      log('Spotify Player Loaded');
+
+      setPlayer('yep');
     };
   }, []);
 
