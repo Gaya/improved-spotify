@@ -53,19 +53,7 @@ interface SpotifyPlayerConstructorOptions {
 }
 
 declare global {
-  interface Window {
-    onSpotifyWebPlaybackSDKReady: () => void;
-  }
-
-  declare class SpotifyPlayer {
-    /**
-     * The main constructor for initializing the Web Playback SDK. It should contain an object with
-     * the player name, volume and access token.
-     *
-     * @param options: SpotifyPlayerConstructorOptions
-     */
-    constructor(options: SpotifyPlayerConstructorOptions): void;
-
+  interface SpotifyWebPlayer {
     /**
      * Connect our Web Playback SDK instance to Spotify with the credentials provided during
      * initialization.
@@ -135,8 +123,21 @@ declare global {
     addListener(name: 'playback_error', callback: (error: WebPlaybackError) => void);
   }
 
-  interface Spotify {
-    Player: SpotifyPlayer;
+  interface SpotifyPlayer extends SpotifyWebPlayer {
+    /**
+     * The main constructor for initializing the Web Playback SDK. It should contain an object with
+     * the player name, volume and access token.
+     *
+     * @param options
+     */
+    new (options: SpotifyPlayerConstructorOptions): SpotifyWebPlayer;
+  }
+
+  interface Window {
+    onSpotifyWebPlaybackSDKReady: () => void;
+    Spotify: {
+      Player: SpotifyPlayer;
+    };
   }
 }
 

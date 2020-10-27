@@ -1,16 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react';
+
 import { log } from '../../utils/logging';
+import { getValidToken } from '../Auth/utils';
 
 interface PlayerContextValues {
-  player: string;
+  player?: SpotifyWebPlayer;
 }
 
-const PlayerContext = createContext<PlayerContextValues>({
-  player: '',
-});
+const PlayerContext = createContext<PlayerContextValues>({});
 
 export const PlayerProvider: React.FC = ({ children }) => {
-  const [player, setPlayer] = useState('');
+  const [player, setPlayer] = useState<SpotifyWebPlayer>();
 
   const value = {
     player,
@@ -28,7 +28,16 @@ export const PlayerProvider: React.FC = ({ children }) => {
     window.onSpotifyWebPlaybackSDKReady = (): void => {
       log('Spotify Player Loaded');
 
-      setPlayer('yep');
+      const spotifyPlayer = new window.Spotify.Player({
+        name: 'Spotify Revised',
+        getOAuthToken: (resolve): void => {
+          getValidToken().then((token) => resolve(token.access_token));
+        },
+      });
+
+      setPlayer(spotifyPlayer);
+
+      console.log(spotifyPlayer);
     };
   }, []);
 
