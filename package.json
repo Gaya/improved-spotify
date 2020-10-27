@@ -29,7 +29,7 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "clear-eslint-cache": "rm -r node_modules/.cache/eslint-loader",
+    "clear-eslint-cache": "rm -rf node_modules/.cache/eslint-loader",
     "prestart": "npm run clear-eslint-cache",
     "start": "react-scripts start",
     "build": "react-scripts build",
