@@ -1,7 +1,3 @@
-interface WebPlaybackPlayer {
-  device_id: string;
-}
-
 interface WebPlayerTrack {
   uri: string;
   id: string | null;
@@ -17,31 +13,6 @@ interface WebPlayerTrack {
   artists: { uri: string; name: string }[];
 }
 
-interface WebPlaybackState {
-  context: {
-    uri: string | null;
-    metadata: {} | null;
-  };
-  disallows: {
-    pausing: boolean;
-    peeking_next: boolean;
-    peeking_prev: boolean;
-    resuming: boolean;
-    seeking: boolean;
-    skipping_next: boolean;
-    skipping_prev: boolean;
-  };
-  paused: boolean;
-  position: number;
-  repeat_mode: 0 | 1 | 2;
-  shuffle: boolean;
-  track_window: {
-    current_track: WebPlayerTrack;
-    previous_tracks: WebPlayerTrack[];
-    next_tracks: WebPlayerTrack[];
-  };
-}
-
 interface WebPlaybackError {
   message: string;
 }
@@ -53,6 +24,35 @@ interface SpotifyPlayerConstructorOptions {
 }
 
 declare global {
+  interface WebPlaybackPlayer {
+    device_id: string;
+  }
+
+  interface WebPlaybackState {
+    context: {
+      uri: string | null;
+      metadata: {} | null;
+    };
+    disallows: {
+      pausing: boolean;
+      peeking_next: boolean;
+      peeking_prev: boolean;
+      resuming: boolean;
+      seeking: boolean;
+      skipping_next: boolean;
+      skipping_prev: boolean;
+    };
+    paused: boolean;
+    position: number;
+    repeat_mode: 0 | 1 | 2;
+    shuffle: boolean;
+    track_window: {
+      current_track: WebPlayerTrack;
+      previous_tracks: WebPlayerTrack[];
+      next_tracks: WebPlayerTrack[];
+    };
+  }
+
   interface SpotifyWebPlayer {
     /**
      * Connect our Web Playback SDK instance to Spotify with the credentials provided during

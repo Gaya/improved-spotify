@@ -1,23 +1,29 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-import { log } from '../../utils/logging';
+import { log, table } from '../../utils/logging';
 import { getValidToken } from '../Auth/utils';
 
 interface PlayerContextValues {
   player?: SpotifyWebPlayer;
+  playbackState?: WebPlaybackState;
+  playback?: WebPlaybackPlayer;
 }
 
 const PlayerContext = createContext<PlayerContextValues>({});
 
 export const PlayerProvider: React.FC = ({ children }) => {
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
+  const [playback, setPlayback] = useState<WebPlaybackPlayer>();
+  const [playbackState, setPlaybackState] = useState<WebPlaybackState>();
 
   const value = {
     player,
+    playbackState,
+    playback,
   };
 
   useEffect(() => {
-    log('Load Spotify Player');
+    log('Loading Spotify Player');
 
     // add script to body
     const script = document.createElement('script');
@@ -35,13 +41,24 @@ export const PlayerProvider: React.FC = ({ children }) => {
         },
       });
 
-      setPlayer(spotifyPlayer);
+      spotifyPlayer.addListener('player_state_changed', setPlaybackState);
+      spotifyPlayer.addListener('ready', setPlayback);
 
-      console.log(spotifyPlayer);
+      spotifyPlayer.connect().then((success) => {
+        log(success ? 'Spotify Player connected' : 'Spotify Player failed to connect');
+      });
+
+      setPlayer(spotifyPlayer);
     };
   }, []);
 
-  return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
+  log({ player, playback, playbackState });
+
+  return (
+    <PlayerContext.Provider value={value}>
+      {children}
+    </PlayerContext.Provider>
+  );
 };
 
 export default PlayerContext;
