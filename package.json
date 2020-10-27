@@ -50,6 +50,7 @@
           "**/*.ts?(x)"
         ],
         "rules": {
+          "no-useless-constructor": "off",
           "no-debugger": "warn",
           "react/prop-types": "off",
           "react/jsx-filename-extension": [
