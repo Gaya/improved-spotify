@@ -16,7 +16,7 @@ interface PlayerContextValues {
   actions: {
     next(): void;
     previous(): void;
-    play(): void;
+    resume(): void;
     pause(): void;
   };
 }
@@ -28,7 +28,7 @@ const defaultActions = {
   previous(): void {
     return undefined;
   },
-  play(): void {
+  resume(): void {
     return undefined;
   },
   pause(): void {
@@ -59,7 +59,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
         log('Go to previous track');
         player.previousTrack();
       },
-      play(): void {
+      resume(): void {
         log('Play track');
         player.resume();
       },

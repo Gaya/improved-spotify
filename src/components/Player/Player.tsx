@@ -73,7 +73,7 @@ const Player: React.FC = () => {
     next,
     pause,
     previous,
-    play,
+    resume,
   } = actions;
 
   const isPlaying = !!(playbackState && !playbackState.paused);
@@ -91,7 +91,7 @@ const Player: React.FC = () => {
             if (isPlaying) {
               pause();
             } else {
-              play();
+              resume();
             }
           }}
         >
