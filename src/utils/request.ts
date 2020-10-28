@@ -19,7 +19,9 @@ export function dataToQueryString(data: QueryStringData, baseUrl = ''): string {
   const searchParams = new URLSearchParams(baseUrl);
 
   Object.keys(data).sort().forEach((key: string) => {
-    searchParams.set(key, data[key].toString());
+    if (typeof data[key] !== 'undefined') {
+      searchParams.set(key, (data[key] || '').toString());
+    }
   });
 
   return searchParams.toString();

@@ -2,6 +2,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -12,9 +13,30 @@ interface PlayerContextValues {
   player?: SpotifyWebPlayer;
   playbackState?: WebPlaybackState;
   playback?: WebPlaybackPlayer;
+  actions: {
+    next(): void;
+    previous(): void;
+    play(): void;
+    pause(): void;
+  };
 }
 
-const PlayerContext = createContext<PlayerContextValues>({});
+const defaultActions = {
+  next(): void {
+    return undefined;
+  },
+  previous(): void {
+    return undefined;
+  },
+  play(): void {
+    return undefined;
+  },
+  pause(): void {
+    return undefined;
+  },
+};
+
+const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActions });
 
 export const PlayerProvider: React.FC = ({ children }) => {
   const { isLoggedIn, getValidToken } = useContext(AuthContext);
@@ -23,11 +45,49 @@ export const PlayerProvider: React.FC = ({ children }) => {
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
   const [playbackState, setPlaybackState] = useState<WebPlaybackState>();
 
-  const value = {
+  const actions = useMemo(() => {
+    if (!player) {
+      return defaultActions;
+    }
+
+    return {
+      next(): void {
+        log('Skip track');
+        player.nextTrack();
+      },
+      previous(): void {
+        log('Go to previous track');
+        player.previousTrack();
+      },
+      play(): void {
+        log('Play track');
+        player.resume();
+      },
+      pause(): void {
+        log('Pause track');
+        player.pause();
+      },
+    };
+  }, [player]);
+
+  const value = useMemo(() => ({
     player,
     playbackState,
     playback,
-  };
+    actions,
+  }), [actions, playback, playbackState, player]);
+
+  useEffect(() => {
+    if (!player) {
+      return (): void => undefined;
+    }
+
+    const id = setInterval(() => {
+      player.getCurrentState().then(setPlaybackState);
+    }, 500);
+
+    return (): void => clearInterval(id);
+  }, [player]);
 
   useEffect(() => {
     if (player) {

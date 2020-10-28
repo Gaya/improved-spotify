@@ -10,7 +10,7 @@ declare global {
   }
 
   interface QueryStringData {
-    [key: string]: string | number | boolean;
+    [key: string]: string | number | boolean | undefined;
   }
 
   interface PostData {

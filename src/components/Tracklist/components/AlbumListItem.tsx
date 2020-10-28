@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import classNames from 'classnames';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -12,6 +12,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { addToQueue, getAlbumTracks, playerPlay } from '../../../utils/externalData';
+
+import PlayerContext from '../../Player/context';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -74,6 +76,8 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
   const [isQueuing, setIsQueuing] = useState(false);
   const [queueTooltip, setQueueTooltip] = useState(false);
 
+  const { playback } = useContext(PlayerContext);
+
   const showQueueTooltip = (): void => {
     setQueueTooltip(true);
     setTimeout(() => setQueueTooltip(false), 3000);
@@ -91,15 +95,10 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
     // eslint-disable-next-line @typescript-eslint/camelcase
     getAlbumTracks(album.id)
       .then((tracks) => {
-        const [firstTrack, ...otherTracks] = tracks;
-
-        playerPlay({ uris: [firstTrack.uri] })
-          .then(() => queueTracks(otherTracks));
-      })
-      .then(() => {
         setIsPlaying(false);
+        return playerPlay({ uris: tracks.map((t) => t.uri) }, playback?.device_id);
       });
-  }, [album.id, isPlaying]);
+  }, [album.id, isPlaying, playback]);
 
   const addAlbumToQueue = useCallback(() => {
     if (isQueuing) {
@@ -133,7 +132,7 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
           >
             <Button
               size="large"
-              startIcon={isQueuing ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
+              startIcon={isPlaying ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
               onClick={playAlbum}
             >
               Play Now

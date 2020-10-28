@@ -44,6 +44,7 @@ declare global {
     };
     paused: boolean;
     position: number;
+    duration: number;
     repeat_mode: 0 | 1 | 2;
     shuffle: boolean;
     track_window: {
