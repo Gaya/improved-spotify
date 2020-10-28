@@ -1,17 +1,19 @@
 import React, { createContext, useCallback, useState } from 'react';
 
-import { wipeAuthStorage, hasToken } from './utils';
+import { wipeAuthStorage, hasToken, getValidToken as resolveValidToken } from './utils';
 
 interface AuthContextValues {
   isLoggedIn: boolean;
-  setLoggedIn: (isLoggedIn: boolean) => void;
-  logOut: () => void;
+  setLoggedIn(isLoggedIn: boolean): void;
+  logOut(): void;
+  getValidToken(): Promise<AuthToken>;
 }
 
 const AuthContext = createContext<AuthContextValues>({
   isLoggedIn: hasToken(),
   setLoggedIn: () => undefined,
   logOut: () => undefined,
+  getValidToken: () => resolveValidToken(),
 });
 
 export const AuthProvider: React.FC = ({ children }) => {
@@ -21,11 +23,13 @@ export const AuthProvider: React.FC = ({ children }) => {
     wipeAuthStorage();
     setIsLoggedIn(false);
   }, []);
+  const getValidToken = useCallback(() => resolveValidToken(), []);
 
   const value = {
     isLoggedIn,
     setLoggedIn,
     logOut,
+    getValidToken,
   };
 
   return (

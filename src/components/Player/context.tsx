@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 
 import { log } from '../../utils/logging';
-import { getValidToken } from '../Auth/utils';
 import AuthContext from '../Auth/context';
 
 interface PlayerContextValues {
@@ -18,7 +17,7 @@ interface PlayerContextValues {
 const PlayerContext = createContext<PlayerContextValues>({});
 
 export const PlayerProvider: React.FC = ({ children }) => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, getValidToken } = useContext(AuthContext);
 
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
@@ -31,6 +30,10 @@ export const PlayerProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
+    if (player) {
+      return;
+    }
+
     log('Loading Spotify Player');
 
     // add script to body
@@ -54,23 +57,23 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
       setPlayer(spotifyPlayer);
     };
-  }, []);
+  }, [getValidToken, player]);
 
   useEffect(() => {
+    // connect player when logged in and not connected yet
     if (player && isLoggedIn && !playback) {
       player.connect().then((success) => {
         log(success ? 'Spotify Player connected' : 'Spotify Player failed to connect');
       });
     }
 
+    // disconnect player when user logs out
     if (player && !isLoggedIn && playback) {
       player.disconnect();
       setPlayback(undefined);
       log('Spotify Player disconnected');
     }
   }, [isLoggedIn, playback, player]);
-
-  log({ player, playback, playbackState });
 
   return (
     <PlayerContext.Provider value={value}>
