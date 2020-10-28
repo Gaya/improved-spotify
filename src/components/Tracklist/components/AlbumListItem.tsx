@@ -11,7 +11,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { addToQueue, getAlbumTracks, playerPlay } from '../../../utils/externalData';
+import { addToQueue, getAlbumTracks } from '../../../utils/externalData';
 
 import PlayerContext from '../../Player/context';
 
@@ -54,6 +54,7 @@ interface AlbumListItemProps {
   album: SpotifyAlbum;
   style?: React.CSSProperties;
 }
+
 function queueTracks(tracks: SpotifyTrackInfo[]): Promise<Response[]> {
   return promiseSerial(tracks.map((track) => addToQueue(track.uri)));
 }
@@ -76,7 +77,8 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
   const [isQueuing, setIsQueuing] = useState(false);
   const [queueTooltip, setQueueTooltip] = useState(false);
 
-  const { playback } = useContext(PlayerContext);
+  const { actions } = useContext(PlayerContext);
+  const { playAlbum } = actions;
 
   const showQueueTooltip = (): void => {
     setQueueTooltip(true);
@@ -85,20 +87,18 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
 
   const artistsText = album.artists.map((a) => a.name).join(', ');
 
-  const playAlbum = useCallback(() => {
+  const onPlayAlbum = useCallback(() => {
     if (isPlaying) {
       return;
     }
 
     setIsPlaying(true);
 
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    getAlbumTracks(album.id)
-      .then((tracks) => {
+    playAlbum(album.id)
+      .then(() => {
         setIsPlaying(false);
-        return playerPlay({ uris: tracks.map((t) => t.uri) }, playback?.device_id);
       });
-  }, [album.id, isPlaying, playback]);
+  }, [album.id, isPlaying, playAlbum]);
 
   const addAlbumToQueue = useCallback(() => {
     if (isQueuing) {
@@ -132,8 +132,10 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
           >
             <Button
               size="large"
-              startIcon={isPlaying ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
-              onClick={playAlbum}
+              startIcon={isPlaying
+                ? <CircularProgress size={16} color="inherit" />
+                : <PlayArrowIcon />}
+              onClick={onPlayAlbum}
             >
               Play Now
             </Button>
@@ -146,7 +148,9 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
             >
               <Button
                 size="large"
-                startIcon={isQueuing ? <CircularProgress size={16} color="inherit" /> : <QueueMusicIcon />}
+                startIcon={isQueuing
+                  ? <CircularProgress size={16} color="inherit" />
+                  : <QueueMusicIcon />}
                 onClick={addAlbumToQueue}
               >
                 Add to Queue

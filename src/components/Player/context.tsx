@@ -6,7 +6,9 @@ import React, {
   useState,
 } from 'react';
 
+import { getAlbumTracks, playerPlay } from '../../utils/externalData';
 import { log } from '../../utils/logging';
+
 import AuthContext from '../Auth/context';
 
 interface PlayerContextValues {
@@ -18,6 +20,7 @@ interface PlayerContextValues {
     previous(): void;
     resume(): void;
     pause(): void;
+    playAlbum(id: string): Promise<void>;
   };
 }
 
@@ -33,6 +36,9 @@ const defaultActions = {
   },
   pause(): void {
     return undefined;
+  },
+  playAlbum(): Promise<void> {
+    return Promise.resolve();
   },
 };
 
@@ -67,8 +73,15 @@ export const PlayerProvider: React.FC = ({ children }) => {
         log('Pause track');
         player.pause();
       },
+      playAlbum(id: string): Promise<void> {
+        log(`Playing album ${id}`);
+
+        return getAlbumTracks(id)
+          .then((tracks) => playerPlay({ uris: tracks.map((t) => t.uri) }, playback?.device_id))
+          .then();
+      },
     };
-  }, [player]);
+  }, [playback, player]);
 
   const value = useMemo(() => ({
     player,
