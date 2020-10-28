@@ -73,7 +73,7 @@ declare global {
 
     removeListener(name: string, callback: Function);
 
-    getCurrentState(): Promise<WebPlaybackState>;
+    getCurrentState(): Promise<WebPlaybackState | null>;
 
     /**
      * Rename the Spotify Player device. This is visible across all Spotify Connect devices.

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-import { getAlbumTracks, playerPlay } from '../../utils/externalData';
+import { addToQueue, getAlbumTracks, playerPlay } from '../../utils/externalData';
 import { log } from '../../utils/logging';
 
 import AuthContext from '../Auth/context';
@@ -21,6 +21,7 @@ interface PlayerContextValues {
     resume(): void;
     pause(): void;
     playAlbum(id: string): Promise<void>;
+    queueAlbum(id: string): Promise<void>;
   };
 }
 
@@ -40,7 +41,34 @@ const defaultActions = {
   playAlbum(): Promise<void> {
     return Promise.resolve();
   },
+  queueAlbum(): Promise<void> {
+    return Promise.resolve();
+  },
 };
+
+function waitForTrack(player: SpotifyWebPlayer, track: string): Promise<void> {
+  return player.getCurrentState()
+    .then((state) => {
+      if (state && state.track_window.next_tracks.find((t) => t.uri === track)) {
+        log('Track was queued');
+        return undefined;
+      }
+
+      return waitForTrack(player, track);
+    });
+}
+
+function queueTracks(tracks: SpotifyTrackInfo[], player: SpotifyWebPlayer): Promise<void> {
+  if (tracks.length === 0) {
+    return Promise.resolve();
+  }
+
+  const [firstTrack, ...otherTracks] = tracks;
+
+  return addToQueue(firstTrack.uri)
+    .then(() => waitForTrack(player, firstTrack.uri))
+    .then(() => queueTracks(otherTracks, player));
+}
 
 const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActions });
 
@@ -78,6 +106,13 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
         return getAlbumTracks(id)
           .then((tracks) => playerPlay({ uris: tracks.map((t) => t.uri) }, playback?.device_id))
+          .then();
+      },
+      queueAlbum(id: string): Promise<void> {
+        log(`Queueing album ${id}`);
+
+        return getAlbumTracks(id)
+          .then((tracks) => queueTracks(tracks, player))
           .then();
       },
     };
