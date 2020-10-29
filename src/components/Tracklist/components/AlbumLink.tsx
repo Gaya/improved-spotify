@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import React from 'react';
 
 interface AlbumLinkProps {
   album: SpotifyAlbum;
 }
 
-const AlbumLink: FC<AlbumLinkProps> = ({ album }) => <>{album.name}</>;
+const AlbumLink: React.FC<AlbumLinkProps> = ({ album }) => <>{album.name}</>;
 
 export default AlbumLink;

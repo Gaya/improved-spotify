@@ -1,5 +1,4 @@
-import {
-  FC,
+import React, {
   createContext,
   useEffect,
   useState,
@@ -14,7 +13,7 @@ import { playlistSnapshots } from '../state/atoms';
 
 const DatabaseContext = createContext<SrIndexedDB | undefined>(undefined);
 
-export const DatabaseProvider: FC = ({ children }) => {
+export const DatabaseProvider: React.FC = ({ children }) => {
   const [isdb, setDb] = useState<SrIndexedDB>();
   const setSnapshots = useSetRecoilState(playlistSnapshots);
 

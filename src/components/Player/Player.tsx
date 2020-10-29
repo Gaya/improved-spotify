@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Player: FC = () => {
+const Player: React.FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const { playbackState, actions } = useContext(PlayerContext);

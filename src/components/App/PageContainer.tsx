@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -20,7 +20,7 @@ interface PageContainerProps {
   topPadding?: boolean;
 }
 
-const PageContainer: FC<PageContainerProps> = ({ children, topPadding = false }) => {
+const PageContainer: React.FC<PageContainerProps> = ({ children, topPadding = false }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 

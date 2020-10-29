@@ -1,5 +1,4 @@
-import {
-  FC,
+import React, {
   useEffect,
   useRef,
   useState,
@@ -37,7 +36,7 @@ interface Dimensions {
   width: number;
 }
 
-const AlbumList: FC = () => {
+const AlbumList: React.FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);

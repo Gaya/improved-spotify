@@ -1,5 +1,4 @@
-import {
-  FC,
+import React, {
   createContext,
   useContext,
   useEffect,
@@ -73,7 +72,7 @@ function queueTracks(tracks: SpotifyTrackInfo[], player: SpotifyWebPlayer): Prom
 
 const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActions });
 
-export const PlayerProvider: FC = ({ children }) => {
+export const PlayerProvider: React.FC = ({ children }) => {
   const { isLoggedIn, getValidToken } = useContext(AuthContext);
 
   const [player, setPlayer] = useState<SpotifyWebPlayer>();

@@ -1,5 +1,4 @@
-import {
-  FC,
+import React, {
   useState,
   useRef,
   useEffect,
@@ -60,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PlaylistTrackList: FC = () => {
+const PlaylistTrackList: React.FC = () => {
   const tracks = useRecoilValue(sortedCurrentTracks);
 
   const theme = useTheme();

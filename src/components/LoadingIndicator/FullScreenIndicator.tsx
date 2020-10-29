@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import React from 'react';
 
 import CenteredContainer from '../CenteredContainer/CenteredContainer';
 
 import LoadingIndicator from './LoadingIndicator';
 
-const FullScreenIndicator: FC = () => (
+const FullScreenIndicator: React.FC = () => (
   <CenteredContainer fullScreen>
     <LoadingIndicator />
   </CenteredContainer>

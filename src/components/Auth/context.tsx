@@ -1,5 +1,4 @@
-import {
-  FC,
+import React, {
   createContext,
   useCallback,
   useState,
@@ -21,7 +20,7 @@ const AuthContext = createContext<AuthContextValues>({
   getValidToken: () => resolveValidToken(),
 });
 
-export const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: React.FC = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(hasToken());
   const setLoggedIn = useCallback((newValue: boolean) => setIsLoggedIn(newValue), []);
   const logOut = useCallback(() => {

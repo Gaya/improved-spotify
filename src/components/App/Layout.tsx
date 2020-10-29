@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 
 import Toolbar from '@material-ui/core/Toolbar';
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Layout: FC = ({ children }) => {
+const Layout: React.FC = ({ children }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 

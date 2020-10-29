@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -42,7 +42,7 @@ interface TrackListProps {
   showProgress: boolean;
 }
 
-const TrackList: FC<TrackListProps> = ({
+const TrackList: React.FC<TrackListProps> = ({
   showProgress,
   isResolved,
   progress,

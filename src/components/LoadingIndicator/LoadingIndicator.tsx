@@ -1,11 +1,11 @@
-import { FC } from 'react';
+import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface LoadingIndicatorProps {
   size?: string | number;
 }
 
-const LoadingIndicator: FC<LoadingIndicatorProps> = ({
+const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
   size = 40,
 }) => (<CircularProgress size={size} />);
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 26px;
 `;
 
-const CompactPlaylists: FC = () => {
+const CompactPlaylists: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const playlists = usePlaylists();
 

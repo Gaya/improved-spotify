@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
@@ -18,7 +18,7 @@ import CenteredContainer from '../../CenteredContainer/CenteredContainer';
 
 import './Auth.css';
 
-const Auth: FC = () => {
+const Auth: React.FC = () => {
   const { setLoggedIn, logOut } = useContext(AuthContext);
   const history = useHistory();
   const searchParams = new URLSearchParams(window.location.search);

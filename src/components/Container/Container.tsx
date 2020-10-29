@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -18,7 +18,7 @@ interface ContainerProps {
   className?: string;
 }
 
-const Container: FC<ContainerProps> = ({ className, children }) => {
+const Container: React.FC<ContainerProps> = ({ className, children }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 
