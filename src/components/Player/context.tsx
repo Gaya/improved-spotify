@@ -131,7 +131,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
     }
 
     const id = setInterval(() => {
-      player.getCurrentState().then(setPlaybackState);
+      player.getCurrentState().then((state) => setPlaybackState(state || undefined));
     }, 500);
 
     return (): void => clearInterval(id);
