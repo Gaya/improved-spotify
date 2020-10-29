@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { RecoilRoot } from 'recoil';
 
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
@@ -17,7 +17,7 @@ import Routes from './Routes';
 
 import './App.css';
 
-const App: React.FC = () => {
+const App: FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const theme = useMemo(

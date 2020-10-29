@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MUIAvatar from '@material-ui/core/Avatar';
@@ -14,7 +14,7 @@ interface AvatarProps {
   user?: SpotifyUser;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ user }) => {
+const Avatar: FC<AvatarProps> = ({ user }) => {
   const styles = useStyles();
 
   return (

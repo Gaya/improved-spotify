@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import Button from '@material-ui/core/Button';
 
@@ -7,7 +7,7 @@ import useAuthStrings from '../hooks/useAuthStrings';
 
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator';
 
-const AuthButton: React.FC = () => {
+const AuthButton: FC = () => {
   const { codeChallenge, state, isLoading } = useAuthStrings();
 
   if (isLoading) {

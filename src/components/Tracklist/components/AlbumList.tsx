@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
 import { useRecoilValue } from 'recoil';
 
@@ -32,7 +32,7 @@ interface Dimensions {
   width: number;
 }
 
-const AlbumList: React.FC = () => {
+const AlbumList: FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const containerRef = useRef<HTMLDivElement>(null);

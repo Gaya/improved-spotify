@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Browse: React.FC = () => {
+const Browse: FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
 

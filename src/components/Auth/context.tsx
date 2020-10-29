@@ -1,4 +1,9 @@
-import React, { createContext, useCallback, useState } from 'react';
+import {
+  FC,
+  createContext,
+  useCallback,
+  useState,
+} from 'react';
 
 import { wipeAuthStorage, hasToken, getValidToken as resolveValidToken } from './utils';
 
@@ -16,7 +21,7 @@ const AuthContext = createContext<AuthContextValues>({
   getValidToken: () => resolveValidToken(),
 });
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: FC = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(hasToken());
   const setLoggedIn = useCallback((newValue: boolean) => setIsLoggedIn(newValue), []);
   const logOut = useCallback(() => {

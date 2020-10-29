@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { useRecoilValue } from 'recoil';
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PlaylistTrackList: React.FC = () => {
+const PlaylistTrackList: FC = () => {
   const tracks = useRecoilValue(sortedCurrentTracks);
 
   const theme = useTheme();
