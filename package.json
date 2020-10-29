@@ -52,6 +52,7 @@
         "rules": {
           "no-useless-constructor": "off",
           "no-debugger": "warn",
+          "no-shadow": "off",
           "react/react-in-jsx-scope": "off",
           "react/prop-types": "off",
           "react/jsx-filename-extension": [

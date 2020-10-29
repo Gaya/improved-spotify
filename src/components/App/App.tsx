@@ -1,5 +1,6 @@
 import { FC, useMemo } from 'react';
 import { RecoilRoot } from 'recoil';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -50,20 +51,22 @@ const App: FC = () => {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <PlayerProvider>
-          <RecoilRoot>
-            <DatabaseProvider>
-              <div className="App">
-                <Routes />
-              </div>
-            </DatabaseProvider>
-          </RecoilRoot>
-        </PlayerProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          <PlayerProvider>
+            <RecoilRoot>
+              <DatabaseProvider>
+                <div className="App">
+                  <Routes />
+                </div>
+              </DatabaseProvider>
+            </RecoilRoot>
+          </PlayerProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </Router>
   );
 };
 

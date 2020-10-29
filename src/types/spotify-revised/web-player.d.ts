@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 interface WebPlayerTrack {
   uri: string;
   id: string | null;
@@ -31,7 +33,7 @@ declare global {
   interface WebPlaybackState {
     context: {
       uri: string | null;
-      metadata: {} | null;
+      metadata: unknown | null;
     };
     disallows: {
       pausing: boolean;
@@ -71,7 +73,7 @@ declare global {
 
     removeListener(name: string);
 
-    removeListener(name: string, callback: Function);
+    removeListener(name: string, callback: typeof Function);
 
     getCurrentState(): Promise<WebPlaybackState | null>;
 
@@ -107,7 +109,7 @@ declare global {
      * @param name
      * @param callback
      */
-    addListener(name: string, callback: Function): boolean;
+    addListener(name: string, callback: typeof Function): boolean;
 
     addListener(name: 'ready', callback: (player: WebPlaybackPlayer) => void);
 

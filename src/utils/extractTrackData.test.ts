@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 
 import tracksData from './extractTrackData.test.mocks';
 import extractTrackData from './extractTrackData';

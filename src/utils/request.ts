@@ -1,5 +1,17 @@
 import { ContentType } from '../enums';
 
+export function dataToQueryString(data: QueryStringData, baseUrl = ''): string {
+  const searchParams = new URLSearchParams(baseUrl);
+
+  Object.keys(data).sort().forEach((key: string) => {
+    if (typeof data[key] !== 'undefined') {
+      searchParams.set(key, (data[key] || '').toString());
+    }
+  });
+
+  return searchParams.toString();
+}
+
 export function urlWithQueryString(url: string, data?: QueryStringData): string {
   if (!data || Object.keys(data).length === 0) {
     return url;
@@ -13,18 +25,6 @@ export function urlWithQueryString(url: string, data?: QueryStringData): string 
     '?',
     dataToQueryString(data, parsed.search),
   ].join('');
-}
-
-export function dataToQueryString(data: QueryStringData, baseUrl = ''): string {
-  const searchParams = new URLSearchParams(baseUrl);
-
-  Object.keys(data).sort().forEach((key: string) => {
-    if (typeof data[key] !== 'undefined') {
-      searchParams.set(key, (data[key] || '').toString());
-    }
-  });
-
-  return searchParams.toString();
 }
 
 function bodyForContentType(data: PostData, contentType: ContentType): string | URLSearchParams {

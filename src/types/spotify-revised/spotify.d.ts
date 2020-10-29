@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 declare global {
   interface SpotifyImage {
     height: number | null;

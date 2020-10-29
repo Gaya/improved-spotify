@@ -46,11 +46,12 @@ export function playerPrevious(): Promise<Response> {
 }
 
 export function playerPlay(
+  // eslint-disable-next-line camelcase
   options?: { context_uri?: string; uris?: string[] },
   deviceId?: string,
 ): Promise<Response> {
   return putWithoutParsing(
-    // eslint-disable-next-line @typescript-eslint/camelcase
+    // eslint-disable-next-line camelcase
     urlWithQueryString(SPOTIFY_PLAYER_PLAY_URI, { device_id: deviceId }),
     options,
   );
