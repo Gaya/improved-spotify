@@ -10,10 +10,10 @@ export const SPOTIFY_ME_URI = `${SPOTIFY_API_URI}/v1/me`;
 export const SPOTIFY_PLAYLISTS_URI = `${SPOTIFY_ME_URI}/playlists`;
 export const SPOTIFY_PLAYLIST_TRACKS = `${SPOTIFY_API_URI}/v1/playlists/{id}/tracks`;
 export const SPOTIFY_PLAYER_URI = `${SPOTIFY_ME_URI}/player`;
-export const SPOTIFY_PLAYER_PAUSE_URI = `${SPOTIFY_ME_URI}/player/pause`;
-export const SPOTIFY_PLAYER_PLAY_URI = `${SPOTIFY_ME_URI}/player/play`;
-export const SPOTIFY_PLAYER_NEXT_URI = `${SPOTIFY_ME_URI}/player/next`;
-export const SPOTIFY_PLAYER_PREVIOUS_URI = `${SPOTIFY_ME_URI}/player/previous`;
+export const SPOTIFY_PLAYER_PAUSE_URI = `${SPOTIFY_PLAYER_URI}/pause`;
+export const SPOTIFY_PLAYER_PLAY_URI = `${SPOTIFY_PLAYER_URI}/play`;
+export const SPOTIFY_PLAYER_NEXT_URI = `${SPOTIFY_PLAYER_URI}/next`;
+export const SPOTIFY_PLAYER_PREVIOUS_URI = `${SPOTIFY_PLAYER_URI}/previous`;
 export const SPOTIFY_PLAYER_QUEUE_URI = `${SPOTIFY_PLAYER_URI}/queue`;
 export const SPOTIFY_ALBUM_TRACKS = `${SPOTIFY_API_URI}/v1/albums/{id}/tracks`;
 

@@ -6,7 +6,12 @@ import React, {
   useState,
 } from 'react';
 
-import { addToQueue, getAlbumTracks, playerPlay } from '../../utils/externalData';
+import {
+  addToQueue,
+  getAlbumTracks,
+  playerPlay,
+  transferPlayback,
+} from '../../utils/externalData';
 import { log } from '../../utils/logging';
 
 import AuthContext from '../Auth/context';
@@ -54,20 +59,33 @@ function waitForTrack(player: SpotifyWebPlayer, track: string): Promise<void> {
         return undefined;
       }
 
-      return waitForTrack(player, track);
+      return new Promise((resolve) => setTimeout(resolve, 100))
+        .then(() => waitForTrack(player, track));
     });
 }
 
-function queueTracks(tracks: SpotifyTrackInfo[], player: SpotifyWebPlayer): Promise<void> {
+function queueTracks(
+  tracks: SpotifyTrackInfo[],
+  player: SpotifyWebPlayer,
+  playback: WebPlaybackPlayer,
+): Promise<void> {
   if (tracks.length === 0) {
     return Promise.resolve();
   }
 
   const [firstTrack, ...otherTracks] = tracks;
 
-  return addToQueue(firstTrack.uri)
+  return player.getCurrentState()
+    .then((state) => {
+      if (!state) {
+        log('Transferring playback');
+        return transferPlayback(playback.device_id);
+      }
+
+      return undefined;
+    }).then(() => addToQueue(firstTrack.uri, playback.device_id))
     .then(() => waitForTrack(player, firstTrack.uri))
-    .then(() => queueTracks(otherTracks, player));
+    .then(() => queueTracks(otherTracks, player, playback));
 }
 
 const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActions });
@@ -80,7 +98,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
   const [playbackState, setPlaybackState] = useState<WebPlaybackState>();
 
   const actions = useMemo(() => {
-    if (!player) {
+    if (!player || !playback) {
       return defaultActions;
     }
 
@@ -105,14 +123,14 @@ export const PlayerProvider: React.FC = ({ children }) => {
         log(`Playing album ${id}`);
 
         return getAlbumTracks(id)
-          .then((tracks) => playerPlay({ uris: tracks.map((t) => t.uri) }, playback?.device_id))
+          .then((tracks) => playerPlay({ uris: tracks.map((t) => t.uri) }, playback.device_id))
           .then();
       },
       queueAlbum(id: string): Promise<void> {
         log(`Queueing album ${id}`);
 
         return getAlbumTracks(id)
-          .then((tracks) => queueTracks(tracks, player))
+          .then((tracks) => queueTracks(tracks, player, playback))
           .then();
       },
     };

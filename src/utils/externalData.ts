@@ -1,11 +1,9 @@
 import {
   SPOTIFY_ALBUM_TRACKS,
   SPOTIFY_ME_URI,
-  SPOTIFY_PLAYER_NEXT_URI,
-  SPOTIFY_PLAYER_PAUSE_URI,
   SPOTIFY_PLAYER_PLAY_URI,
-  SPOTIFY_PLAYER_PREVIOUS_URI,
   SPOTIFY_PLAYER_QUEUE_URI,
+  SPOTIFY_PLAYER_URI,
   SPOTIFY_PLAYLISTS_URI,
 } from '../consts';
 
@@ -29,20 +27,14 @@ export function getPlaylistTracks(uri: string): Promise<PagedResponse<SpotifyPla
   return get<PagedResponse<SpotifyPlaylistTrack>>(uri);
 }
 
-export function addToQueue(uri: string): Promise<Response> {
-  return postWithoutParsing(`${SPOTIFY_PLAYER_QUEUE_URI}?uri=${uri}`);
+export function addToQueue(uri: string, deviceId?: string): Promise<Response> {
+  return postWithoutParsing(
+    urlWithQueryString(SPOTIFY_PLAYER_QUEUE_URI, { uri, device_id: deviceId }),
+  );
 }
 
 export function getAlbumTracks(id: string): Promise<SpotifyTrackInfo[]> {
   return getPaged<SpotifyTrackInfo>(SPOTIFY_ALBUM_TRACKS.replace('{id}', id));
-}
-
-export function playerNext(): Promise<Response> {
-  return postWithoutParsing(SPOTIFY_PLAYER_NEXT_URI);
-}
-
-export function playerPrevious(): Promise<Response> {
-  return postWithoutParsing(SPOTIFY_PLAYER_PREVIOUS_URI);
 }
 
 export function playerPlay(
@@ -51,12 +43,11 @@ export function playerPlay(
   deviceId?: string,
 ): Promise<Response> {
   return putWithoutParsing(
-    // eslint-disable-next-line camelcase
     urlWithQueryString(SPOTIFY_PLAYER_PLAY_URI, { device_id: deviceId }),
     options,
   );
 }
 
-export function playerPause(): Promise<Response> {
-  return putWithoutParsing(SPOTIFY_PLAYER_PAUSE_URI);
+export function transferPlayback(deviceId: string): Promise<Response> {
+  return putWithoutParsing(SPOTIFY_PLAYER_URI, { device_ids: [deviceId], play: true });
 }
