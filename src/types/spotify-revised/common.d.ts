@@ -35,6 +35,12 @@ declare global {
     id: string;
     playlistId: string;
   }
+
+  interface SongQueue {
+    next: SpotifyTrackInfo[];
+    previous: SpotifyTrackInfo[];
+    current: SpotifyTrackInfo | null;
+  }
 }
 
 export {};

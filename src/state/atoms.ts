@@ -32,3 +32,12 @@ export const currentPlaylistTracks = atom<StoredSpotifyPlaylistTrack[]>({
   key: 'CurrentPlaylistTracks',
   default: [],
 });
+
+export const queue = atom<SongQueue>({
+  key: 'SongQueue',
+  default: {
+    next: [],
+    previous: [],
+    current: null,
+  },
+});
