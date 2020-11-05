@@ -5,9 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.1",
+    "@testing-library/user-event": "^12.2.0",
     "@types/classnames": "^2.2.11",
     "@types/crypto-js": "^4.0.1",
     "@types/jest": "^26.0.15",
@@ -23,9 +23,9 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
-    "react-window": "^1.8.5",
-    "recoil": "0.0.13",
-    "styled-components": "^5.2.0",
+    "react-window": "^1.8.6",
+    "recoil": "0.1.2",
+    "styled-components": "^5.2.1",
     "typescript": "^4.0.5"
   },
   "scripts": {
@@ -112,6 +112,6 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.0.0"
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
