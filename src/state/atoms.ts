@@ -38,7 +38,6 @@ export const queue = atom<SongQueue>({
   default: {
     next: [],
     previous: [],
-    current: null,
   },
 });
 
