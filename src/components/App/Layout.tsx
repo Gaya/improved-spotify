@@ -11,7 +11,7 @@ import { queueOpened } from '../../state/atoms';
 import UserMenu from '../User/UserMenu';
 import CompactPlaylists from '../Playlists/components/CompactPlaylists';
 import Player from '../Player/Player';
-import QueueToggle from '../Queue/QueueToggle';
+import QueueToggle from '../Queue/components/QueueToggle';
 import { QUEUE_WIDTH } from '../Queue/consts';
 
 const useStyles = makeStyles((theme) => ({

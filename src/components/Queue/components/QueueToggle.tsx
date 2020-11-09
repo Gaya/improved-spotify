@@ -6,14 +6,18 @@ import Drawer from '@material-ui/core/Drawer';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-import { queueOpened } from '../../state/atoms';
+import { queueOpened } from '../../../state/atoms';
 
-import { QUEUE_WIDTH } from './consts';
-import fireOnResize from './fireOnResize';
+import { QUEUE_WIDTH } from '../consts';
+import fireOnResize from '../fireOnResize';
+
+import Queue from './Queue';
 
 const useStyles = makeStyles({
   drawerContent: {
     width: QUEUE_WIDTH,
+    flexGrow: 1,
+    display: 'flex',
   },
 });
 
@@ -49,7 +53,7 @@ const QueueToggle: React.FC = () => {
         transitionDuration={300}
       >
         <div className={styles.drawerContent}>
-          Queue contents
+          <Queue />
         </div>
       </Drawer>
     </>
