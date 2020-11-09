@@ -43,7 +43,7 @@ const UserMenu: React.FC = () => {
 
   return (
     <>
-      <IconButtonNoPadding aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButtonNoPadding aria-controls="user-menu" aria-haspopup="true" onClick={handleClick}>
         <Avatar user={user.state === 'hasValue' ? user.contents : undefined} />
       </IconButtonNoPadding>
       {user.state === 'hasValue' && (

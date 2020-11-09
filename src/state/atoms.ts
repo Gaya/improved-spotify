@@ -41,3 +41,8 @@ export const queue = atom<SongQueue>({
     current: null,
   },
 });
+
+export const queueOpened = atom<boolean>({
+  key: 'QueueOpened',
+  default: false,
+});
