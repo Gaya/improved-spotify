@@ -174,7 +174,13 @@ export const PlayerProvider: React.FC = ({ children }) => {
       const spotifyPlayer = new window.Spotify.Player({
         name: 'Spotify Revised',
         getOAuthToken: (resolve): void => {
-          getValidToken().then((token) => resolve(token.access_token));
+          getValidToken().then((token) => {
+            if (!token) {
+              throw new Error('Couldn\'t resolve token.');
+            }
+
+            resolve(token.access_token);
+          });
         },
       });
 

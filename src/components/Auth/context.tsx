@@ -10,7 +10,7 @@ interface AuthContextValues {
   isLoggedIn: boolean;
   setLoggedIn(isLoggedIn: boolean): void;
   logOut(): void;
-  getValidToken(): Promise<AuthToken>;
+  getValidToken(): Promise<AuthToken | void>;
 }
 
 const AuthContext = createContext<AuthContextValues>({
@@ -27,7 +27,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     wipeAuthStorage();
     setIsLoggedIn(false);
   }, []);
-  const getValidToken = useCallback(() => resolveValidToken(), []);
+  const getValidToken = useCallback(() => resolveValidToken().catch(() => logOut()), [logOut]);
 
   const value = {
     isLoggedIn,
