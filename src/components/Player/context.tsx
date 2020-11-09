@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { useRecoilState } from 'recoil';
 
 import {
   addToQueue,
@@ -13,6 +14,7 @@ import {
   transferPlayback,
 } from '../../utils/externalData';
 import { log } from '../../utils/logging';
+import { songQueue } from '../../state/atoms';
 
 import AuthContext from '../Auth/context';
 
@@ -92,6 +94,7 @@ const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActio
 
 export const PlayerProvider: React.FC = ({ children }) => {
   const { isLoggedIn, getValidToken } = useContext(AuthContext);
+  const [queue, setQueue] = useRecoilState(songQueue);
 
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
@@ -123,18 +126,16 @@ export const PlayerProvider: React.FC = ({ children }) => {
         log(`Playing album ${id}`);
 
         return getAlbumTracks(id)
-          .then((tracks) => playerPlay({ uris: tracks.map((t) => t.uri) }, playback.device_id))
-          .then();
+          .then((tracks) => setQueue({ ...queue, next: tracks }));
       },
       queueAlbum(id: string): Promise<void> {
         log(`Queueing album ${id}`);
 
         return getAlbumTracks(id)
-          .then((tracks) => queueTracks(tracks, player, playback))
-          .then();
+          .then((tracks) => setQueue({ ...queue, next: [...queue.next, ...tracks] }));
       },
     };
-  }, [playback, player]);
+  }, [playback, player, queue, setQueue]);
 
   const value = useMemo(() => ({
     player,

@@ -3,6 +3,8 @@ import { atom } from 'recoil';
 import { getStoredPlaylistView } from '../components/Playlists/utils';
 import { PlaylistView } from '../enums';
 
+import { defaultQueue } from './data';
+
 export const playlistSnapshots = atom<PlaylistSnapshots>({
   key: 'PlaylistSnapshots',
   default: {},
@@ -33,15 +35,15 @@ export const currentPlaylistTracks = atom<StoredSpotifyPlaylistTrack[]>({
   default: [],
 });
 
-export const queue = atom<SongQueue>({
+export const songQueue = atom<SongQueue>({
   key: 'SongQueue',
   default: {
-    next: [],
+    next: defaultQueue,
     previous: [],
   },
 });
 
 export const queueOpened = atom<boolean>({
   key: 'QueueOpened',
-  default: false,
+  default: true,
 });

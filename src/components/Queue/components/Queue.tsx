@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-import { queue } from '../../../state/atoms';
+import { songQueue } from '../../../state/atoms';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,9 +32,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Queue: React.FC = () => {
-  const queueContents = useRecoilValue(queue);
+  const queue = useRecoilValue(songQueue);
   const theme = useTheme();
   const styles = useStyles(theme);
+
+  console.log(queue.next);
 
   return (
     <div className={styles.container}>
@@ -46,7 +48,7 @@ const Queue: React.FC = () => {
           History
         </Button>
       </section>
-      {queueContents.next.length === 0 && <div className={styles.empty}>No upcoming songs.</div>}
+      {queue.next.length === 0 && <div className={styles.empty}>No upcoming songs.</div>}
     </div>
   );
 };

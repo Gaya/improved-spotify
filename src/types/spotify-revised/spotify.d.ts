@@ -92,6 +92,25 @@ declare global {
     uri: string;
   }
 
+  interface SpotifyAlbumTrack {
+    artists: SpotifyArtist[];
+    available_markets: string[];
+    disc_number: number;
+    duration_ms: number;
+    explicit: boolean;
+    external_urls: {
+      [name: string]: string;
+    };
+    href: string;
+    id: string;
+    is_local: boolean;
+    name: string;
+    preview_url: string | null;
+    track_number: number;
+    type: string;
+    uri: string;
+  }
+
   interface SpotifyPlaylistTrack {
     added_at: string;
     added_by: {

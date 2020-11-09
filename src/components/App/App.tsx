@@ -54,17 +54,17 @@ const App: React.FC = () => {
     <Router>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AuthProvider>
-          <PlayerProvider>
-            <RecoilRoot>
+        <RecoilRoot>
+          <AuthProvider>
+            <PlayerProvider>
               <DatabaseProvider>
                 <div className="App">
                   <Routes />
                 </div>
               </DatabaseProvider>
-            </RecoilRoot>
-          </PlayerProvider>
-        </AuthProvider>
+            </PlayerProvider>
+          </AuthProvider>
+        </RecoilRoot>
       </ThemeProvider>
     </Router>
   );

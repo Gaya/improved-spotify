@@ -37,8 +37,8 @@ declare global {
   }
 
   interface SongQueue {
-    next: SpotifyTrackInfo[];
-    previous: SpotifyTrackInfo[];
+    next: SpotifyAlbumTrack[];
+    previous: SpotifyAlbumTrack[];
   }
 }
 
