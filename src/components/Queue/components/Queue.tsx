@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '1px solid',
     borderBottomColor: theme.palette.divider,
     paddingBottom: theme.spacing(1),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
     justifyContent: 'space-between',
   },
 }));
@@ -51,6 +51,7 @@ const Queue: React.FC = () => {
       <QueueList
         emptyText={view === QueueView.NEXT ? 'No upcoming songs.' : 'No previous songs.'}
         tracks={view === QueueView.NEXT ? queue.next : queue.previous}
+        onRemove={view === QueueView.NEXT ? (index?: number) => console.log('Remove queue', index) : undefined}
       />
     </div>
   );

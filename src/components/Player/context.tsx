@@ -13,7 +13,7 @@ import {
   playerPlay,
   transferPlayback,
 } from '../../utils/externalData';
-import { log } from '../../utils/logging';
+import { error, log } from '../../utils/logging';
 import { songQueue } from '../../state/atoms';
 
 import AuthContext from '../Auth/context';
@@ -177,7 +177,8 @@ export const PlayerProvider: React.FC = ({ children }) => {
         getOAuthToken: (resolve): void => {
           getValidToken().then((token) => {
             if (!token) {
-              throw new Error('Couldn\'t resolve token.');
+              error('Couldn\'t resolve token.');
+              return;
             }
 
             resolve(token.access_token);

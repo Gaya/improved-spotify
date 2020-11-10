@@ -22,7 +22,7 @@ export const defaultQueue: SpotifyAlbumTrack[] = [
     href: 'https://api.spotify.com/v1/tracks/4jfEVENvL5XS0FWmDAvRe3',
     id: '4jfEVENvL5XS0FWmDAvRe3',
     is_local: false,
-    name: 'Wake.Repeat (Intro)',
+    name: 'Wake.Repeat This is not real but a test (Intro)',
     preview_url: null,
     track_number: 1,
     type: 'track',
