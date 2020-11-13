@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useCallback, useState } from 'react';
+import { useRecoilState } from 'recoil';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -32,11 +32,15 @@ enum QueueView {
 
 const Queue: React.FC = () => {
   const [view, setView] = useState<QueueView>(QueueView.NEXT);
-  const queue = useRecoilValue(songQueue);
+  const [queue, setQueue] = useRecoilState(songQueue);
   const theme = useTheme();
   const styles = useStyles(theme);
 
   const toggleView = () => setView(view === QueueView.NEXT ? QueueView.PREVIOUS : QueueView.NEXT);
+  const onRemoveFromQueue = useCallback((index?: number) => {
+    const next = typeof index !== 'undefined' ? queue.next.filter((_, i) => i !== index) : [];
+    setQueue({ ...queue, next });
+  }, [queue, setQueue]);
 
   return (
     <div className={styles.container}>
@@ -51,7 +55,7 @@ const Queue: React.FC = () => {
       <QueueList
         emptyText={view === QueueView.NEXT ? 'No upcoming songs.' : 'No previous songs.'}
         tracks={view === QueueView.NEXT ? queue.next : queue.previous}
-        onRemove={view === QueueView.NEXT ? (index?: number) => console.log('Remove queue', index) : undefined}
+        onRemove={view === QueueView.NEXT ? onRemoveFromQueue : undefined}
       />
     </div>
   );
