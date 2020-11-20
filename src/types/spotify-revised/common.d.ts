@@ -40,6 +40,12 @@ declare global {
     next: SpotifyAlbumTrack[];
     previous: SpotifyAlbumTrack[];
   }
+
+  interface PlayerPlaybackState {
+    paused: boolean;
+    position: number;
+    current?: SpotifyAlbumTrack;
+  }
 }
 
 export {};
