@@ -7,12 +7,7 @@ import React, {
 } from 'react';
 import { useRecoilState } from 'recoil';
 
-import {
-  addToQueue,
-  getAlbumTracks,
-  playerPlay,
-  transferPlayback,
-} from '../../utils/externalData';
+import { getAlbumTracks } from '../../utils/externalData';
 import { error, log } from '../../utils/logging';
 import { songQueue } from '../../state/atoms';
 
@@ -20,7 +15,7 @@ import AuthContext from '../Auth/context';
 
 interface PlayerContextValues {
   player?: SpotifyWebPlayer;
-  playbackState?: WebPlaybackState;
+  playbackState?: PlayerPlaybackState;
   playback?: WebPlaybackPlayer;
   actions: {
     next(): void;
@@ -53,43 +48,6 @@ const defaultActions = {
   },
 };
 
-function waitForTrack(player: SpotifyWebPlayer, track: string): Promise<void> {
-  return player.getCurrentState()
-    .then((state) => {
-      if (state && state.track_window.next_tracks.find((t) => t.uri === track)) {
-        log('Track was queued');
-        return undefined;
-      }
-
-      return new Promise((resolve) => setTimeout(resolve, 100))
-        .then(() => waitForTrack(player, track));
-    });
-}
-
-function queueTracks(
-  tracks: SpotifyTrackInfo[],
-  player: SpotifyWebPlayer,
-  playback: WebPlaybackPlayer,
-): Promise<void> {
-  if (tracks.length === 0) {
-    return Promise.resolve();
-  }
-
-  const [firstTrack, ...otherTracks] = tracks;
-
-  return player.getCurrentState()
-    .then((state) => {
-      if (!state) {
-        log('Transferring playback');
-        return transferPlayback(playback.device_id);
-      }
-
-      return undefined;
-    }).then(() => addToQueue(firstTrack.uri, playback.device_id))
-    .then(() => waitForTrack(player, firstTrack.uri))
-    .then(() => queueTracks(otherTracks, player, playback));
-}
-
 const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActions });
 
 export const PlayerProvider: React.FC = ({ children }) => {
@@ -98,8 +56,11 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
-  const [playbackState, setPlaybackState] = useState<WebPlaybackState>();
+  const [playbackState, setPlaybackState] = useState<PlayerPlaybackState>();
 
+  /**
+   * Determine exposed actions
+   */
   const actions = useMemo(() => {
     if (!player || !playback) {
       return defaultActions;
@@ -137,6 +98,9 @@ export const PlayerProvider: React.FC = ({ children }) => {
     };
   }, [playback, player, queue, setQueue]);
 
+  /**
+   * Calculate and memoize context value
+   */
   const value = useMemo(() => ({
     player,
     playbackState,
@@ -144,18 +108,26 @@ export const PlayerProvider: React.FC = ({ children }) => {
     actions,
   }), [actions, playback, playbackState, player]);
 
+  /**
+   * Keep player in sync with Spotify
+   */
   useEffect(() => {
     if (!player) {
       return (): void => undefined;
     }
 
     const id = setInterval(() => {
-      player.getCurrentState().then((state) => setPlaybackState(state || undefined));
+      player.getCurrentState().then((state) => {
+        // @todo update playback state if changed on spotify
+      });
     }, 500);
 
     return (): void => clearInterval(id);
   }, [player]);
 
+  /**
+   * Load and initialize player
+   */
   useEffect(() => {
     if (player) {
       return;
