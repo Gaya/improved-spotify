@@ -76,9 +76,8 @@ const Player: React.FC = () => {
     resume,
   } = actions;
 
-  const isPlaying = !!(playbackState && !playbackState.paused);
-
-  const currentTrack = playbackState && playbackState.track_window.current_track;
+  const isPlaying = !playbackState.paused;
+  const currentTrack = playbackState.current;
 
   return (
     <div className={styles.player}>
@@ -101,7 +100,7 @@ const Player: React.FC = () => {
           <SkipNextIcon />
         </IconButton>
       </div>
-      {playbackState && currentTrack && (
+      {currentTrack && (
         <div className={styles.currentlyPlaying}>
           <div className={styles.songName}>
             <Typography>{currentTrack.name}</Typography>
@@ -116,10 +115,10 @@ const Player: React.FC = () => {
             <LinearProgress
               className={styles.progressBar}
               variant="determinate"
-              value={100 / (playbackState.duration / playbackState.position)}
+              value={100 / (currentTrack.duration_ms / playbackState.position)}
             />
             <Typography className={styles.progressEnd} variant="body2" color="textSecondary">
-              {formatDuration(playbackState.duration)}
+              {formatDuration(currentTrack.duration_ms)}
             </Typography>
           </div>
         </div>
