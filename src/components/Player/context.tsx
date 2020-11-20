@@ -1,13 +1,13 @@
 import React, {
-  createContext,
+  createContext, useCallback,
   useContext,
   useEffect,
-  useMemo,
+  useMemo, useRef,
   useState,
 } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { getAlbumTracks } from '../../utils/externalData';
+import { getAlbumTracks, playerPlay } from '../../utils/externalData';
 import { error, log } from '../../utils/logging';
 import { songQueue } from '../../state/atoms';
 
@@ -15,7 +15,7 @@ import AuthContext from '../Auth/context';
 
 interface PlayerContextValues {
   player?: SpotifyWebPlayer;
-  playbackState?: PlayerPlaybackState;
+  playbackState: PlayerPlaybackState;
   playback?: WebPlaybackPlayer;
   actions: {
     next(): void;
@@ -48,7 +48,12 @@ const defaultActions = {
   },
 };
 
-const PlayerContext = createContext<PlayerContextValues>({ actions: defaultActions });
+const defaultPlaybackState = { paused: true, position: 0 };
+
+const PlayerContext = createContext<PlayerContextValues>({
+  actions: defaultActions,
+  playbackState: defaultPlaybackState,
+});
 
 export const PlayerProvider: React.FC = ({ children }) => {
   const { isLoggedIn, getValidToken } = useContext(AuthContext);
@@ -56,7 +61,42 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
-  const [playbackState, setPlaybackState] = useState<PlayerPlaybackState>();
+  const [playbackState, setPlaybackState] = useState<PlayerPlaybackState>(defaultPlaybackState);
+  const [webPlaybackState, setWebPlaybackState] = useState<WebPlaybackState>();
+  const resumeTimeRef = useRef(0);
+
+  const play = useCallback((): void => {
+    if (!player || !playback) {
+      return;
+    }
+
+    resumeTimeRef.current = +new Date();
+
+    // no song is playing yet, so pick first from queue
+    if (!playbackState.current) {
+      const [song, ...next] = queue.next;
+
+      playerPlay({ context_uri: song.uri }, playback.device_id);
+
+      setQueue({ ...queue, next });
+      setPlaybackState({ paused: false, position: 0, current: song });
+      return;
+    }
+
+    player.resume();
+
+    setPlaybackState({ ...playbackState, paused: false });
+  }, [playback, playbackState, player, queue, setQueue]);
+
+  const pause = useCallback((): void => {
+    if (!player) {
+      return;
+    }
+
+    player.pause();
+
+    setPlaybackState({ ...playbackState, paused: true });
+  }, [playbackState, player]);
 
   /**
    * Determine exposed actions
@@ -69,25 +109,26 @@ export const PlayerProvider: React.FC = ({ children }) => {
     return {
       next(): void {
         log('Skip track');
-        player.nextTrack();
+        // player.nextTrack();
       },
       previous(): void {
         log('Go to previous track');
-        player.previousTrack();
+        // player.previousTrack();
       },
       resume(): void {
         log('Play track');
-        player.resume();
+        play();
       },
       pause(): void {
         log('Pause track');
-        player.pause();
+        pause();
       },
       playAlbum(id: string): Promise<void> {
         log(`Playing album ${id}`);
 
         return getAlbumTracks(id)
           .then((tracks) => setQueue({ ...queue, next: tracks }));
+        // @todo .then(play)
       },
       queueAlbum(id: string): Promise<void> {
         log(`Queueing album ${id}`);
@@ -96,7 +137,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
           .then((tracks) => setQueue({ ...queue, next: [...queue.next, ...tracks] }));
       },
     };
-  }, [playback, player, queue, setQueue]);
+  }, [pause, play, playback, player, queue, setQueue]);
 
   /**
    * Calculate and memoize context value
@@ -109,7 +150,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
   }), [actions, playback, playbackState, player]);
 
   /**
-   * Keep player in sync with Spotify
+   * Keep our player in sync with Spotify
    */
   useEffect(() => {
     if (!player) {
@@ -126,7 +167,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
   }, [player]);
 
   /**
-   * Load and initialize player
+   * Load and initialize Spotify player
    */
   useEffect(() => {
     if (player) {
@@ -158,7 +199,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
         },
       });
 
-      spotifyPlayer.addListener('player_state_changed', setPlaybackState);
+      spotifyPlayer.addListener('player_state_changed', setWebPlaybackState);
       spotifyPlayer.addListener('ready', setPlayback);
 
       setPlayer(spotifyPlayer);
