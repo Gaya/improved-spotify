@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-import { log } from '../../utils/logging';
+import { log } from '../../../utils/logging';
 
 type IntervalFunction = () => void;
 

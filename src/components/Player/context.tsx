@@ -13,7 +13,8 @@ import { songQueue } from '../../state/atoms';
 
 import AuthContext from '../Auth/context';
 
-import useInterval from './useInterval';
+import useInterval from './hooks/useInterval';
+import usePlaybackState from './hooks/usePlayerState';
 
 interface PlayerContextValues {
   player?: SpotifyWebPlayer;
@@ -72,7 +73,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
-  const [playbackState, setPlaybackState] = useState<PlayerPlaybackState>(defaultPlaybackState);
+  const [playbackState, dispatchPlaybackState] = usePlaybackState(defaultPlaybackState);
   const [webPlaybackState, setWebPlaybackState] = useState<WebPlaybackState>();
   const resumeTimeRef = useRef(0);
 
@@ -92,12 +93,9 @@ export const PlayerProvider: React.FC = ({ children }) => {
     }
 
     setQueue(nextQueue);
-    setPlaybackState({
-      paused: false,
-      position: 0,
-      current: song,
-      playbackPosition: 0,
-      playbackStarted: +new Date(),
+    dispatchPlaybackState({
+      type: 'PLAY_SONG',
+      song,
     });
 
     info(`Play ${song.name}`);
@@ -155,38 +153,59 @@ export const PlayerProvider: React.FC = ({ children }) => {
         player.resume();
       }
 
-      setPlaybackState({
-        ...playbackState,
-        paused: false,
-        playbackPosition: playbackState.position,
-        playbackStarted: +new Date(),
-      });
+      dispatchPlaybackState({ type: 'RESUME_SONG' });
+
       info('Resume playback');
     }
-  }, [next, playback, playbackState, player, queue, usePlayback]);
+  }, [dispatchPlaybackState, next, playback, playbackState, player, queue, usePlayback]);
 
   const pause = useCallback((): void => {
     if (!player) {
       return;
     }
 
-    player.pause();
+    if (usePlayback) {
+      player.pause();
+    }
 
-    setPlaybackState({ ...playbackState, paused: true });
+    dispatchPlaybackState({ type: 'PAUSE_SONG' });
 
     info('Pause playback');
-  }, [playbackState, player]);
+  }, [dispatchPlaybackState, player, usePlayback]);
+
+  const seek = useCallback((seekTo: number): void => {
+    if (!player) {
+      return;
+    }
+
+    if (usePlayback) {
+      player.seek(seekTo);
+    }
+
+    dispatchPlaybackState({
+      type: 'SEEK_SONG',
+      position: seekTo,
+    });
+
+    info(`Seeking to ${seekTo}`);
+  }, [dispatchPlaybackState, player, usePlayback]);
 
   /**
    * Setup player timer functionality
    */
   useInterval(() => {
     if (playbackState && !playbackState.paused) {
-      // update elapsed time
       const elapsed = +new Date() - playbackState.playbackStarted;
-      setPlaybackState({ ...playbackState, position: playbackState.playbackPosition + elapsed });
+      const position = playbackState.playbackPosition + elapsed;
+
+      // @todo next song if done
+
+      // update elapsed time
+      dispatchPlaybackState({ type: 'UPDATE_POSITION_SONG', position });
     }
   }, 100);
+
+  // @todo keep track of external webplayback and sync
 
   /**
    * Determine exposed actions
@@ -214,12 +233,20 @@ export const PlayerProvider: React.FC = ({ children }) => {
         previous(queue);
       },
       seek(seekTo: number): void {
-        console.log(seekTo);
+        if (!currentTrack) {
+          return;
+        }
+
+        seek(seekTo);
       },
       resume(): void {
         play();
       },
       pause(): void {
+        if (!currentTrack) {
+          return;
+        }
+
         pause();
       },
       playAlbum(id: string): Promise<void> {
@@ -239,7 +266,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
           .then((tracks) => setQueue({ ...queue, next: [...queue.next, ...tracks] }));
       },
     };
-  }, [currentTrack, next, pause, play, playback, player, previous, queue, setQueue]);
+  }, [currentTrack, next, pause, play, playback, player, previous, queue, seek, setQueue]);
 
   /**
    * Calculate and memoize context value
