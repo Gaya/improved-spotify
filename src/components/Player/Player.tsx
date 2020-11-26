@@ -9,6 +9,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Slider from '@material-ui/core/Slider';
 
 import formatDuration from '../../utils/formatDuration';
 
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   progressBar: {
     flexGrow: 1,
-    marginBottom: -2,
+    marginBottom: -16,
   },
   progressStart: {
     width: 60,
@@ -74,6 +75,7 @@ const Player: React.FC = () => {
     pause,
     previous,
     resume,
+    seek,
   } = actions;
 
   const isPlaying = !playbackState.paused;
@@ -112,11 +114,25 @@ const Player: React.FC = () => {
             <Typography className={styles.progressStart} variant="body2" color="textSecondary">
               {formatDuration(playbackState.position)}
             </Typography>
-            <LinearProgress
+            <Slider
               className={styles.progressBar}
-              variant="determinate"
+              min={0}
+              max={100}
               value={100 / (currentTrack.duration_ms / playbackState.position)}
+              onChange={(_, value: number | number[]) => {
+                if (Array.isArray(value)) {
+                  return;
+                }
+
+                const seekTo = currentTrack.duration_ms * (value / 100);
+                seek(seekTo);
+              }}
             />
+            {/* <LinearProgress */}
+            {/*  className={styles.progressBar} */}
+            {/*  variant="determinate" */}
+            {/*  value={100 / (currentTrack.duration_ms / playbackState.position)} */}
+            {/* /> */}
             <Typography className={styles.progressEnd} variant="body2" color="textSecondary">
               {formatDuration(currentTrack.duration_ms)}
             </Typography>

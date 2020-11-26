@@ -13,6 +13,8 @@ import { songQueue } from '../../state/atoms';
 
 import AuthContext from '../Auth/context';
 
+import useInterval from './useInterval';
+
 interface PlayerContextValues {
   player?: SpotifyWebPlayer;
   playbackState: PlayerPlaybackState;
@@ -22,6 +24,7 @@ interface PlayerContextValues {
     previous(): void;
     resume(): void;
     pause(): void;
+    seek(seekTo: number): void;
     playAlbum(id: string): Promise<void>;
     queueAlbum(id: string): Promise<void>;
   };
@@ -40,6 +43,9 @@ const defaultActions = {
   pause(): void {
     return undefined;
   },
+  seek(): void {
+    return undefined;
+  },
   playAlbum(): Promise<void> {
     return Promise.resolve();
   },
@@ -48,7 +54,12 @@ const defaultActions = {
   },
 };
 
-const defaultPlaybackState = { paused: true, position: 0 };
+const defaultPlaybackState = {
+  paused: true,
+  position: 0,
+  playbackStarted: 0,
+  playbackPosition: 0,
+};
 
 const PlayerContext = createContext<PlayerContextValues>({
   actions: defaultActions,
@@ -68,6 +79,9 @@ export const PlayerProvider: React.FC = ({ children }) => {
   const usePlayback = false;
   const currentTrack = playbackState.current;
 
+  /**
+   * Create player playback functionality
+   */
   const playSong = useCallback((song: SpotifyAlbumTrack, nextQueue: SongQueue) => {
     if (!playback) {
       return;
@@ -78,7 +92,13 @@ export const PlayerProvider: React.FC = ({ children }) => {
     }
 
     setQueue(nextQueue);
-    setPlaybackState({ paused: false, position: 0, current: song });
+    setPlaybackState({
+      paused: false,
+      position: 0,
+      current: song,
+      playbackPosition: 0,
+      playbackStarted: +new Date(),
+    });
 
     info(`Play ${song.name}`);
   }, [playback, setQueue, usePlayback]);
@@ -135,7 +155,12 @@ export const PlayerProvider: React.FC = ({ children }) => {
         player.resume();
       }
 
-      setPlaybackState({ ...playbackState, paused: false });
+      setPlaybackState({
+        ...playbackState,
+        paused: false,
+        playbackPosition: playbackState.position,
+        playbackStarted: +new Date(),
+      });
       info('Resume playback');
     }
   }, [next, playback, playbackState, player, queue, usePlayback]);
@@ -151,6 +176,17 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
     info('Pause playback');
   }, [playbackState, player]);
+
+  /**
+   * Setup player timer functionality
+   */
+  useInterval(() => {
+    if (playbackState && !playbackState.paused) {
+      // update elapsed time
+      const elapsed = +new Date() - playbackState.playbackStarted;
+      setPlaybackState({ ...playbackState, position: playbackState.playbackPosition + elapsed });
+    }
+  }, 100);
 
   /**
    * Determine exposed actions
@@ -176,6 +212,9 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
         info('Go to previous');
         previous(queue);
+      },
+      seek(seekTo: number): void {
+        console.log(seekTo);
       },
       resume(): void {
         play();

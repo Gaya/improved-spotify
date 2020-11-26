@@ -45,6 +45,8 @@ declare global {
     paused: boolean;
     position: number;
     current?: SpotifyAlbumTrack;
+    playbackPosition: number;
+    playbackStarted: number;
   }
 }
 
