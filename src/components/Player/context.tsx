@@ -66,6 +66,56 @@ export const PlayerProvider: React.FC = ({ children }) => {
   const resumeTimeRef = useRef(0);
 
   const usePlayback = false;
+  const currentTrack = playbackState.current;
+
+  const playSong = useCallback((song: SpotifyAlbumTrack, nextQueue: SongQueue) => {
+    if (!playback) {
+      return;
+    }
+
+    if (usePlayback) {
+      playerPlay({ context_uri: song.uri }, playback.device_id);
+    }
+
+    setQueue(nextQueue);
+    setPlaybackState({ paused: false, position: 0, current: song });
+
+    info(`Play ${song.name}`);
+  }, [playback, setQueue, usePlayback]);
+
+  const previous = useCallback((currentQueue: SongQueue): void => {
+    if (!player || !playback) {
+      return;
+    }
+
+    const [song, ...previous] = currentQueue.previous;
+
+    if (!song) {
+      info('No previous song play');
+      return;
+    }
+
+    playSong(song, { ...currentQueue, previous });
+  }, [playSong, playback, player]);
+
+  const next = useCallback((currentQueue: SongQueue, currentSong?: SpotifyAlbumTrack): void => {
+    if (!player || !playback) {
+      return;
+    }
+
+    const [song, ...next] = currentQueue.next;
+
+    if (!song) {
+      info('No song in queue to play');
+      return;
+    }
+
+    const previous = currentSong
+      ? [currentSong, ...currentQueue.previous]
+      : currentQueue.previous;
+
+    playSong(song, { previous, next });
+  }, [playSong, playback, player]);
 
   const play = useCallback((currentQueue = queue, forcePlay = false): void => {
     if (!player || !playback) {
@@ -76,27 +126,19 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
     // no song is playing yet, so pick first from queue
     if (!playbackState.current || forcePlay) {
-      const [song, ...next] = currentQueue.next;
-
-      if (usePlayback) {
-        playerPlay({ context_uri: song.uri }, playback.device_id);
-      }
-
-      setQueue({ ...currentQueue, next });
-      setPlaybackState({ paused: false, position: 0, current: song });
-
-      info(`Play ${song.name}`);
+      next(currentQueue, playbackState.current);
       return;
     }
 
-    if (usePlayback) {
-      player.resume();
+    if (playbackState.current) {
+      if (usePlayback) {
+        player.resume();
+      }
+
+      setPlaybackState({ ...playbackState, paused: false });
+      info('Resume playback');
     }
-
-    setPlaybackState({ ...playbackState, paused: false });
-
-    info('Resume playback');
-  }, [playback, playbackState, player, queue, setQueue, usePlayback]);
+  }, [next, playback, playbackState, player, queue, usePlayback]);
 
   const pause = useCallback((): void => {
     if (!player) {
@@ -120,12 +162,20 @@ export const PlayerProvider: React.FC = ({ children }) => {
 
     return {
       next(): void {
-        log('Skip track');
-        // player.nextTrack();
+        if (!currentTrack) {
+          return;
+        }
+
+        info('Go to next');
+        next(queue, currentTrack);
       },
       previous(): void {
-        log('Go to previous track');
-        // player.previousTrack();
+        if (!currentTrack) {
+          return;
+        }
+
+        info('Go to previous');
+        previous(queue);
       },
       resume(): void {
         play();
@@ -139,8 +189,6 @@ export const PlayerProvider: React.FC = ({ children }) => {
         return getAlbumTracks(id)
           .then((tracks) => {
             const nextQueue: SongQueue = { ...queue, next: tracks };
-            setQueue(nextQueue);
-
             return nextQueue;
           })
           .then((nextQueue) => play(nextQueue, true));
@@ -152,7 +200,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
           .then((tracks) => setQueue({ ...queue, next: [...queue.next, ...tracks] }));
       },
     };
-  }, [pause, play, playback, player, queue, setQueue]);
+  }, [currentTrack, next, pause, play, playback, player, previous, queue, setQueue]);
 
   /**
    * Calculate and memoize context value
