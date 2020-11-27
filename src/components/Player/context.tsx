@@ -153,7 +153,7 @@ export const PlayerProvider: React.FC = ({ children }) => {
         player.resume();
       }
 
-      dispatchPlaybackState({ type: 'RESUME_SONG' });
+      dispatchPlaybackState({ type: 'RESUME_SONG', position: playbackState.position });
 
       info('Resume playback');
     }

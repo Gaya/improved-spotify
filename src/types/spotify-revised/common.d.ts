@@ -42,11 +42,11 @@ declare global {
   }
 
   interface PlayerPlaybackState {
-    paused: boolean;
-    position: number;
     current?: SpotifyAlbumTrack;
+    paused: boolean;
     playbackPosition: number;
     playbackStarted: number;
+    position: number;
   }
 }
 

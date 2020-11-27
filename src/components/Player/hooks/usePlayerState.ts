@@ -7,6 +7,7 @@ interface PlaySongAction {
 
 interface ResumeSongAction {
   type: 'RESUME_SONG';
+  position: number;
 }
 
 interface PauseSongAction {
@@ -23,45 +24,88 @@ interface UpdatePositionSongAction {
   position: number;
 }
 
-type Actions = PlaySongAction | ResumeSongAction | PauseSongAction | SeekSongAction | UpdatePositionSongAction;
+type Actions = PlaySongAction | ResumeSongAction | PauseSongAction | SeekSongAction
+  | UpdatePositionSongAction;
 
-function reducer(state: PlayerPlaybackState, action: Actions): PlayerPlaybackState {
+function current(
+  state: PlayerPlaybackState['current'],
+  action: Actions,
+): PlayerPlaybackState['current'] {
   switch (action.type) {
     case 'PLAY_SONG':
-      return {
-        paused: false,
-        position: 0,
-        playbackPosition: 0,
-        playbackStarted: +new Date(),
-        current: action.song,
-      };
-    case 'RESUME_SONG':
-      return {
-        ...state,
-        paused: false,
-        playbackPosition: state.position,
-        playbackStarted: +new Date(),
-      };
-    case 'PAUSE_SONG':
-      return {
-        ...state,
-        paused: true,
-      };
-    case 'SEEK_SONG':
-      return {
-        ...state,
-        position: action.position,
-        playbackPosition: action.position,
-        playbackStarted: +new Date(),
-      };
-    case 'UPDATE_POSITION_SONG':
-      return {
-        ...state,
-        position: action.position,
-      };
+      return action.song;
     default:
       return state;
   }
+}
+
+function paused(
+  state: PlayerPlaybackState['paused'],
+  action: Actions,
+): PlayerPlaybackState['paused'] {
+  switch (action.type) {
+    case 'RESUME_SONG':
+    case 'PLAY_SONG':
+      return false;
+    case 'PAUSE_SONG':
+      return true;
+    default:
+      return state;
+  }
+}
+
+function playbackPosition(
+  state: PlayerPlaybackState['playbackPosition'],
+  action: Actions,
+): PlayerPlaybackState['playbackPosition'] {
+  switch (action.type) {
+    case 'PLAY_SONG':
+      return 0;
+    case 'RESUME_SONG':
+    case 'SEEK_SONG':
+      return action.position;
+    default:
+      return state;
+  }
+}
+
+function playbackStarted(
+  state: PlayerPlaybackState['playbackStarted'],
+  action: Actions,
+): PlayerPlaybackState['playbackStarted'] {
+  switch (action.type) {
+    case 'PLAY_SONG':
+    case 'RESUME_SONG':
+    case 'SEEK_SONG':
+      return +new Date();
+    default:
+      return state;
+  }
+}
+
+function position(
+  state: PlayerPlaybackState['position'],
+  action: Actions,
+): PlayerPlaybackState['position'] {
+  switch (action.type) {
+    case 'PLAY_SONG':
+      return 0;
+    case 'SEEK_SONG':
+    case 'UPDATE_POSITION_SONG':
+      return action.position;
+    default:
+      return state;
+  }
+}
+
+function reducer(state: PlayerPlaybackState, action: Actions): PlayerPlaybackState {
+  return {
+    current: current(state.current, action),
+    paused: paused(state.paused, action),
+    playbackPosition: playbackPosition(state.playbackPosition, action),
+    playbackStarted: playbackStarted(state.playbackStarted, action),
+    position: position(state.position, action),
+  };
 }
 
 function usePlaybackState(

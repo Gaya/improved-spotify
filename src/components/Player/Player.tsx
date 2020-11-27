@@ -8,7 +8,6 @@ import PauseIcon from '@material-ui/icons/Pause';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Slider from '@material-ui/core/Slider';
 
 import formatDuration from '../../utils/formatDuration';
