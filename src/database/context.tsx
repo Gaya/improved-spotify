@@ -15,7 +15,7 @@ import { playlistSnapshots } from '../state/atoms';
 const DatabaseContext = createContext<SrIndexedDB | undefined>(undefined);
 
 export const DatabaseProvider: FC = ({ children }) => {
-  const [isdb, setDb] = useState<SrIndexedDB>();
+  const [isDb, setDb] = useState<SrIndexedDB>();
   const setSnapshots = useSetRecoilState(playlistSnapshots);
 
   useEffect(() => {
@@ -33,12 +33,12 @@ export const DatabaseProvider: FC = ({ children }) => {
       });
   }, [setSnapshots]);
 
-  if (!isdb) {
+  if (!isDb) {
     return <FullScreenIndicator />;
   }
 
   return (
-    <DatabaseContext.Provider value={isdb}>
+    <DatabaseContext.Provider value={isDb}>
       {children}
     </DatabaseContext.Provider>
   );
