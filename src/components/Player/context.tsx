@@ -79,6 +79,7 @@ export const PlayerProvider: FC = ({ children }) => {
   const [playbackState, dispatchPlaybackState] = usePlaybackState(defaultPlaybackState);
   const resumeTimeRef = useRef(0);
 
+  // disable this to toggle of web player
   const usePlayback = true;
   const currentTrack = playbackState.current;
 
@@ -281,6 +282,7 @@ export const PlayerProvider: FC = ({ children }) => {
   /**
    * Keep our player in sync with Spotify
    */
+  // @TODO use useInterval
   useEffect(() => {
     if (!player) {
       return (): void => undefined;

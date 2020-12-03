@@ -1,7 +1,5 @@
 import { useRef, useEffect } from 'react';
 
-import { log } from '../../../utils/logging';
-
 type IntervalFunction = () => void;
 
 function useInterval(cb: IntervalFunction, delay: number): void {
@@ -19,8 +17,6 @@ function useInterval(cb: IntervalFunction, delay: number): void {
 
       savedCallback.current();
     }
-
-    log('Setup');
 
     const id = setInterval(tick, delay);
     return () => clearInterval(id);
