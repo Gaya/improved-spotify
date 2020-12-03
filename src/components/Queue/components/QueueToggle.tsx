@@ -43,7 +43,7 @@ const QueueToggle: FC = () => {
         aria-haspopup="true"
         onClick={isOpened ? onClose : onOpen}
       >
-        <QueueMusicIcon fontSize="small" color="action" />
+        <QueueMusicIcon fontSize="small" color={isOpened ? 'primary' : 'action'} />
       </IconButton>
       <Drawer
         anchor="right"
