@@ -4,7 +4,8 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo, useRef,
+  useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useRecoilState } from 'recoil';
@@ -76,10 +77,9 @@ export const PlayerProvider: FC = ({ children }) => {
   const [player, setPlayer] = useState<SpotifyWebPlayer>();
   const [playback, setPlayback] = useState<WebPlaybackPlayer>();
   const [playbackState, dispatchPlaybackState] = usePlaybackState(defaultPlaybackState);
-  const [webPlaybackState, setWebPlaybackState] = useState<WebPlaybackState>();
   const resumeTimeRef = useRef(0);
 
-  const usePlayback = false;
+  const usePlayback = true;
   const currentTrack = playbackState.current;
 
   /**
@@ -91,7 +91,7 @@ export const PlayerProvider: FC = ({ children }) => {
     }
 
     if (usePlayback) {
-      playerPlay({ context_uri: song.uri }, playback.device_id);
+      playerPlay({ uris: [song.uri] }, playback.device_id).catch(error);
     }
 
     setQueue(nextQueue);
@@ -101,7 +101,7 @@ export const PlayerProvider: FC = ({ children }) => {
     });
 
     info(`Play ${song.name}`);
-  }, [playback, setQueue, usePlayback]);
+  }, [dispatchPlaybackState, playback, setQueue, usePlayback]);
 
   const previous = useCallback((currentQueue: SongQueue): void => {
     if (!player || !playback) {
@@ -127,6 +127,7 @@ export const PlayerProvider: FC = ({ children }) => {
 
     if (!song) {
       info('No song in queue to play');
+      dispatchPlaybackState({ type: 'STOP_SONG' });
       return;
     }
 
@@ -135,7 +136,7 @@ export const PlayerProvider: FC = ({ children }) => {
       : currentQueue.previous;
 
     playSong(song, { previous, next });
-  }, [playSong, playback, player]);
+  }, [dispatchPlaybackState, playSong, playback, player]);
 
   const play = useCallback((currentQueue = queue, forcePlay = false): void => {
     if (!player || !playback) {
@@ -152,7 +153,7 @@ export const PlayerProvider: FC = ({ children }) => {
 
     if (playbackState.current) {
       if (usePlayback) {
-        player.resume();
+        player.resume().catch(error);
       }
 
       dispatchPlaybackState({ type: 'RESUME_SONG', position: playbackState.position });
@@ -167,7 +168,7 @@ export const PlayerProvider: FC = ({ children }) => {
     }
 
     if (usePlayback) {
-      player.pause();
+      player.pause().catch(error);
     }
 
     dispatchPlaybackState({ type: 'PAUSE_SONG' });
@@ -181,7 +182,7 @@ export const PlayerProvider: FC = ({ children }) => {
     }
 
     if (usePlayback) {
-      player.seek(seekTo);
+      player.seek(seekTo).catch(error);
     }
 
     dispatchPlaybackState({
@@ -193,21 +194,18 @@ export const PlayerProvider: FC = ({ children }) => {
   }, [dispatchPlaybackState, player, usePlayback]);
 
   /**
-   * Setup player timer functionality
+   * Setup player next song in line
    */
   useInterval(() => {
     if (playbackState && !playbackState.paused) {
       const elapsed = +new Date() - playbackState.playbackStarted;
       const position = playbackState.playbackPosition + elapsed;
 
-      // @todo next song if done
-
-      // update elapsed time
-      dispatchPlaybackState({ type: 'UPDATE_POSITION_SONG', position });
+      if (playbackState.current && playbackState.current.duration_ms <= position) {
+        next(queue);
+      }
     }
   }, 100);
-
-  // @todo keep track of external webplayback and sync
 
   /**
    * Determine exposed actions
@@ -290,12 +288,15 @@ export const PlayerProvider: FC = ({ children }) => {
 
     const id = setInterval(() => {
       player.getCurrentState().then((state) => {
-        // @todo update playback state if changed on spotify
+        if (state && !state.paused) {
+          // update elapsed time
+          dispatchPlaybackState({ type: 'UPDATE_POSITION_SONG', position: state.position });
+        }
       });
     }, 500);
 
     return (): void => clearInterval(id);
-  }, [player]);
+  }, [dispatchPlaybackState, player]);
 
   /**
    * Load and initialize Spotify player
@@ -330,7 +331,6 @@ export const PlayerProvider: FC = ({ children }) => {
         },
       });
 
-      spotifyPlayer.addListener('player_state_changed', setWebPlaybackState);
       spotifyPlayer.addListener('ready', setPlayback);
 
       setPlayer(spotifyPlayer);

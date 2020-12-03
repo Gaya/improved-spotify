@@ -24,8 +24,12 @@ interface UpdatePositionSongAction {
   position: number;
 }
 
+interface StopSongAction {
+  type: 'STOP_SONG';
+}
+
 type Actions = PlaySongAction | ResumeSongAction | PauseSongAction | SeekSongAction
-  | UpdatePositionSongAction;
+  | UpdatePositionSongAction | StopSongAction;
 
 function current(
   state: PlayerPlaybackState['current'],
@@ -34,6 +38,8 @@ function current(
   switch (action.type) {
     case 'PLAY_SONG':
       return action.song;
+    case 'STOP_SONG':
+      return undefined;
     default:
       return state;
   }
@@ -48,6 +54,7 @@ function paused(
     case 'PLAY_SONG':
       return false;
     case 'PAUSE_SONG':
+    case 'STOP_SONG':
       return true;
     default:
       return state;
@@ -60,6 +67,7 @@ function playbackPosition(
 ): PlayerPlaybackState['playbackPosition'] {
   switch (action.type) {
     case 'PLAY_SONG':
+    case 'STOP_SONG':
       return 0;
     case 'RESUME_SONG':
     case 'SEEK_SONG':
@@ -78,6 +86,8 @@ function playbackStarted(
     case 'RESUME_SONG':
     case 'SEEK_SONG':
       return +new Date();
+    case 'STOP_SONG':
+      return 0;
     default:
       return state;
   }
@@ -89,6 +99,7 @@ function position(
 ): PlayerPlaybackState['position'] {
   switch (action.type) {
     case 'PLAY_SONG':
+    case 'STOP_SONG':
       return 0;
     case 'SEEK_SONG':
     case 'UPDATE_POSITION_SONG':
