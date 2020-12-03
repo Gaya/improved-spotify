@@ -108,14 +108,14 @@ export const PlayerProvider: FC = ({ children }) => {
       return;
     }
 
-    const [song, ...previous] = currentQueue.previous;
+    const [song, ...previousSongs] = currentQueue.previous;
 
     if (!song) {
       info('No previous song play');
       return;
     }
 
-    playSong(song, { ...currentQueue, previous });
+    playSong(song, { ...currentQueue, previous: previousSongs });
   }, [playSong, playback, player]);
 
   const next = useCallback((currentQueue: SongQueue, currentSong?: SpotifyAlbumTrack): void => {
@@ -123,7 +123,7 @@ export const PlayerProvider: FC = ({ children }) => {
       return;
     }
 
-    const [song, ...next] = currentQueue.next;
+    const [song, ...nextSongs] = currentQueue.next;
 
     if (!song) {
       info('No song in queue to play');
@@ -131,11 +131,11 @@ export const PlayerProvider: FC = ({ children }) => {
       return;
     }
 
-    const previous = currentSong
+    const previousSongs = currentSong
       ? [currentSong, ...currentQueue.previous]
       : currentQueue.previous;
 
-    playSong(song, { previous, next });
+    playSong(song, { previous: previousSongs, next: nextSongs });
   }, [dispatchPlaybackState, playSong, playback, player]);
 
   const play = useCallback((currentQueue = queue, forcePlay = false): void => {

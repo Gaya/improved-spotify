@@ -52,9 +52,9 @@
           "**/*.ts?(x)"
         ],
         "rules": {
-          "no-useless-constructor": "off",
-          "no-debugger": "warn",
           "no-shadow": "off",
+          "@typescript-eslint/no-shadow": "error",
+          "no-debugger": "warn",
           "react/react-in-jsx-scope": "off",
           "react/prop-types": "off",
           "react/jsx-filename-extension": [
