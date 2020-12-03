@@ -48,7 +48,9 @@
     ],
     "overrides": [
       {
-        "files": ["**/*.ts?(x)"],
+        "files": [
+          "**/*.ts?(x)"
+        ],
         "rules": {
           "no-useless-constructor": "off",
           "no-debugger": "warn",
