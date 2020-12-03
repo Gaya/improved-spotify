@@ -127,11 +127,6 @@ const Player: FC = () => {
                 seek(seekTo);
               }}
             />
-            {/* <LinearProgress */}
-            {/*  className={styles.progressBar} */}
-            {/*  variant="determinate" */}
-            {/*  value={100 / (currentTrack.duration_ms / playbackState.position)} */}
-            {/* /> */}
             <Typography className={styles.progressEnd} variant="body2" color="textSecondary">
               {formatDuration(currentTrack.duration_ms)}
             </Typography>
