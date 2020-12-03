@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Layout: React.FC = ({ children }) => {
+const Layout: FC = ({ children }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const isQueueOpened = useRecoilValue(queueOpened);

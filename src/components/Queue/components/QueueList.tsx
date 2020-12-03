@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -48,7 +48,7 @@ interface QueueListProps {
   onRemove?: (index?: number) => void;
 }
 
-const QueueList: React.FC<QueueListProps> = ({ emptyText, tracks, onRemove }) => {
+const QueueList: FC<QueueListProps> = ({ emptyText, tracks, onRemove }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 

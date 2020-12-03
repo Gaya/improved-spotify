@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import Button from '@material-ui/core/Button';
@@ -9,7 +9,7 @@ import { playlistSelectedArtist, playlistViewAs } from '../../../state/atoms';
 
 import { storePlaylistView } from '../utils';
 
-const ViewPicker: React.FC = () => {
+const ViewPicker: FC = () => {
   const [viewAs, onSelectView] = useRecoilState(playlistViewAs);
   const setSelectedArtist = useSetRecoilState(playlistSelectedArtist);
 

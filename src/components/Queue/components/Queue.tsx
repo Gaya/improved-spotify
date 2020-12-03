@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import Typography from '@material-ui/core/Typography';
@@ -30,7 +30,7 @@ enum QueueView {
   PREVIOUS = 'PREVIOUS',
 }
 
-const Queue: React.FC = () => {
+const Queue: FC = () => {
   const [view, setView] = useState<QueueView>(QueueView.NEXT);
   const [queue, setQueue] = useRecoilState(songQueue);
   const theme = useTheme();

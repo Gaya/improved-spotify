@@ -1,4 +1,5 @@
-import React, {
+import {
+  FC,
   useCallback,
   useContext,
   useState,
@@ -57,7 +58,7 @@ interface AlbumListItemProps {
   style?: React.CSSProperties;
 }
 
-const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
+const AlbumListItem: FC<AlbumListItemProps> = ({ album, style }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const [isHovering, setIsHovering] = useState(false);

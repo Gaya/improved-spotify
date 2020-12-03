@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import classNames from 'classnames';
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Filter: React.FC = () => {
+const Filter: FC = () => {
   const [value, onChange] = useRecoilState(playlistSearchFilter);
 
   const theme = useTheme();

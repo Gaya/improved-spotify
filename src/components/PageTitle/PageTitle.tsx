@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -23,7 +23,7 @@ interface PageTitleProps {
   subtitle?: string;
 }
 
-const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle, children }) => {
+const PageTitle: FC<PageTitleProps> = ({ title, subtitle, children }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 

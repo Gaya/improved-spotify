@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -25,7 +25,7 @@ interface ImageProps {
   id: string;
 }
 
-const Image: React.FC<ImageProps> = ({ id }: ImageProps) => {
+const Image: FC<ImageProps> = ({ id }: ImageProps) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const playlist = useRecoilValueLoadable(playlistQuery(id));

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 type PlaylistProps = RouteComponentProps<{ id: string }>;
 
-const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
+const Playlist: FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const { id } = match.params;
 
   const theme = useTheme();

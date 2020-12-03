@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ArtistsList: React.FC = () => {
+const ArtistsList: FC = () => {
   const [selected, setSelected] = useRecoilState(playlistSelectedArtist);
   const artists = useRecoilValue(artistsFromCurrentTracks);
 

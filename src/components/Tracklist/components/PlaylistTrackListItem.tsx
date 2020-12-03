@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -55,7 +55,7 @@ interface PlaylistTrackListItemProps {
   style: React.CSSProperties;
 }
 
-const PlaylistTrackListItem: React.FC<PlaylistTrackListItemProps> = ({ style, playlistTrack }) => {
+const PlaylistTrackListItem: FC<PlaylistTrackListItemProps> = ({ style, playlistTrack }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const { track } = playlistTrack;

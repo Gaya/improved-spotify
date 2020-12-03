@@ -1,5 +1,7 @@
-import React, {
-  createContext, useCallback,
+import {
+  createContext,
+  FC,
+  useCallback,
   useContext,
   useEffect,
   useMemo, useRef,
@@ -67,7 +69,7 @@ const PlayerContext = createContext<PlayerContextValues>({
   playbackState: defaultPlaybackState,
 });
 
-export const PlayerProvider: React.FC = ({ children }) => {
+export const PlayerProvider: FC = ({ children }) => {
   const { isLoggedIn, getValidToken } = useContext(AuthContext);
   const [queue, setQueue] = useRecoilState(songQueue);
 

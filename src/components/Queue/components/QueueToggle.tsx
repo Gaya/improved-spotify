@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useRecoilState } from 'recoil';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const QueueToggle: React.FC = () => {
+const QueueToggle: FC = () => {
   const [isOpened, setOpened] = useRecoilState(queueOpened);
   const styles = useStyles();
 

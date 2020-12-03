@@ -1,4 +1,5 @@
-import React, {
+import {
+  FC,
   useCallback,
   useContext,
   useState,
@@ -21,7 +22,7 @@ const IconButtonNoPadding = styled(IconButton)`
   padding: 0;
 `;
 
-const UserMenu: React.FC = () => {
+const UserMenu: FC = () => {
   const { logOut } = useContext(AuthContext);
   const history = useHistory();
   const user = useRecoilValueLoadable(userInformationQuery);
