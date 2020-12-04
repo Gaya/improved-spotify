@@ -61,38 +61,6 @@ function paused(
   }
 }
 
-function playbackPosition(
-  state: PlayerPlaybackState['playbackPosition'],
-  action: Actions,
-): PlayerPlaybackState['playbackPosition'] {
-  switch (action.type) {
-    case 'PLAY_SONG':
-    case 'STOP_SONG':
-      return 0;
-    case 'RESUME_SONG':
-    case 'SEEK_SONG':
-      return action.position;
-    default:
-      return state;
-  }
-}
-
-function playbackStarted(
-  state: PlayerPlaybackState['playbackStarted'],
-  action: Actions,
-): PlayerPlaybackState['playbackStarted'] {
-  switch (action.type) {
-    case 'PLAY_SONG':
-    case 'RESUME_SONG':
-    case 'SEEK_SONG':
-      return +new Date();
-    case 'STOP_SONG':
-      return 0;
-    default:
-      return state;
-  }
-}
-
 function position(
   state: PlayerPlaybackState['position'],
   action: Actions,
@@ -113,8 +81,6 @@ function reducer(state: PlayerPlaybackState, action: Actions): PlayerPlaybackSta
   return {
     current: current(state.current, action),
     paused: paused(state.paused, action),
-    playbackPosition: playbackPosition(state.playbackPosition, action),
-    playbackStarted: playbackStarted(state.playbackStarted, action),
     position: position(state.position, action),
   };
 }

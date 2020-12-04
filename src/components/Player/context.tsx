@@ -61,8 +61,6 @@ const defaultActions = {
 const defaultPlaybackState = {
   paused: true,
   position: 0,
-  playbackStarted: 0,
-  playbackPosition: 0,
 };
 
 const PlayerContext = createContext<PlayerContextValues>({
@@ -195,14 +193,11 @@ export const PlayerProvider: FC = ({ children }) => {
   }, [dispatchPlaybackState, player, usePlayback]);
 
   /**
-   * Setup player next song in line
+   * Setup player to skip to next song in line
    */
   useInterval(() => {
     if (playbackState && !playbackState.paused) {
-      const elapsed = +new Date() - playbackState.playbackStarted;
-      const position = playbackState.playbackPosition + elapsed;
-
-      if (playbackState.current && playbackState.current.duration_ms <= position) {
+      if (playbackState.current && playbackState.current.duration_ms <= playbackState.position) {
         next(queue);
       }
     }
