@@ -282,23 +282,18 @@ export const PlayerProvider: FC = ({ children }) => {
   /**
    * Keep our player in sync with Spotify
    */
-  // @TODO use useInterval
-  useEffect(() => {
+  useInterval(() => {
     if (!player) {
-      return (): void => undefined;
+      return;
     }
 
-    const id = setInterval(() => {
-      player.getCurrentState().then((state) => {
-        if (state && !state.paused) {
-          // update elapsed time
-          dispatchPlaybackState({ type: 'UPDATE_POSITION_SONG', position: state.position });
-        }
-      });
-    }, 500);
-
-    return (): void => clearInterval(id);
-  }, [dispatchPlaybackState, player]);
+    player.getCurrentState().then((state) => {
+      if (state && !state.paused) {
+        // update elapsed time
+        dispatchPlaybackState({ type: 'UPDATE_POSITION_SONG', position: state.position });
+      }
+    });
+  }, 500);
 
   /**
    * Load and initialize Spotify player
