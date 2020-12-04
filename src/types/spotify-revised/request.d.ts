@@ -1,7 +1,7 @@
 declare global {
-  interface PagedResponse<S> {
+  interface PagedResponse<T> {
     href: string;
-    items: S[];
+    items: T[];
     limit: number;
     next: string | null;
     offset: number;
