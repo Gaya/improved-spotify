@@ -9,7 +9,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { queueOpened } from '../../../state/atoms';
 
 import { QUEUE_WIDTH } from '../consts';
-import dispatchOnResizeEvent from '../dispatchOnResizeEvent';
+import dispatchOnResizeEvents from '../dispatchOnResizeEvents';
 
 import Queue from './Queue';
 
@@ -27,12 +27,12 @@ const QueueToggle: FC = () => {
 
   const onClose = () => {
     setOpened(false);
-    dispatchOnResizeEvent();
+    dispatchOnResizeEvents();
   };
 
   const onOpen = () => {
     setOpened(true);
-    dispatchOnResizeEvent();
+    dispatchOnResizeEvents();
   };
 
   return (

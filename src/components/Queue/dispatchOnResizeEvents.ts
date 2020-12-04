@@ -3,7 +3,7 @@ function dispatchOnResizeOnWindow() {
   window.dispatchEvent(event);
 }
 
-function dispatchOnResizeEvent(): void {
+function dispatchOnResizeEvents(): void {
   const animationFrames = 7;
   const lastInterval = 400;
 
@@ -12,4 +12,4 @@ function dispatchOnResizeEvent(): void {
   }
 }
 
-export default dispatchOnResizeEvent;
+export default dispatchOnResizeEvents;
