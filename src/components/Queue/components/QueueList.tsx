@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -52,15 +52,15 @@ const QueueList: FC<QueueListProps> = ({ emptyText, tracks, onRemove }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 
-  const clearQueue = useCallback(() => {
-    if (onRemove) {
-      onRemove();
-    }
-  }, [onRemove]);
-
   if (tracks.length === 0) {
     return <div className={styles.empty}>{emptyText}</div>;
   }
+
+  const clearQueue = () => {
+    if (onRemove) {
+      onRemove();
+    }
+  };
 
   return (
     <>
