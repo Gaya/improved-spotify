@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { songQueue } from '../../../state/atoms';
+
 import QueueList from './QueueList';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +38,7 @@ const Queue: FC = () => {
   const styles = useStyles(theme);
 
   const toggleView = () => setView(view === QueueView.NEXT ? QueueView.PREVIOUS : QueueView.NEXT);
+
   const onRemoveFromQueue = useCallback((index?: number) => {
     const next = typeof index !== 'undefined' ? queue.next.filter((_, i) => i !== index) : [];
     setQueue({ ...queue, next });
