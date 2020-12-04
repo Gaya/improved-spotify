@@ -1,5 +1,5 @@
-import { PlaylistView } from '../../types';
 import { STORAGE_VIEW_SETTINGS } from '../../consts';
+import { PlaylistView } from '../../enums';
 
 export function getStoredPlaylistView(): PlaylistView {
   const type = localStorage.getItem(STORAGE_VIEW_SETTINGS);

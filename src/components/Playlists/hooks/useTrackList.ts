@@ -1,18 +1,12 @@
 import {
   useCallback,
   useContext,
-  useEffect, useMemo,
+  useEffect,
   useReducer,
   useRef,
 } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import {
-  PagedResponse,
-  SpotifyPlaylistTrack,
-  StoredSpotifyPlaylistTrack,
-  TrackState,
-} from '../../../types';
 import { SPOTIFY_PLAYLIST_TRACKS } from '../../../consts';
 import { getPlaylistTracks } from '../../../utils/externalData';
 import extractTrackData from '../../../utils/extractTrackData';
@@ -29,6 +23,7 @@ import {
   playlistSelectedArtist,
   playlistTracksState,
 } from '../../../state/atoms';
+import { TrackState } from '../../../enums';
 
 interface UseTrackListState {
   isResolving: boolean;

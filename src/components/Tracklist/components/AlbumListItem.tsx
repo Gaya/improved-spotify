@@ -1,4 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -11,8 +16,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { SpotifyAlbum, SpotifyTrackInfo } from '../../../types';
-import { addToQueue, getAlbumTracks, playerPlay } from '../../../utils/externalData';
+import PlayerContext from '../../Player/context';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -53,27 +57,17 @@ interface AlbumListItemProps {
   album: SpotifyAlbum;
   style?: React.CSSProperties;
 }
-function queueTracks(tracks: SpotifyTrackInfo[]): Promise<Response[]> {
-  return promiseSerial(tracks.map((track) => addToQueue(track.uri)));
-}
 
-function promiseSerial<T>(promises: Promise<T>[], results: T[] = []): Promise<T[]> {
-  if (promises.length === 0) {
-    return Promise.resolve(results);
-  }
-
-  const [next, ...remaining] = promises;
-
-  return next.then((result) => promiseSerial(remaining, [...results, result]));
-}
-
-const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
+const AlbumListItem: FC<AlbumListItemProps> = ({ album, style }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
   const [isHovering, setIsHovering] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isQueuing, setIsQueuing] = useState(false);
   const [queueTooltip, setQueueTooltip] = useState(false);
+
+  const { actions } = useContext(PlayerContext);
+  const { playAlbum, queueAlbum } = actions;
 
   const showQueueTooltip = (): void => {
     setQueueTooltip(true);
@@ -82,25 +76,18 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
 
   const artistsText = album.artists.map((a) => a.name).join(', ');
 
-  const playAlbum = useCallback(() => {
+  const onPlayAlbum = useCallback(() => {
     if (isPlaying) {
       return;
     }
 
     setIsPlaying(true);
 
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    getAlbumTracks(album.id)
-      .then((tracks) => {
-        const [firstTrack, ...otherTracks] = tracks;
-
-        playerPlay({ uris: [firstTrack.uri] })
-          .then(() => queueTracks(otherTracks));
-      })
+    playAlbum(album.id)
       .then(() => {
         setIsPlaying(false);
       });
-  }, [album.id, isPlaying]);
+  }, [album.id, isPlaying, playAlbum]);
 
   const addAlbumToQueue = useCallback(() => {
     if (isQueuing) {
@@ -109,13 +96,12 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
 
     setIsQueuing(true);
 
-    getAlbumTracks(album.id)
-      .then((tracks) => queueTracks(tracks))
+    queueAlbum(album.id)
       .then(() => {
         setIsQueuing(false);
         showQueueTooltip();
       });
-  }, [album.id, isQueuing]);
+  }, [album.id, isQueuing, queueAlbum]);
 
   return (
     <div style={style} key={album.id} className={styles.container}>
@@ -134,8 +120,10 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
           >
             <Button
               size="large"
-              startIcon={isQueuing ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon />}
-              onClick={playAlbum}
+              startIcon={isPlaying
+                ? <CircularProgress size={16} color="inherit" />
+                : <PlayArrowIcon />}
+              onClick={onPlayAlbum}
             >
               Play Now
             </Button>
@@ -148,7 +136,9 @@ const AlbumListItem: React.FC<AlbumListItemProps> = ({ album, style }) => {
             >
               <Button
                 size="large"
-                startIcon={isQueuing ? <CircularProgress size={16} color="inherit" /> : <QueueMusicIcon />}
+                startIcon={isQueuing
+                  ? <CircularProgress size={16} color="inherit" />
+                  : <QueueMusicIcon />}
                 onClick={addAlbumToQueue}
               >
                 Add to Queue

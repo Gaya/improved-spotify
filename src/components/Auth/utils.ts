@@ -8,12 +8,7 @@ import {
   STORAGE_AUTH_STATE,
   STORAGE_TOKEN,
 } from '../../consts';
-import {
-  AuthToken,
-  ContentType,
-  PostData,
-  StoredAuthToken,
-} from '../../types';
+import { ContentType } from '../../enums';
 
 export function generateRandomString(length: number): string {
   let text = '';
@@ -93,6 +88,8 @@ function getAuthScopes(): string {
     'user-modify-playback-state',
     'user-read-currently-playing',
     'streaming',
+    'user-read-email',
+    'user-read-private',
   ];
 
   return scopes.join(' ');
@@ -102,7 +99,6 @@ export function createAuthUrl(codeChallenge: string, state: string): string {
   return urlWithQueryString(
     SPOTIFY_AUTH_URI,
     {
-      /* eslint-disable @typescript-eslint/camelcase */
       client_id: SPOTIFY_CLIENT_ID,
       response_type: 'code',
       redirect_uri: SPOTIFY_REDIRECT_URI,
@@ -110,7 +106,6 @@ export function createAuthUrl(codeChallenge: string, state: string): string {
       code_challenge: codeChallenge,
       state,
       scope: getAuthScopes(),
-      /* eslint-enable @typescript-eslint/camelcase */
     },
   );
 }
@@ -127,16 +122,6 @@ export function getStoredToken(): StoredAuthToken {
 
 export function hasToken(): boolean {
   return localStorage.getItem(STORAGE_TOKEN) !== null;
-}
-
-export function getValidToken(): Promise<AuthToken> {
-  const token = getStoredToken();
-
-  if (token.received + (token.expires_in * 100) < +new Date()) {
-    return refreshToken(token);
-  }
-
-  return Promise.resolve(token);
 }
 
 function storeToken(token: AuthToken): void {
@@ -165,11 +150,9 @@ let currentTokenRefresh: Promise<AuthToken> | undefined;
 function refreshToken(authToken: StoredAuthToken): Promise<AuthToken> {
   if (!currentTokenRefresh) {
     currentTokenRefresh = performAuthentication({
-      /* eslint-disable @typescript-eslint/camelcase */
       grant_type: 'refresh_token',
       refresh_token: authToken.refresh_token,
       client_id: SPOTIFY_CLIENT_ID,
-      /* eslint-enable @typescript-eslint/camelcase */
     }).then((token) => {
       currentTokenRefresh = undefined;
       return token;
@@ -179,16 +162,24 @@ function refreshToken(authToken: StoredAuthToken): Promise<AuthToken> {
   return currentTokenRefresh;
 }
 
+export function getValidToken(): Promise<AuthToken> {
+  const token = getStoredToken();
+
+  if (token.received + (token.expires_in * 100) < +new Date()) {
+    return refreshToken(token);
+  }
+
+  return Promise.resolve(token);
+}
+
 export function authenticateWithAuthorizationCode(code: string): Promise<AuthToken> {
   const codeVerifier = getStoredCodeVerifier() || '';
 
   return performAuthentication({
-    /* eslint-disable @typescript-eslint/camelcase */
     client_id: SPOTIFY_CLIENT_ID,
     grant_type: 'authorization_code',
     redirect_uri: SPOTIFY_REDIRECT_URI,
     code,
     code_verifier: codeVerifier,
-    /* eslint-enable @typescript-eslint/camelcase */
   });
 }

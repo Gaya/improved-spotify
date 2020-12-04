@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Login: React.FC = () => {
+const Login: FC = () => {
   const styles = useStyles();
 
   return (

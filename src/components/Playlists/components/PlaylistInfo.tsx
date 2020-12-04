@@ -1,10 +1,9 @@
-import React from 'react';
+import { FC } from 'react';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 
-import { SpotifyPlaylist } from '../../../types';
 import htmlDecode from '../../../utils/htmlDecode';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +29,7 @@ interface PlaylistInfoProps {
   playlist: SpotifyPlaylist;
 }
 
-const PlaylistInfo: React.FC<PlaylistInfoProps> = ({ playlist }) => {
+const PlaylistInfo: FC<PlaylistInfoProps> = ({ playlist }) => {
   const theme = useTheme();
   const styles = useStyles(theme);
 

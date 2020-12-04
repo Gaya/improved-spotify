@@ -1,4 +1,5 @@
-import React, {
+import {
+  FC,
   useCallback,
   useContext,
   useState,
@@ -21,7 +22,7 @@ const IconButtonNoPadding = styled(IconButton)`
   padding: 0;
 `;
 
-const UserMenu: React.FC = () => {
+const UserMenu: FC = () => {
   const { logOut } = useContext(AuthContext);
   const history = useHistory();
   const user = useRecoilValueLoadable(userInformationQuery);
@@ -43,7 +44,7 @@ const UserMenu: React.FC = () => {
 
   return (
     <>
-      <IconButtonNoPadding aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButtonNoPadding aria-controls="user-menu" aria-haspopup="true" onClick={handleClick}>
         <Avatar user={user.state === 'hasValue' ? user.contents : undefined} />
       </IconButtonNoPadding>
       {user.state === 'hasValue' && (

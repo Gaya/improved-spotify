@@ -1,6 +1,5 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
-import { StoredSpotifyPlaylistTrack } from '../types';
 import { error } from '../utils/logging';
 
 const version = 1;

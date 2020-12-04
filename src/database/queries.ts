@@ -1,10 +1,5 @@
 import { SrIndexedDB } from './createDatabase';
 
-import {
-  PlaylistSnapshots,
-  StoredSpotifyPlaylistTrack,
-} from '../types';
-
 export function getSnapshots(db: SrIndexedDB): Promise<PlaylistSnapshots> {
   const keysPromise = db.getAllKeys('snapshots');
   const valuesPromise = db.getAll('snapshots');
@@ -25,15 +20,6 @@ export function saveSnapshots(db: SrIndexedDB, snapshots: PlaylistSnapshots): Pr
     .then(() => undefined);
 }
 
-export function removePlaylistTracksByPlaylist(
-  db: SrIndexedDB,
-  playlistId: string,
-): Promise<void> {
-  return queryPlaylistTrackKeys(db, playlistId)
-    .then((keys) => Promise.all(keys.map((key: string) => db.delete('playlistTracks', key))))
-    .then(() => undefined);
-}
-
 export function storePlaylistTracks(
   db: SrIndexedDB,
   playlistTracks: StoredSpotifyPlaylistTrack[],
@@ -47,6 +33,15 @@ export function queryPlaylistTrackKeys(
   playlistId: string,
 ): Promise<string[]> {
   return db.getAllKeysFromIndex('playlistTracks', 'by-playlist', playlistId);
+}
+
+export function removePlaylistTracksByPlaylist(
+  db: SrIndexedDB,
+  playlistId: string,
+): Promise<void> {
+  return queryPlaylistTrackKeys(db, playlistId)
+    .then((keys) => Promise.all(keys.map((key: string) => db.delete('playlistTracks', key))))
+    .then(() => undefined);
 }
 
 export function queryPlaylistTracks(

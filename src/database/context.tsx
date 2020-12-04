@@ -1,4 +1,9 @@
-import React, { createContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  FC,
+  useEffect,
+  useState,
+} from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import createDatabase, { SrIndexedDB } from './createDatabase';
@@ -9,8 +14,8 @@ import { playlistSnapshots } from '../state/atoms';
 
 const DatabaseContext = createContext<SrIndexedDB | undefined>(undefined);
 
-export const DatabaseProvider: React.FC = ({ children }) => {
-  const [isdb, setDb] = useState<SrIndexedDB>();
+export const DatabaseProvider: FC = ({ children }) => {
+  const [isDb, setDb] = useState<SrIndexedDB>();
   const setSnapshots = useSetRecoilState(playlistSnapshots);
 
   useEffect(() => {
@@ -28,12 +33,12 @@ export const DatabaseProvider: React.FC = ({ children }) => {
       });
   }, [setSnapshots]);
 
-  if (!isdb) {
+  if (!isDb) {
     return <FullScreenIndicator />;
   }
 
   return (
-    <DatabaseContext.Provider value={isdb}>
+    <DatabaseContext.Provider value={isDb}>
       {children}
     </DatabaseContext.Provider>
   );

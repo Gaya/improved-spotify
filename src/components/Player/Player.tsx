@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { FC, useContext } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
@@ -8,17 +8,11 @@ import PauseIcon from '@material-ui/icons/Pause';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import Slider from '@material-ui/core/Slider';
 
-import {
-  getCurrentPlaying,
-  playerNext,
-  playerPause,
-  playerPlay,
-  playerPrevious,
-} from '../../utils/externalData';
-import { SpotifyCurrentPlayer } from '../../types';
 import formatDuration from '../../utils/formatDuration';
+
+import PlayerContext from './context';
 
 const useStyles = makeStyles((theme) => ({
   player: {
@@ -54,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   progressBar: {
     flexGrow: 1,
-    marginBottom: -2,
+    marginBottom: -16,
   },
   progressStart: {
     width: 60,
@@ -71,64 +65,70 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Player: React.FC = () => {
+const Player: FC = () => {
   const theme = useTheme();
   const styles = useStyles(theme);
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<SpotifyCurrentPlayer>();
+  const { playbackState, actions } = useContext(PlayerContext);
+  const {
+    next,
+    pause,
+    previous,
+    resume,
+    seek,
+  } = actions;
 
-  const isPlaying = !!(currentlyPlaying && currentlyPlaying.is_playing);
-
-  const fetchCurrentlyPlaying = (): Promise<void> => getCurrentPlaying()
-    .catch(() => undefined)
-    .then(setCurrentlyPlaying);
-
-  useEffect(() => {
-    const refreshData = setInterval(fetchCurrentlyPlaying, 1000);
-    fetchCurrentlyPlaying();
-
-    return (): void => clearInterval(refreshData);
-  }, []);
+  const isPlaying = !playbackState.paused;
+  const currentTrack = playbackState.current;
 
   return (
     <div className={styles.player}>
       <div className={styles.controls}>
-        <IconButton onClick={(): void => { playerPrevious(); }}>
+        <IconButton onClick={(): void => { previous(); }}>
           <SkipPreviousIcon />
         </IconButton>
         <IconButton
           onClick={(): void => {
             if (isPlaying) {
-              playerPause();
+              pause();
             } else {
-              playerPlay();
+              resume();
             }
           }}
         >
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
-        <IconButton onClick={(): void => { playerNext(); }}>
+        <IconButton onClick={(): void => { next(); }}>
           <SkipNextIcon />
         </IconButton>
       </div>
-      {currentlyPlaying && currentlyPlaying.item && (
+      {currentTrack && (
         <div className={styles.currentlyPlaying}>
           <div className={styles.songName}>
-            <Typography>{currentlyPlaying.item.name}</Typography>
+            <Typography>{currentTrack.name}</Typography>
             <Typography variant="body2" color="textSecondary">
-              {currentlyPlaying.item.artists.map((artist) => artist.name).join(', ')}
+              {currentTrack.artists.map((artist) => artist.name).join(', ')}
             </Typography>
           </div>
           <div className={styles.progress}>
             <Typography className={styles.progressStart} variant="body2" color="textSecondary">
-              {formatDuration(currentlyPlaying.progress_ms)}
+              {formatDuration(playbackState.position)}
             </Typography>
-            <LinearProgress
+            <Slider
               className={styles.progressBar}
-              variant="determinate"
-              value={100 / (currentlyPlaying.item.duration_ms / currentlyPlaying.progress_ms)}
+              min={0}
+              max={100}
+              value={100 / (currentTrack.duration_ms / playbackState.position)}
+              onChange={(_, value: number | number[]) => {
+                if (Array.isArray(value)) {
+                  return;
+                }
+
+                const seekTo = currentTrack.duration_ms * (value / 100);
+                seek(seekTo);
+              }}
             />
             <Typography className={styles.progressEnd} variant="body2" color="textSecondary">
-              {formatDuration(currentlyPlaying.item.duration_ms)}
+              {formatDuration(currentTrack.duration_ms)}
             </Typography>
           </div>
         </div>

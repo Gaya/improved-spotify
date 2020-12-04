@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { RecoilRoot } from 'recoil';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -8,14 +9,16 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import pink from '@material-ui/core/colors/pink';
 import green from '@material-ui/core/colors/green';
 
-import Routes from './Routes';
+import { DatabaseProvider } from '../../database/context';
 
 import { AuthProvider } from '../Auth/context';
-import { DatabaseProvider } from '../../database/context';
+import { PlayerProvider } from '../Player/context';
+
+import Routes from './Routes';
 
 import './App.css';
 
-const App: React.FC = () => {
+const App: FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const theme = useMemo(
@@ -48,18 +51,22 @@ const App: React.FC = () => {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <RecoilRoot>
-          <DatabaseProvider>
-            <div className="App">
-              <Routes />
-            </div>
-          </DatabaseProvider>
+          <AuthProvider>
+            <PlayerProvider>
+              <DatabaseProvider>
+                <div className="App">
+                  <Routes />
+                </div>
+              </DatabaseProvider>
+            </PlayerProvider>
+          </AuthProvider>
         </RecoilRoot>
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Router>
   );
 };
 

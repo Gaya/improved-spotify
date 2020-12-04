@@ -1,7 +1,7 @@
 import { getValidToken } from '../components/Auth/utils';
-import { get as getPlain, post as postPlain, getPaged as getPagedPlain } from './request';
+import { ContentType } from '../enums';
 
-import { ContentType, PostData, QueryStringData } from '../types';
+import { get as getPlain, post as postPlain, getPaged as getPagedPlain } from './request';
 
 function parseResponse<S>(response: Response): Promise<S> {
   const contentType = response.headers.get('content-type');

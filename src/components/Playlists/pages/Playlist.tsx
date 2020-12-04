@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
@@ -6,8 +6,8 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import { playlistQuery } from '../../../state/selectors';
-import { PlaylistView } from '../../../types';
 import { playlistViewAs } from '../../../state/atoms';
+import { PlaylistView } from '../../../enums';
 
 import Layout from '../../App/Layout';
 import PageContainer from '../../App/PageContainer';
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 type PlaylistProps = RouteComponentProps<{ id: string }>;
 
-const Playlist: React.FC<PlaylistProps> = ({ match }: PlaylistProps) => {
+const Playlist: FC<PlaylistProps> = ({ match }: PlaylistProps) => {
   const { id } = match.params;
 
   const theme = useTheme();

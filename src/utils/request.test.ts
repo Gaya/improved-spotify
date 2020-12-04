@@ -41,4 +41,19 @@ describe('urlWithQueryString', () => {
       [`${baseUrl}/path`, expectedQueryString].join('?'),
     );
   });
+
+  it('should ignore undefined properties', () => {
+    const data = {
+      deviceId: undefined,
+      test: 'hello',
+    };
+
+    const expectedQueryString = 'test=hello';
+
+    expect(
+      urlWithQueryString(`${baseUrl}/path`, data),
+    ).toEqual(
+      [`${baseUrl}/path`, expectedQueryString].join('?'),
+    );
+  });
 });

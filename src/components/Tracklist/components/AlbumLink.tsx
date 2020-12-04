@@ -1,11 +1,9 @@
-import React from 'react';
-
-import { SpotifyAlbum } from '../../../types';
+import { FC } from 'react';
 
 interface AlbumLinkProps {
   album: SpotifyAlbum;
 }
 
-const AlbumLink: React.FC<AlbumLinkProps> = ({ album }) => <>{album.name}</>;
+const AlbumLink: FC<AlbumLinkProps> = ({ album }) => <>{album.name}</>;
 
 export default AlbumLink;

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
-import { SpotifyPlaylistTrack } from '../types';
+/* eslint-disable camelcase */
 
 const tracksData: SpotifyPlaylistTrack[] = [
   {
