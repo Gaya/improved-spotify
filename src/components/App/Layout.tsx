@@ -13,6 +13,7 @@ import CompactPlaylists from '../Playlists/components/CompactPlaylists';
 import Player from '../Player/Player';
 import QueueToggle from '../Queue/components/QueueToggle';
 import { QUEUE_WIDTH } from '../Queue/consts';
+import About from '../About/About';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,7 +28,17 @@ const useStyles = makeStyles((theme) => ({
     borderRightStyle: 'solid',
     borderRightWidth: 2,
     borderRightColor: '#010102',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  sidebarPlaylists: {
+    flexShrink: 0,
+    flexGrow: 1,
     overflow: 'auto',
+  },
+  sidebarAbout: {
+    flexGrow: 0,
+    flexShrink: 1,
   },
   toolbarContainer: {
     borderBottomStyle: 'solid',
@@ -74,7 +85,12 @@ const Layout: FC = ({ children }) => {
   return (
     <section className={styles.container}>
       <section className={styles.sidebar}>
-        <CompactPlaylists />
+        <section className={styles.sidebarPlaylists}>
+          <CompactPlaylists />
+        </section>
+        <section className={styles.sidebarAbout}>
+          <About />
+        </section>
       </section>
       <section className={styles.contentWrapper}>
         <section className={styles.content}>
