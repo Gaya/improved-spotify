@@ -310,7 +310,7 @@ export const PlayerProvider: FC = ({ children }) => {
       log('Spotify Player Loaded');
 
       const spotifyPlayer = new window.Spotify.Player({
-        name: 'Spotify Revised',
+        name: 'Plaotje',
         getOAuthToken: (resolve): void => {
           getValidToken().then((token) => {
             if (!token) {

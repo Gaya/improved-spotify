@@ -26,7 +26,7 @@ const Login: FC = () => {
     <CenteredContainer>
       <Card variant="outlined">
         <CardContent className={styles.container}>
-          <Typography variant="h1" gutterBottom>Spotify Revised</Typography>
+          <Typography variant="h1" gutterBottom>Plaotje</Typography>
           <Typography variant="h6" className={styles.subHeader} color="textSecondary">
             An improved browsing experience for your Spotify playlists.
           </Typography>
