@@ -2,6 +2,8 @@
 
 Attempt to improve the Spotify browsing experience, especially for people who like to listen to full albums instead of single random songs.
 
+Go to [plaotje.com](https://plaotje.com) to try it for yourself.
+
 ## Getting Started
 
 Before you can run this locally you need to do a couple of things.
