@@ -20,7 +20,7 @@ const Avatar: FC<AvatarProps> = ({ user }) => {
   return (
     <MUIAvatar
       className={styles.avatar}
-      src={user ? user.images[0].url : undefined}
+      src={user && user.images ? user.images[0].url : undefined}
     />
   );
 };

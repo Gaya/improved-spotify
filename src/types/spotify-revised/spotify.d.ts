@@ -11,7 +11,7 @@ declare global {
     display_name: string;
     href: string;
     id: string;
-    images: SpotifyImage[];
+    images?: SpotifyImage[];
     uri: string;
   }
 
@@ -23,7 +23,7 @@ declare global {
     };
     href: string;
     id: string;
-    images: SpotifyImage[];
+    images?: SpotifyImage[];
     name: string;
     owner: SpotifyUser;
     primary_color: string | null;
@@ -57,7 +57,7 @@ declare global {
     };
     href: string;
     id: string;
-    images: SpotifyImage[];
+    images?: SpotifyImage[];
     name: string;
     release_date: string;
     release_date_precision: 'day' | 'year';
