@@ -57,7 +57,7 @@ declare global {
     };
     href: string;
     id: string;
-    images: SpotifyImage[];
+    images?: SpotifyImage[];
     name: string;
     release_date: string;
     release_date_precision: 'day' | 'year';

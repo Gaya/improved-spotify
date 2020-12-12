@@ -110,7 +110,7 @@ const AlbumListItem: FC<AlbumListItemProps> = ({ album, style }) => {
           onMouseEnter={(): void => setIsHovering(true)}
           onMouseLeave={(): void => setIsHovering(false)}
           className={styles.cover}
-          style={{ backgroundImage: `url(${album.images[0].url})` }}
+          style={{ backgroundImage: album.images ? `url(${album.images[0].url})` : '' }}
         >
           <ButtonGroup
             className={
