@@ -32,7 +32,7 @@ const Image: FC<ImageProps> = ({ id }: ImageProps) => {
 
   return (
     <div className={styles.container}>
-      {playlist.state === 'hasValue' && playlist.contents && (
+      {playlist.state === 'hasValue' && playlist.contents && playlist.contents.images && playlist.contents.images.length > 0 && (
         <img
           className={styles.image}
           alt={playlist.contents.name}

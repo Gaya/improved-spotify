@@ -23,7 +23,7 @@ declare global {
     };
     href: string;
     id: string;
-    images: SpotifyImage[];
+    images?: SpotifyImage[];
     name: string;
     owner: SpotifyUser;
     primary_color: string | null;
