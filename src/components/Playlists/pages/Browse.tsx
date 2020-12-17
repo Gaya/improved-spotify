@@ -78,7 +78,7 @@ const Browse: FC = () => {
                 >
                   <div
                     className={styles.playlistImage}
-                    style={{ backgroundImage: playlist.images ? `url(${playlist.images[0].url})` : '' }}
+                    style={{ backgroundImage: playlist.images[0] ? `url(${playlist.images[0].url})` : '' }}
                   />
                   <Typography className={styles.playlistName} noWrap>{playlist.name}</Typography>
                 </Button>
