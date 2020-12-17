@@ -11,7 +11,7 @@ declare global {
     display_name: string;
     href: string;
     id: string;
-    images?: SpotifyImage[];
+    images: SpotifyImage[];
     uri: string;
   }
 
