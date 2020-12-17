@@ -17,10 +17,12 @@ interface AvatarProps {
 const Avatar: FC<AvatarProps> = ({ user }) => {
   const styles = useStyles();
 
+  const hasAvatar = !!user?.images[0];
+
   return (
     <MUIAvatar
       className={styles.avatar}
-      src={user && user.images ? user.images[0].url : undefined}
+      src={hasAvatar ? user?.images[0].url : undefined}
     />
   );
 };
